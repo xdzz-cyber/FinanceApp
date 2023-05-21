@@ -3,7 +3,7 @@ using Persistence;
 
 namespace TestsProject.Common;
 
-public abstract class TestCommandBase
+public abstract class TestCommandBase : IDisposable
 {
     protected readonly ApplicationDbContext Context;
     protected readonly IMapper Mapper;
