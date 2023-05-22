@@ -1,4 +1,5 @@
 ﻿using Application.Interfaces;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -13,7 +14,17 @@ public static class DependencyInjection
 
         //services.AddScoped<IApplicationDbContext>(provider => provider.GetService<ApplicationDbContext>());
         services.AddScoped<IApplicationDbContext, ApplicationDbContext>();
-
+        services.AddIdentity<IdentityUser, IdentityRole>(options =>
+        {
+            options.Password.RequireDigit = false;
+            options.Password.RequiredLength = 5;
+            options.Password.RequireNonAlphanumeric = false;
+            options.Password.RequireUppercase = false;
+            options.Lockout.MaxFailedAccessAttempts = 5;
+            options.SignIn.RequireConfirmedEmail = false;
+            options.SignIn.RequireConfirmedAccount = false;
+        }).AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
+   
         return services;
     }
 }

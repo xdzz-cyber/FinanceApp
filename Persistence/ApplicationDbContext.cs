@@ -1,5 +1,6 @@
 ﻿using Application.Interfaces;
 using Domain;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -7,7 +8,7 @@ using Persistence.EntityTypeConfigurations;
 
 namespace Persistence;
 
-public class ApplicationDbContext : DbContext,IApplicationDbContext
+public class ApplicationDbContext : IdentityDbContext,IApplicationDbContext
 {
     private readonly IConfiguration _configuration;
     public DbSet<Mock> Mocks { get; set; }

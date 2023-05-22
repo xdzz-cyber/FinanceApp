@@ -2,12 +2,15 @@ using System.Reflection;
 using Application;
 using Application.Common.Mappings;
 using Application.Interfaces;
+using Microsoft.AspNetCore.Identity;
 using Persistence;
 using WebMVC.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+// Configure Identity Server
+
 builder.Services.AddControllersWithViews();
 builder.Services.AddAutoMapper(config =>
 {

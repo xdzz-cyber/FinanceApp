@@ -2,11 +2,13 @@
 using Application.Common.ViewModels;
 using Application.Mocks.Queries.GetMock;
 using Application.Mocks.Queries.GetMocks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebMVC.Models;
 
 namespace WebMVC.Controllers;
 
+[Authorize]
 public class HomeController : BaseController
 {
 
