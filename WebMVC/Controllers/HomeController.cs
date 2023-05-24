@@ -8,7 +8,7 @@ using WebMVC.Models;
 
 namespace WebMVC.Controllers;
 
-[Authorize]
+// [Authorize]
 public class HomeController : BaseController
 {
 

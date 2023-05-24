@@ -22,4 +22,9 @@
       </PackageReference>
     </ItemGroup>
 
+    <ItemGroup>
+      <AdditionalFiles Include="Views\Auth\Login.cshtml" />
+      <AdditionalFiles Include="Views\Auth\Register.cshtml" />
+    </ItemGroup>
+
 </Project>
