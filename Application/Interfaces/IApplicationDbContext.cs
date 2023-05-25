@@ -4,7 +4,13 @@ namespace Application.Interfaces;
 
 public interface IApplicationDbContext
 {
-    DbSet<Domain.Mock> Mocks { get; set; }
+    DbSet<Domain.Budget> Budgets { get; set; }
     
+    DbSet<Domain.Transaction> Transactions { get; set; }
+    
+    DbSet<Domain.Category> Categories { get; set; }
+    
+    DbSet<Domain.FinancialGoal> FinancialGoals { get; set; }
+
     Task<int> SaveChangesAsync(CancellationToken cancellationToken);
 }

@@ -1,14 +1,12 @@
 ﻿using System.Diagnostics;
 using Application.Common.ViewModels;
-using Application.Mocks.Queries.GetMock;
-using Application.Mocks.Queries.GetMocks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebMVC.Models;
 
 namespace WebMVC.Controllers;
 
-// [Authorize]
+[Authorize]
 public class HomeController : BaseController
 {
 
@@ -20,17 +18,13 @@ public class HomeController : BaseController
     [HttpGet]
     public async Task<ActionResult<MockVm>> Index()
     {
-        var getMocksQuery = new GetMocks();
-        var mocks = await Mediator.Send(getMocksQuery);
-        return View(mocks);
+        return View();
     }
     
     [HttpGet("{id}")]
     public async Task<ActionResult<MockVm>> Details(Guid id)
     {
-        var getMockQuery = new GetMock {Id = id};
-        var mock = await Mediator.Send(getMockQuery);
-        return View(mock);
+        return View();
     }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

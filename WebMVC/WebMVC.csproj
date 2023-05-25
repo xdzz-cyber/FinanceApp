@@ -27,4 +27,8 @@
       <AdditionalFiles Include="Views\Auth\Register.cshtml" />
     </ItemGroup>
 
+    <ItemGroup>
+      <TypeScriptCompile Include="wwwroot\src\index.ts" />
+    </ItemGroup>
+
 </Project>

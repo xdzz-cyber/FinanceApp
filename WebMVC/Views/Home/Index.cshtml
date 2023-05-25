@@ -2,13 +2,8 @@
     ViewData["Title"] = "Home Page";
 }
 
-@model List<Application.Common.ViewModels.MockVm>
 
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
-    @foreach(var mock in Model)
-    {
-        <p>Mock id = @mock.Id</p>
-    }
     <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
 </div>

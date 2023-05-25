@@ -8,11 +8,15 @@ using Persistence.EntityTypeConfigurations;
 
 namespace Persistence;
 
-public class ApplicationDbContext : IdentityDbContext,IApplicationDbContext
+public class ApplicationDbContext : IdentityDbContext<ApplicationUser>,IApplicationDbContext
 {
     private readonly IConfiguration _configuration;
-    public DbSet<Mock> Mocks { get; set; }
     
+    public DbSet<Budget> Budgets { get; set; }
+    public DbSet<Transaction> Transactions { get; set; }
+    public DbSet<Category> Categories { get; set; }
+    public DbSet<FinancialGoal> FinancialGoals { get; set; }
+
 
     public ApplicationDbContext()
     {

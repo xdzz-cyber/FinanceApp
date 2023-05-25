@@ -1,4 +1,5 @@
 ﻿using Application.Interfaces;
+using Domain;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -14,7 +15,7 @@ public static class DependencyInjection
 
         //services.AddScoped<IApplicationDbContext>(provider => provider.GetService<ApplicationDbContext>());
         services.AddScoped<IApplicationDbContext, ApplicationDbContext>();
-        services.AddIdentity<IdentityUser, IdentityRole>(options =>
+        services.AddIdentity<ApplicationUser, IdentityRole>(options =>
         {
             options.Password.RequireDigit = false;
             options.Password.RequiredLength = 5;
