@@ -22,4 +22,8 @@
       <PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="6.0.16" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Auth\Commands\" />
+    </ItemGroup>
+
 </Project>
