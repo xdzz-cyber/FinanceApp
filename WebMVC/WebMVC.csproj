@@ -31,4 +31,8 @@
       <TypeScriptCompile Include="wwwroot\src\index.ts" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="wwwroot\dist\" />
+    </ItemGroup>
+
 </Project>
