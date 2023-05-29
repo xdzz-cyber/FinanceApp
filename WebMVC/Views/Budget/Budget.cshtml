@@ -1,0 +1,145 @@
+﻿@using MediatR
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using Application.Category.Queries.GetCategories
+@model Application.Common.Dtos.BudgetDto
+
+@{
+    Layout = "_Layout";
+}
+
+@inject IMediator Mediator
+
+
+
+@functions
+{
+    private async Task<string> GetCategoryName(Guid categoryId)
+    {
+        var categories = await Mediator.Send(new GetCategories());
+        var categoryName = categories.First(c => c.Id == categoryId).Name;
+        return categoryName;
+    }
+
+    private string GetTransactionsJson()
+    {
+        var transactions = Model.Transactions!.Select(t => new
+        {
+            Date = t.Date.ToString("yyyy-MM-dd"),
+            Amount = t.Amount,
+            CategoryName = GetCategoryName(t.CategoryId).Result,
+        });
+
+        return Newtonsoft.Json.JsonConvert.SerializeObject(transactions);
+    }
+}
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <h1>Budget Details</h1>
+        
+            <div class="budget-container">
+                <div class="budget-info">
+                    <h3>@Model.Name</h3>
+                    <p>Amount: @Model.Amount</p>
+                    <p>Start Date: @Model.StartDate.ToString("yyyy-MM-dd")</p>
+                    <p>End Date: @Model.EndDate.ToString("yyyy-MM-dd")</p>
+                </div>
+                <div class="budget-container">
+                    <div class="budget-info">
+                        <h3>Add transaction by clicking on button below</h3>
+                        <p><a asp-controller="Transaction" asp-action="AddTransaction" asp-route-budgetId="@Model.Id">Add transaction</a></p>
+                    </div>
+                </div>
+            </div>
+        
+            <h2>Transactions</h2>
+        
+            @if (Model.Transactions != null && Model.Transactions.Any())
+            {
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Category</th>
+                        <th>Amount</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @foreach (var transaction in Model.Transactions)
+                    {
+                        <tr>
+                            <td>Date: @transaction.Date.ToString("yyyy-MM-dd")</td>
+                            <td>Category name: @(GetCategoryName(transaction.CategoryId).GetAwaiter().GetResult())</td>
+                            <td>Amount: @transaction.Amount</td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <p class="no-transactions">No transactions found.</p>
+            }
+        
+        </div>
+        
+        <div class="col" id="incomeExpenseChart"></div>
+    </div>
+
+</div>
+
+
+<script>
+    let transactionsJson = '@Html.Raw(GetTransactionsJson())';
+    let transactions = JSON.parse(transactionsJson);
+
+    let incomeData = {
+        type: 'scatter',
+        x: [],
+        y: [],
+        mode: 'lines',
+        name: 'Income',
+        line: {
+            color: 'rgb(219, 64, 82)',
+            width: 3
+        }
+    };
+
+    let expenseData = {
+        type: 'scatter',
+        x: [],
+        y: [],
+        mode: 'lines',
+        name: 'Expense',
+        line: {
+            color: 'rgb(55, 128, 191)',
+            width: 1
+        }
+    };
+
+    // Sort transactions by date and by amount
+    transactions.sort(function (a, b) {
+        return new Date(a.Date) - new Date(b.Date) || a.Amount - b.Amount;
+    });
+
+    transactions.forEach(function (transaction) {
+        // Check if transaction is income or expense
+        if (transaction.CategoryName === "Income") {
+            incomeData.x.push(transaction.Date);
+            incomeData.y.push(transaction.Amount);
+        }
+        else {
+            expenseData.x.push(transaction.Date);
+            expenseData.y.push(transaction.Amount);
+        }
+    });
+
+    var layout = {
+        width: 650,
+        height: 650
+    };
+
+    var data = [incomeData, expenseData];
+
+    Plotly.newPlot('incomeExpenseChart', data, layout);
+</script>

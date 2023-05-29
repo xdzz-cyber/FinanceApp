@@ -1,0 +1,33 @@
+﻿@model LoginVm
+
+@{
+    Layout = "_Layout";
+}
+
+<div class="d-grid align-items-center justify-content-center mt-5">
+    <form asp-controller="Auth" asp-action="Login" method="post">
+        <!-- Email input -->
+        <div class="form-outline mb-4">
+            <input asp-for="Email" type="email" id="form2Example1" class="form-control" />
+            <label class="form-label" for="form2Example1">Email address</label>
+            <div>
+                <span class="text-danger" asp-validation-for="Email"></span>
+            </div>
+        </div>
+    
+        <!-- Password input -->
+        <div class="form-outline mb-4">
+            <input asp-for="Password" type="password" id="form2Example2" class="form-control" />
+            <label class="form-label" for="form2Example2">Password</label>
+            <div>
+                <span class="text-danger" asp-validation-for="Password"></span>
+            </div>
+        </div>
+        <!-- Submit button -->
+        <button type="submit" class="btn btn-primary btn-block mb-4">Sign in</button>
+    </form>
+    <!-- Register buttons -->
+    <div class="text-center">
+        <p>Not a member? <a asp-controller="Auth" asp-action="Register">Register</a></p>
+    </div>
+</div>

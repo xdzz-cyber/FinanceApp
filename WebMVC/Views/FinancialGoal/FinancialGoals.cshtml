@@ -1,0 +1,35 @@
+﻿@model List<Application.Common.Dtos.FinancialGoalDto>
+
+@{
+    Layout = "_Layout";
+}
+
+<h2>Financial Goals</h2>
+
+<table class="table">
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Description</th>
+        <th>Target Amount</th>
+        <th>Target Date</th>
+        <th>Budget</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var goal in Model)
+    {
+        <tr>
+            <td>@goal.Name</td>
+            <td>@goal.Description</td>
+            <td>@goal.TargetAmount</td>
+            <td>@goal.TargetDate.ToString("dd/MM/yyyy")</td>
+            <td>@(goal.BudgetId.ToString())</td>
+        </tr>
+    }
+    </tbody>
+</table>
+
+<div>
+    @Html.ActionLink("Create New", "AddFinancialGoal", "FinancialGoal")
+</div>

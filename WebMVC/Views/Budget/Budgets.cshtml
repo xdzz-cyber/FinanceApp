@@ -1,0 +1,33 @@
+﻿@model List<Application.Common.Dtos.BudgetDto>
+
+@{
+    Layout = "_Layout";
+}
+
+<h1 class="text-center">Welcome to budget page</h1>
+<div class="d-grid justify-content-center">
+    <p>Click the button below to add a budget</p>
+    <a asp-controller="Budget" asp-action="AddBudget" class="btn btn-primary">Add budget</a>
+</div>
+
+@if (Model.Count == 0)
+{
+    // Say that there are no budgets
+    <div class="d-grid justify-content-center">
+        <p>There are no budgets</p>
+    </div>
+}
+else
+{
+    @foreach(var budget in Model)
+    {
+        <div class="card mx-auto">
+            <div class="card-body">
+                <h5 class="card-title">@budget.Name</h5>
+                <p class="card-text">@budget.Amount</p>
+                <a asp-action="Budget" asp-controller="Budget" asp-route-id="@budget.Id" class="btn btn-primary">Go see transaction story as well as graphics of income/expenses</a>
+            </div>
+        </div>
+    }
+}
+
