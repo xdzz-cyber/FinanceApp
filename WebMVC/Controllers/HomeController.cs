@@ -20,11 +20,6 @@ public class HomeController : BaseController
         return View();
     }
     
-    [HttpGet("{id}")]
-    public IActionResult Details(Guid id)
-    {
-        return View();
-    }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error()

@@ -1,14 +1,18 @@
-﻿@model AddBudgetVm
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model AddBudgetVm
 
 @{
     Layout = "_Layout";
 }
 
+@inject IViewLocalizer Localizer
+
 @using (Html.BeginForm("AddBudget", "Budget", FormMethod.Post))
 {
     <div class="form-outline mb-4">
         <input asp-for="Name" type="text" id="name" class="form-control"/>
-        <label class="form-label" for="name">Name</label>
+        <label class="form-label" for="name">@Localizer["NameInputMessage"]</label>
         <div>
             <span class="text-danger" asp-validation-for="Name"></span>
         </div>
@@ -16,7 +20,7 @@
 
     <div class="form-outline mb-4">
         <input asp-for="Amount" type="number" id="amount" class="form-control"/>
-        <label class="form-label" for="amount">Amount</label>
+        <label class="form-label" for="amount">@Localizer["AmountInputMessage"]</label>
         <div>
             <span class="text-danger" asp-validation-for="Amount"></span>
         </div>
@@ -25,7 +29,7 @@
     // Add start date and end date
     <div class="form-outline mb-4">
         <input asp-for="StartDate" type="date" id="startDate" class="form-control"/>
-        <label class="form-label" for="startDate">Start date</label>
+        <label class="form-label" for="startDate">@Localizer["StartDateInputMessage"]</label>
         <div>
             <span class="text-danger" asp-validation-for="StartDate"></span>
         </div>
@@ -33,11 +37,11 @@
 
     <div class="form-outline mb-4">
         <input asp-for="EndDate" type="date" id="endDate" class="form-control"/>
-        <label class="form-label" for="endDate">End date</label>
+        <label class="form-label" for="endDate">@Localizer["EndDateInputMessage"]</label>
         <div>
             <span class="text-danger" asp-validation-for="EndDate"></span>
         </div>
     </div>
 
-    <button type="submit" class="btn btn-primary btn-block mb-4">Add budget</button>
+    <button type="submit" class="btn btn-primary btn-block mb-4">@Localizer["AddBudgetButtonMessage"]</button>
 }

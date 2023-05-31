@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Application.Common.Dtos;
 
 namespace WebMVC.Models;
 
@@ -22,4 +23,6 @@ public record AddTransactionVm
     [DataType(DataType.Date)]
     [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
     public DateTime Date { get; set; }
+    [Required]
+    public List<CategoryDto> Categories { get; set; } = null!;
 }

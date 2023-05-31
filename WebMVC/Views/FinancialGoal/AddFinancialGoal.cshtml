@@ -1,56 +1,43 @@
-﻿@using MediatR
-@using Application.Budget.Queries.GetBudgets
-@using System.Security.Claims
-@model Application.Common.Dtos.FinancialGoalDto
+﻿@model AddFinancialGoalVm
 
 @{
     Layout = "_Layout";
 }
 
-@inject IMediator Mediator
-
-@{
-    var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-    var budgets = await Mediator.Send(new GetBudgets()
-    {
-        
-        UserId = userId
-    });
-}
 
 <h2>Create Financial Goal</h2>
 
 @using (Html.BeginForm("AddFinancialGoal", "FinancialGoal", FormMethod.Post))
 {
     <div class="form-group">
-        @Html.LabelFor(model => model.Name)
-        @Html.TextBoxFor(model => model.Name, new { @class = "form-control" })
-        @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+        @Html.LabelFor(model => model.FinancialGoal.Name, "Name")
+        @Html.TextBoxFor(model => model.FinancialGoal.Name, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.FinancialGoal.Name, "", new { @class = "text-danger" })
     </div>
 
     <div class="form-group">
-        @Html.LabelFor(model => model.Description)
-        @Html.TextBoxFor(model => model.Description, new { @class = "form-control" })
-        @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+        @Html.LabelFor(model => model.FinancialGoal.Description, "Description")
+        @Html.TextBoxFor(model => model.FinancialGoal.Description, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.FinancialGoal.Description, "", new { @class = "text-danger" })
     </div>
 
     <div class="form-group">
-        @Html.LabelFor(model => model.TargetAmount)
-        @Html.TextBoxFor(model => model.TargetAmount, new { @class = "form-control" })
-        @Html.ValidationMessageFor(model => model.TargetAmount, "", new { @class = "text-danger" })
+        @Html.LabelFor(model => model.FinancialGoal.TargetAmount, "Target Amount")
+        @Html.TextBoxFor(model => model.FinancialGoal.TargetAmount, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.FinancialGoal.TargetAmount, "", new { @class = "text-danger" })
     </div>
 
     <div class="form-group">
-        @Html.LabelFor(model => model.TargetDate)
-        @Html.TextBoxFor(model => model.TargetDate, new { @class = "form-control", type = "date" })
-        @Html.ValidationMessageFor(model => model.TargetDate, "", new { @class = "text-danger" })
+        @Html.LabelFor(model => model.FinancialGoal.TargetDate, "Target Date")
+        @Html.TextBoxFor(model => model.FinancialGoal.TargetDate, new { @class = "form-control", type = "date" })
+        @Html.ValidationMessageFor(model => model.FinancialGoal.TargetDate, "", new { @class = "text-danger" })
     </div>
     
     
     <div class="form-group">
-        @Html.LabelFor(model => model.BudgetId)
-        @Html.DropDownListFor(model => model.BudgetId, new SelectList(budgets, "Id", "Name"), "Select Budget", new { @class = "form-control" })
-        @Html.ValidationMessageFor(model => model.BudgetId, "", new { @class = "text-danger" })
+        @Html.LabelFor(model => model.FinancialGoal.BudgetId, "Budget")
+        @Html.DropDownListFor(model => model.FinancialGoal.BudgetId, new SelectList(Model.Budgets, "Id", "Name"), "Select Budget", new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.FinancialGoal.BudgetId, "", new { @class = "text-danger" })
     </div>
 
     <div class="form-group mt-3">

@@ -1,4 +1,5 @@
 ﻿using System.Security.Claims;
+using Application.Category.Queries.GetCategories;
 using Application.Transaction.Commands.CreateTransaction;
 using Domain;
 using Microsoft.AspNetCore.Authorization;
@@ -12,11 +13,13 @@ namespace WebMVC.Controllers;
 public class TransactionController : BaseController
 {
     [HttpGet]
-    public ActionResult AddTransaction(Guid budgetId)
+    public async Task<ActionResult> AddTransaction(Guid budgetId)
     {
+        var categories = await Mediator.Send(new GetCategories());
         return View(new AddTransactionVm()
         {
-            BudgetId = budgetId
+            BudgetId = budgetId,
+            Categories = categories
         });
     }
     

@@ -1,19 +1,22 @@
-﻿@model List<Application.Common.Dtos.FinancialGoalDto>
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@model List<Application.Common.Dtos.FinancialGoalDto>
 
 @{
     Layout = "_Layout";
 }
 
-<h2>Financial Goals</h2>
+@inject IViewLocalizer Localizer
+
+<h2>@Localizer["FinancialGoalsMessage"]</h2>
 
 <table class="table">
     <thead>
     <tr>
-        <th>Name</th>
-        <th>Description</th>
-        <th>Target Amount</th>
-        <th>Target Date</th>
-        <th>Budget</th>
+        <th>@Localizer["NameMessage"]</th>
+        <th>@Localizer["DescriptionMessage"]</th>
+        <th>@Localizer["TargetAmountMessage"]</th>
+        <th>@Localizer["TargetDateMessage"]</th>
+        <th>@Localizer["BudgetMessage"]</th>
     </tr>
     </thead>
     <tbody>

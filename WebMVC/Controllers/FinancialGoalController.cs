@@ -1,7 +1,10 @@
-﻿using Application.Common.Dtos;
+﻿using System.Security.Claims;
+using Application.Budget.Queries.GetBudgets;
+using Application.Common.Dtos;
 using Application.FinancialGoal.Commands.CreateFinancialGoal;
 using Application.FinancialGoal.Queries.GetFinancialGoals;
 using Microsoft.AspNetCore.Mvc;
+using WebMVC.Models;
 
 namespace WebMVC.Controllers;
 
@@ -15,9 +18,15 @@ public class FinancialGoalController : BaseController
     }
     
     [HttpGet]
-    public IActionResult AddFinancialGoal()
+    public async Task<IActionResult> AddFinancialGoal()
     {
-        return View();
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        return View(new AddFinancialGoalVm()
+        {
+            FinancialGoal = new FinancialGoalDto(),
+            UserId = userId,
+            Budgets = await Mediator.Send(new GetBudgets {UserId = userId})
+        });
     }
     
     // Create a new financial goal handler.
