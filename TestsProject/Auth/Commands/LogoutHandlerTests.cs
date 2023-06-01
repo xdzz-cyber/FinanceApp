@@ -47,6 +47,6 @@ public class LogoutHandlerTests
         var result = await logoutHandler.Handle(logoutRequest, CancellationToken.None);
 
         // Assert
-        Assert.Equal("Success", result);
+        Assert.True(result);
     }
 }

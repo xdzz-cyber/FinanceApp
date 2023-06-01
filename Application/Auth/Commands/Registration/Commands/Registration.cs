@@ -2,7 +2,7 @@
 
 namespace Application.Auth.Commands.Registration.Commands;
 
-public class Registration : IRequest<string>
+public class Registration : IRequest<bool>
 {
     public string UserName { get; set; }
     

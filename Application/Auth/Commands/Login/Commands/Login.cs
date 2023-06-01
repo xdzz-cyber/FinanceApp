@@ -2,7 +2,7 @@
 
 namespace Application.Auth.Commands.Login.Commands;
 
-public class Login : IRequest<string>
+public class Login : IRequest<bool>
 {
     public string Email { get; set; }
 

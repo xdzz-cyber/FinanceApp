@@ -26,7 +26,7 @@ public class RegisterHandlerTests
         // Mock the behavior of IMediator
         var mediatorMock = new Mock<IMediator>();
         mediatorMock.Setup(m => m.Send(It.IsAny<Login>(), default))
-            .ReturnsAsync("Success");
+            .ReturnsAsync(true);
 
         // Create the RegistrationHandler instance
         var registrationHandler = new RegistrationHandler(userManagerMock.Object, mediatorMock.Object);
@@ -35,7 +35,7 @@ public class RegisterHandlerTests
         var result = await registrationHandler.Handle(registrationRequest, CancellationToken.None);
 
         // Assert
-        Assert.Equal("Success", result);
+        Assert.True(result);
     }
     
     [Fact]
@@ -59,6 +59,6 @@ public class RegisterHandlerTests
         var result = await registrationHandler.Handle(registrationRequest, CancellationToken.None);
 
         // Assert
-        Assert.Equal("Error", result);
+        Assert.True(result);
     }
 }

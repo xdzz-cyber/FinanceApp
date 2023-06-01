@@ -24,7 +24,6 @@
 
     <ItemGroup>
       <Folder Include="Auth\Commands\" />
-      <Folder Include="Transaction\Queries\" />
     </ItemGroup>
 
 </Project>

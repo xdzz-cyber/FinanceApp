@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Application.Auth.Commands.Registration.Commands;
 
-public class RegistrationHandler : IRequestHandler<Auth.Commands.Registration.Commands.Registration, string>
+public class RegistrationHandler : IRequestHandler<Auth.Commands.Registration.Commands.Registration, bool>
 {
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly IMediator _mediator;
@@ -15,7 +15,7 @@ public class RegistrationHandler : IRequestHandler<Auth.Commands.Registration.Co
         _mediator = mediator;
     }
     
-    public async Task<string> Handle(Auth.Commands.Registration.Commands.Registration request, CancellationToken cancellationToken)
+    public async Task<bool> Handle(Auth.Commands.Registration.Commands.Registration request, CancellationToken cancellationToken)
     {
         var user = await _userManager.CreateAsync(new ApplicationUser
         {
@@ -25,7 +25,7 @@ public class RegistrationHandler : IRequestHandler<Auth.Commands.Registration.Co
 
         if (user.Succeeded == false)
         {
-            return "Error";
+            return false;
         }
         
         // Make request via mediator to login user after registration

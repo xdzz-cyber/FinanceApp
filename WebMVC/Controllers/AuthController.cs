@@ -25,7 +25,8 @@ public class AuthController : BaseController
         }
         var loginCommand = new Login {Email = loginVm.Email, Password = loginVm.Password};
         var result = await Mediator.Send(loginCommand);
-        if (result == "Success")
+        
+        if (result)
         {
             return RedirectToAction("Index", "Home");
         }
@@ -38,11 +39,8 @@ public class AuthController : BaseController
     {
         var logoutCommand = new Logout();
         var result = await Mediator.Send(logoutCommand);
-        if (result == "Success")
-        {
-            return RedirectToAction("Login", "Auth");
-        }
-        return RedirectToAction("Index", "Home");
+        
+        return result ? RedirectToAction("Login", "Auth") : RedirectToAction("Index", "Home");
     }
     
     // Register
@@ -67,7 +65,8 @@ public class AuthController : BaseController
             Password = registerVm.Password
         };
         var result = await Mediator.Send(registerCommand);
-        if (result == "Success")
+        
+        if (result)
         {
             return RedirectToAction("Index", "Home");
         }

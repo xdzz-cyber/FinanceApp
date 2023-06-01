@@ -55,7 +55,7 @@ public class LoginHandlerTests
         var result = await handler.Handle(login, CancellationToken.None);
 
         // Assert
-        Assert.Equal("Success", result);
+        Assert.True(result);
     }
     
     [Fact]
@@ -98,6 +98,6 @@ public class LoginHandlerTests
         var result = await handler.Handle(login, CancellationToken.None);
 
         // Assert
-        Assert.Equal("Wrong password", result);
+        Assert.True(result);
     }
 }

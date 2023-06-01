@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Application.Auth.Commands.Logout.Commands;
 
-public class LogoutHandler : IRequestHandler<Auth.Commands.Logout.Commands.Logout, string>
+public class LogoutHandler : IRequestHandler<Auth.Commands.Logout.Commands.Logout, bool>
 {
     private readonly SignInManager<ApplicationUser> _signInManager;
 
@@ -13,10 +13,10 @@ public class LogoutHandler : IRequestHandler<Auth.Commands.Logout.Commands.Logou
         _signInManager = signInManager;
     }
     
-    public async Task<string> Handle(Auth.Commands.Logout.Commands.Logout request, CancellationToken cancellationToken)
+    public async Task<bool> Handle(Auth.Commands.Logout.Commands.Logout request, CancellationToken cancellationToken)
     {
         await _signInManager.SignOutAsync();
         
-        return "Success";
+        return true;
     }
 }
