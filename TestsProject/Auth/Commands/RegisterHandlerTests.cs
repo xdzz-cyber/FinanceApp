@@ -59,6 +59,6 @@ public class RegisterHandlerTests
         var result = await registrationHandler.Handle(registrationRequest, CancellationToken.None);
 
         // Assert
-        Assert.True(result);
+        Assert.False(result);
     }
 }

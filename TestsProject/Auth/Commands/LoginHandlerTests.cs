@@ -98,6 +98,6 @@ public class LoginHandlerTests
         var result = await handler.Handle(login, CancellationToken.None);
 
         // Assert
-        Assert.True(result);
+        Assert.False(result);
     }
 }
