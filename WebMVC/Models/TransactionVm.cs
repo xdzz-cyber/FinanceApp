@@ -11,7 +11,7 @@ public class TransactionVm
     public DateTime Date { get; set; }
     // Validate amount
     [Required]
-    [Range(0, 1000000)]
+    [Range(1, 1000000)]
     public decimal Amount { get; set; }
     // Validate category name
     [Required]

@@ -12,7 +12,6 @@ public record AddTransactionVm
     // Add validation for BudgetId
     [Required]
     public Guid BudgetId { get; set; }
-    
 
     // Add validation for Amount
     [Required]
@@ -23,6 +22,6 @@ public record AddTransactionVm
     [DataType(DataType.Date)]
     [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
     public DateTime Date { get; set; }
-    [Required]
-    public List<CategoryDto> Categories { get; set; } = null!;
+    // [Required]
+    public List<CategoryDto>? Categories { get; set; } 
 }

@@ -24,14 +24,14 @@ public class FinancialGoalController : BaseController
         return View(new AddFinancialGoalVm()
         {
             FinancialGoal = new FinancialGoalDto(),
-            UserId = userId,
+            // UserId = userId,
             Budgets = await Mediator.Send(new GetBudgets {UserId = userId})
         });
     }
     
     // Create a new financial goal handler.
     [HttpPost]
-    public async Task<IActionResult> AddFinancialGoal(FinancialGoalDto financialGoalDto)
+    public async Task<IActionResult> AddFinancialGoal(AddFinancialGoalVm addFinancialGoalVm)
     {
         if (!ModelState.IsValid)
         {
@@ -40,11 +40,11 @@ public class FinancialGoalController : BaseController
 
         var createdInstanceId = await Mediator.Send(new CreateFinancialGoal()
         {
-            Name = financialGoalDto.Name,
-            Description = financialGoalDto.Description,
-            TargetAmount = financialGoalDto.TargetAmount,
-            TargetDate = financialGoalDto.TargetDate,
-            BudgetId = financialGoalDto.BudgetId
+            Name = addFinancialGoalVm.FinancialGoal.Name,
+            Description = addFinancialGoalVm.FinancialGoal.Description,
+            TargetAmount = addFinancialGoalVm.FinancialGoal.TargetAmount,
+            TargetDate = addFinancialGoalVm.FinancialGoal.TargetDate,
+            BudgetId = addFinancialGoalVm.FinancialGoal.BudgetId
         });
         
         // Check if the instance was created successfully.

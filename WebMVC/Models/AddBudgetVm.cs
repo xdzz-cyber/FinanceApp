@@ -9,7 +9,7 @@ public record AddBudgetVm
     public string Name { get; set; } = null!;
     // Validation for amount
     [Required]
-    [Range(0.01, 1000000)]
+    [Range(1, 1000000)]
     public decimal Amount { get; set; }
     // Validation for start date
     [Required]

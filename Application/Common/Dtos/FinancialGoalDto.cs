@@ -1,18 +1,32 @@
-﻿using Application.Common.Mappings;
+﻿using System.ComponentModel.DataAnnotations;
+using Application.Common.Mappings;
 using AutoMapper;
 
 namespace Application.Common.Dtos;
 
 public class FinancialGoalDto : IMapWith<Domain.FinancialGoal>
 {
+    // Add validation for Name
+    [Required]
+    [StringLength(50, MinimumLength = 1)]
     public string Name { get; set; } = null!;
-    
-    public string Description { get; set; } = null!;
-    
-    public decimal TargetAmount { get; set; }
-    
-    public DateTime TargetDate { get; set; }
 
+    // Add validation for Description
+    [Required]
+    [StringLength(50, MinimumLength = 1)]
+    public string Description { get; set; } = null!;
+
+    // Add validation for TargetAmount
+    [Required]
+    [Range(1, 1000000)]
+    public decimal TargetAmount { get; set; }
+    // Add validation for TargetDate
+    [Required]
+    [DataType(DataType.Date)]
+    [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+    public DateTime TargetDate { get; set; }
+    // Add validation for BudgetId
+    [Required]
     public Guid BudgetId { get; set; }
     
     public void Mapping(Profile profile)

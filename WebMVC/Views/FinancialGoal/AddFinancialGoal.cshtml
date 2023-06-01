@@ -22,20 +22,20 @@
     </div>
 
     <div class="form-group">
-        @Html.LabelFor(model => model.FinancialGoal.TargetAmount, "Target Amount")
+        @Html.LabelFor(model => model.FinancialGoal.TargetAmount, "TargetAmount")
         @Html.TextBoxFor(model => model.FinancialGoal.TargetAmount, new { @class = "form-control" })
         @Html.ValidationMessageFor(model => model.FinancialGoal.TargetAmount, "", new { @class = "text-danger" })
     </div>
 
     <div class="form-group">
-        @Html.LabelFor(model => model.FinancialGoal.TargetDate, "Target Date")
+        @Html.LabelFor(model => model.FinancialGoal.TargetDate, "TargetDate")
         @Html.TextBoxFor(model => model.FinancialGoal.TargetDate, new { @class = "form-control", type = "date" })
         @Html.ValidationMessageFor(model => model.FinancialGoal.TargetDate, "", new { @class = "text-danger" })
     </div>
     
     
     <div class="form-group">
-        @Html.LabelFor(model => model.FinancialGoal.BudgetId, "Budget")
+        @Html.LabelFor(model => model.FinancialGoal.BudgetId, "BudgetId")
         @Html.DropDownListFor(model => model.FinancialGoal.BudgetId, new SelectList(Model.Budgets, "Id", "Name"), "Select Budget", new { @class = "form-control" })
         @Html.ValidationMessageFor(model => model.FinancialGoal.BudgetId, "", new { @class = "text-danger" })
     </div>
