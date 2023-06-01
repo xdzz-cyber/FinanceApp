@@ -1,0 +1,14 @@
+﻿{
+  "compilerOptions": {
+    "target": "es5",
+    "module": "commonjs",
+    "sourceMap": true,
+    "outDir": "wwwroot/dist" // Adjust the output directory
+  },
+  "include": [
+    "wwwroot/src/**/*.ts" // Adjust the included path
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}

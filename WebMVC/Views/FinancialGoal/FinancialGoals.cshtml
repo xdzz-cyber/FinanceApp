@@ -1,0 +1,38 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@model List<Application.Common.Dtos.FinancialGoalDto>
+
+@{
+    Layout = "_Layout";
+}
+
+@inject IViewLocalizer Localizer
+
+<h2>@Localizer["FinancialGoalsMessage"]</h2>
+
+<table class="table">
+    <thead>
+    <tr>
+        <th>@Localizer["NameMessage"]</th>
+        <th>@Localizer["DescriptionMessage"]</th>
+        <th>@Localizer["TargetAmountMessage"]</th>
+        <th>@Localizer["TargetDateMessage"]</th>
+        <th>@Localizer["BudgetMessage"]</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var goal in Model)
+    {
+        <tr>
+            <td>@goal.Name</td>
+            <td>@goal.Description</td>
+            <td>@goal.TargetAmount</td>
+            <td>@goal.TargetDate.ToString("dd/MM/yyyy")</td>
+            <td>@(goal.BudgetId.ToString())</td>
+        </tr>
+    }
+    </tbody>
+</table>
+
+<div>
+    @Html.ActionLink("Create New", "AddFinancialGoal", "FinancialGoal")
+</div>

@@ -1,0 +1,45 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model RegisterVm
+
+@{
+    Layout = "_Layout";
+}
+
+@inject IViewLocalizer Localizer
+
+<div class="tab-content d-grid align-items-center justify-content-center mt-5">
+  <div class="tab-pane fade show active" id="pills-login" role="tabpanel" aria-labelledby="tab-login">
+    <form asp-controller="Auth" asp-action="Register" method="post">
+      <!-- Email input -->
+      <div class="form-outline mb-4">
+        <input asp-for="Email" type="email" id="email" class="form-control" />
+        <label class="form-label" for="email">@Localizer["EmailInputMessage"]</label>
+        <div>
+          <span class="text-danger" asp-validation-for="Email"></span>
+        </div>
+      </div>
+      
+      <!-- Username input -->
+            <div class="form-outline mb-4">
+              <input asp-for="UserName" type="text" id="username" class="form-control" />
+              <label class="form-label" for="username">@Localizer["UsernameInputMessage"]</label>
+              <div>
+                <span class="text-danger" asp-validation-for="UserName"></span>
+              </div>
+            </div>
+
+      <!-- Password input -->
+      <div class="form-outline mb-4">
+        <input asp-for="Password" type="password" id="loginPassword" class="form-control" />
+        <label class="form-label" for="loginPassword">@Localizer["PasswordInputMessage"]</label>
+        <div>
+          <span class="text-danger" asp-validation-for="Password"></span>
+        </div>
+      </div>
+
+      <!-- Submit button -->
+      <button type="submit" class="btn btn-primary btn-block mb-4">@Localizer["RegisterButtonMessage"]</button>
+    </form>
+  </div>
+</div>

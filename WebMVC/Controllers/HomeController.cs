@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics;
-using Application.Common.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebMVC.Models;
@@ -16,16 +15,11 @@ public class HomeController : BaseController
     }
     
     [HttpGet]
-    public async Task<ActionResult<MockVm>> Index()
+    public IActionResult Index()
     {
         return View();
     }
     
-    [HttpGet("{id}")]
-    public async Task<ActionResult<MockVm>> Details(Guid id)
-    {
-        return View();
-    }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error()

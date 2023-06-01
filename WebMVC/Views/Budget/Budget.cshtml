@@ -1,0 +1,123 @@
+﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using Microsoft.AspNetCore.Mvc.Localization
+@model BudgetVm
+
+@{
+    Layout = "_Layout";
+}
+
+@inject IViewLocalizer Localizer
+
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <h1>@Localizer["BudgetDetailsMessage"]</h1>
+        
+            <div class="budget-container">
+                <div class="budget-info">
+                    <h3>@Model.Budget.Name</h3>
+                    <p>Amount: @Model.Budget.Amount</p>
+                    <p>Start Date: @Model.Budget.StartDate.ToString("yyyy-MM-dd")</p>
+                    <p>End Date: @Model.Budget.EndDate.ToString("yyyy-MM-dd")</p>
+                </div>
+                <div class="budget-container">
+                    <div class="budget-info">
+                        <h3>@Localizer["AddTransactionButtonMessage"]</h3>
+                        <p><a asp-controller="Transaction" asp-action="AddTransaction" asp-route-budgetId="@Model.Budget.Id">
+                            @Localizer["AddTransactionMessage"]
+                        </a></p>
+                    </div>
+                </div>
+            </div>
+        
+            <h2>@Localizer["TransactionsMessage"]</h2>
+        
+            @if (Model.Transactions != null && Model.Transactions.Any())
+            {
+                <table>
+                    <thead>
+                    <tr>
+                        <th>@Localizer["DateMessage"]</th>
+                        <th>@Localizer["CategoryNameMessage"]</th>
+                        <th>@Localizer["AmountMessage"]</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @foreach (var transaction in Model.Transactions)
+                    {
+                        <tr>
+                            <td>@Localizer["DateMessage"]: @transaction.Date.ToString("yyyy-MM-dd")</td>
+                            <td>@Localizer["CategoryNameMessage"]: @transaction.CategoryName</td>
+                            <td>@Localizer["AmountMessage"]: @transaction.Amount</td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <p class="no-transactions">@Localizer["NoTransactionsFoundMessage"]</p>
+            }
+        
+        </div>
+        
+        <div class="col" id="incomeExpenseChart"></div>
+    </div>
+
+</div>
+
+
+<script>
+    let transactionsJson = '@Html.Raw(Model.TransactionsJson)';
+    let transactions = JSON.parse(transactionsJson);
+
+    let incomeData = {
+        type: 'scatter',
+        x: [],
+        y: [],
+        mode: 'lines',
+        name: 'Income',
+        line: {
+            color: 'rgb(219, 64, 82)',
+            width: 3
+        }
+    };
+
+    let expenseData = {
+        type: 'scatter',
+        x: [],
+        y: [],
+        mode: 'lines',
+        name: 'Expense',
+        line: {
+            color: 'rgb(55, 128, 191)',
+            width: 1
+        }
+    };
+
+    // Sort transactions by date and by amount
+    transactions.sort(function (a, b) {
+        return new Date(a.Date) - new Date(b.Date) || a.Amount - b.Amount;
+    });
+
+    transactions.forEach(function (transaction) {
+        // Check if transaction is income or expense
+        if (transaction.CategoryName === "Income") {
+            incomeData.x.push(transaction.Date);
+            incomeData.y.push(transaction.Amount);
+        }
+        else {
+            expenseData.x.push(transaction.Date);
+            expenseData.y.push(transaction.Amount);
+        }
+    });
+
+    var layout = {
+        width: 650,
+        height: 650
+    };
+
+    var data = [incomeData, expenseData];
+
+    Plotly.newPlot('incomeExpenseChart', data, layout);
+</script>

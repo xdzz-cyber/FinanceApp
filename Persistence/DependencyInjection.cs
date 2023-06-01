@@ -25,7 +25,13 @@ public static class DependencyInjection
             options.SignIn.RequireConfirmedEmail = false;
             options.SignIn.RequireConfirmedAccount = false;
         }).AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
-   
+        
+        services.ConfigureApplicationCookie(options => {
+            options.ExpireTimeSpan = TimeSpan.FromHours(1);
+            options.LoginPath = "/Auth/Login";
+            options.AccessDeniedPath = "/Auth/Login";
+        });
+        
         return services;
     }
 }

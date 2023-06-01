@@ -20,7 +20,7 @@ public class AssemblyMappingProfile : Profile
         foreach (var type in types)
         {
             var instance = Activator.CreateInstance(type);
-            var methodInfo = type.GetMethod("Mapping") ?? type.GetInterface("IMapWith`1")?.GetMethod("Mapping");
+            var methodInfo = type.GetMethod("Mapping") ?? type.GetInterface("IMapWith")?.GetMethod("Mapping"); //IMapWith`1
             methodInfo?.Invoke(instance, new object[] {this});
         }
     }
