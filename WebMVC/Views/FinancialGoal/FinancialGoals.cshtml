@@ -1,5 +1,6 @@
 ﻿@using Microsoft.AspNetCore.Mvc.Localization
-@model List<Application.Common.Dtos.FinancialGoalDto>
+@* @model List<Application.Common.Dtos.FinancialGoalDto> *@
+@model List<FinancialGoalsVm>
 
 @{
     Layout = "_Layout";
@@ -27,7 +28,7 @@
             <td>@goal.Description</td>
             <td>@goal.TargetAmount</td>
             <td>@goal.TargetDate.ToString("dd/MM/yyyy")</td>
-            <td>@(goal.BudgetId.ToString())</td>
+            <td>@(goal.BudgetName)</td>
         </tr>
     }
     </tbody>

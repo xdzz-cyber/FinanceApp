@@ -14,17 +14,5 @@ public class ApplicationUserConfiguration : IEntityTypeConfiguration<Application
             .WithOne(b => b.AppUser)
             .HasForeignKey(b => b.AppUserId)
             .OnDelete(DeleteBehavior.Cascade);
-        
-        // One-to-Many with Transaction: A user can have multiple transactions.
-        // builder.HasMany<Transaction>()
-        //     .WithOne(t => t.AppUser)
-        //     .HasForeignKey(t => t.AppUserId)
-        //     .OnDelete(DeleteBehavior.Cascade);
-        
-        // One-to-Many with FinancialGoal: A user can have multiple financial goals.
-        // builder.HasMany<FinancialGoal>()
-        //     .WithOne(fg => fg.AppUser)
-        //     .HasForeignKey(fg => fg.AppUserId)
-        //     .OnDelete(DeleteBehavior.Cascade);
     }
 }

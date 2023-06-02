@@ -21,7 +21,7 @@ public class AuthController : BaseController
         // Check if ModelState is valid
         if (!ModelState.IsValid)
         {
-            return View();
+            return View(loginVm);
         }
         var loginCommand = new Login {Email = loginVm.Email, Password = loginVm.Password};
         var result = await Mediator.Send(loginCommand);
@@ -56,7 +56,7 @@ public class AuthController : BaseController
         // Check if ModelState is valid
         if (!ModelState.IsValid)
         {
-            return View();
+            return View(registerVm);
         }
         var registerCommand = new Registration
         {

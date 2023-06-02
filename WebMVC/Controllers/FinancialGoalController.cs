@@ -3,18 +3,41 @@ using Application.Budget.Queries.GetBudgets;
 using Application.Common.Dtos;
 using Application.FinancialGoal.Commands.CreateFinancialGoal;
 using Application.FinancialGoal.Queries.GetFinancialGoals;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebMVC.Models;
 
 namespace WebMVC.Controllers;
 
+[Authorize]
 public class FinancialGoalController : BaseController
 {
     [HttpGet]
     public async Task<IActionResult> FinancialGoals()
     {
-        var financialGoals = await Mediator.Send(new GetFinancialGoals());
-        return View(financialGoals);
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+        var financialGoals = await Mediator.Send(new GetFinancialGoals()
+        {
+            UserId = userId
+        });
+
+        var budgets = await Mediator.Send(new GetBudgets { UserId = userId });
+
+        var financialGoalsVm = (
+            from financialGoal in financialGoals
+            join budget in budgets on financialGoal.BudgetId equals budget.Id
+            select new FinancialGoalsVm
+            {
+                Name = financialGoal.Name,
+                Description = financialGoal.Description,
+                TargetAmount = financialGoal.TargetAmount,
+                TargetDate = financialGoal.TargetDate,
+                BudgetName = budget.Name
+            }
+        ).ToList();
+
+        return View(financialGoalsVm);
     }
     
     [HttpGet]
@@ -24,7 +47,6 @@ public class FinancialGoalController : BaseController
         return View(new AddFinancialGoalVm()
         {
             FinancialGoal = new FinancialGoalDto(),
-            // UserId = userId,
             Budgets = await Mediator.Send(new GetBudgets {UserId = userId})
         });
     }

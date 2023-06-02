@@ -20,7 +20,7 @@ public class GetBudgetHandler : IRequestHandler<GetBudget, BudgetDto>
     
     public async Task<BudgetDto> Handle(GetBudget request, CancellationToken cancellationToken)
     {
-        var budget = await _context.Budgets.Include(b => b.Transactions)
+        var budget = await _context.Budgets.AsNoTracking().Include(b => b.Transactions)
             .FirstOrDefaultAsync(b => b.Id == request.Id, cancellationToken: cancellationToken);
 
         if (budget is null)
