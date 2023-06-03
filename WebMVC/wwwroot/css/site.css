@@ -16,3 +16,65 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+.row-container {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+.goal-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: calc(33.33% - 20px);
+  padding: 0 10px;
+  box-sizing: border-box;
+}
+.goal-name {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+.goal-type {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+.goal-description {
+  margin-bottom: 10px;
+}
+.goal-progress-bar {
+  height: 20px;
+  width: 100%;
+  background-color: #e0e0e0;
+  position: relative;
+  margin-bottom: 5px;
+}
+.goal-progress {
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+}
+.income-green {
+  background-color: green;
+}
+.income-red {
+  background-color: red;
+}
+.expense-red {
+  background-color: red;
+}
+.expense-green {
+  background-color: green;
+}
+.goal-percentage {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #fff;
+  font-weight: bold;
+}
+.goal-tips {
+  margin-top: 10px;
+}
