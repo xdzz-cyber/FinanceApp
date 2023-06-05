@@ -1,15 +1,22 @@
-﻿function generateFinancialGoals(){
+﻿async function generateFinancialGoals() {
     // Mocked data for testing purposes
     var financialGoals = [
-        { name: "Goal 1", description: "Description 1", type: "Income", targetAmount: 1000, currentAmount: 500 },
-        { name: "Goal 2", description: "Description 2", type: "Income", targetAmount: 2000, currentAmount: 1500 },
-        { name: "Goal 3", description: "Description 3", type: "Expense", targetAmount: 3000, currentAmount: 2800 },
-        { name: "Goal 4", description: "Description 4", type: "Expense", targetAmount: 4000, currentAmount: 4000 },
-        { name: "Goal 5", description: "Description 5", type: "Income", targetAmount: 5000, currentAmount: 5500 },
-        { name: "Goal 6", description: "Description 6", type: "Expense", targetAmount: 6000, currentAmount: 4500 },
-        { name: "Goal 7", description: "Description 7", type: "Income", targetAmount: 7000, currentAmount: 7000 },
-        { name: "Goal 8", description: "Description 8", type: "Expense", targetAmount: 8000, currentAmount: 6000 },
-        { name: "Goal 9", description: "Description 9", type: "Income", targetAmount: 9000, currentAmount: 9500 },
+        {
+            name: "earn money for my family",
+            description: "Kids and wife need more money",
+            type: "Income",
+            targetAmount: 1000,
+            currentAmount: 500,
+            budgetName: "Family"
+        },
+        {
+            name: "earn money on charitable event to send it to kids",
+            description: "gotta earn money to help kids",
+            type: "Income",
+            targetAmount: 2000,
+            currentAmount: 1500,
+            budgetName: "Leisure"
+        },
     ];
 
     // Function to create progress bar
@@ -33,6 +40,52 @@
         container.appendChild(progressBar);
         container.appendChild(percentageLabel);
     }
+
+    // Function to get advice for financial goal
+    async function getAdvice(goals) {
+        let prompt = ""
+        goals.forEach((goal, idx) => {
+            const {name, description, type, targetAmount, currentAmount, budgetName} = goal;
+            prompt += `I want you to generate me an meaningful advice (64 symbols at max) for each financial goal (there's ${goals.length} of them 
+            and separate answer for each by ; symbol), and here's data of current which is ${idx + 1}th (name:${name},
+            description:${description}, type:${type}, targetAmount:${targetAmount}, currentAmount:${currentAmount}).
+            Type income means that you need to earn more money, type expense means that you need to save more money.
+            Budget name is ${budgetName}`;
+        });
+
+        const headers = {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer `
+        };
+
+        const data = {
+            "max_tokens": 128,
+            "temperature": 0.6,
+            "model": "gpt-3.5-turbo",
+            "n": 1,
+            "messages": [
+                {
+                    "role": "user",
+                    "content": prompt
+                }
+            ]
+        };
+
+        const response = await fetch("https://api.openai.com/v1/chat/completions", {
+            method: "POST",
+            headers: headers,
+            body: JSON.stringify(data)
+        });
+        //console.log(await response.json())
+        const responseData = await response.json();
+        console.log(responseData.choices)
+        console.log(responseData.choices[0].message.content)
+        console.log(responseData.choices[0].message.content.split("\n"))
+        // console.log(responseData.choices[1].message.content)
+        return response //await response.json();
+    }
+
+    await getAdvice(financialGoals);
 
     // Generate financial goals
     var container = document.getElementById("financial-goals-container");
