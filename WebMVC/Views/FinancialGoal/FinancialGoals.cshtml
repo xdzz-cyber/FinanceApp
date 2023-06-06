@@ -41,5 +41,6 @@
 </div>
 
 <script>
-  generateFinancialGoals();
+    console.log(@Html.Raw(Json.Serialize(Model)));
+    generateFinancialGoals(@Html.Raw(Json.Serialize(Model)));
 </script>

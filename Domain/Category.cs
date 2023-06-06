@@ -8,4 +8,5 @@ public class Category
 
     public string Description { get; set; } = null!;
     public IEnumerable<Transaction>? Transactions { get; set; }
+    public IEnumerable<FinancialGoal>? FinancialGoals { get; set; }
 }

@@ -11,7 +11,7 @@
 <div class="container">
     <div class="row">
         <div class="col">
-            <h1>@Localizer["BudgetDetailsMessage"]</h1>
+            <h1>@Localizer["BudgetDetailsMessage"].Value</h1>
         
             <div class="budget-container">
                 <div class="budget-info">
@@ -22,9 +22,9 @@
                 </div>
                 <div class="budget-container">
                     <div class="budget-info">
-                        <h3>@Localizer["AddTransactionButtonMessage"]</h3>
+                        <h3>@Localizer["AddTransactionButtonMessage"].Value</h3>
                         <p><a asp-controller="Transaction" asp-action="AddTransaction" asp-route-budgetId="@Model.Budget.Id">
-                            @Localizer["AddTransactionMessage"]
+                            @Localizer["AddTransactionMessage"].Value
                         </a></p>
                     </div>
                 </div>
@@ -37,18 +37,18 @@
                 <table>
                     <thead>
                     <tr>
-                        <th>@Localizer["DateMessage"]</th>
-                        <th>@Localizer["CategoryNameMessage"]</th>
-                        <th>@Localizer["AmountMessage"]</th>
+                        <th>@Localizer["DateMessage"].Value</th>
+                        <th>@Localizer["CategoryNameMessage"].Value</th>
+                        <th>@Localizer["AmountMessage"].Value</th>
                     </tr>
                     </thead>
                     <tbody>
                     @foreach (var transaction in Model.Transactions)
                     {
                         <tr>
-                            <td>@Localizer["DateMessage"]: @transaction.Date.ToString("yyyy-MM-dd")</td>
-                            <td>@Localizer["CategoryNameMessage"]: @transaction.CategoryName</td>
-                            <td>@Localizer["AmountMessage"]: @transaction.Amount</td>
+                            <td>@Localizer["DateMessage"].Value: @transaction.Date.ToString("yyyy-MM-dd")</td>
+                            <td>@Localizer["CategoryNameMessage"].Value: @transaction.CategoryName</td>
+                            <td>@Localizer["AmountMessage"].Value: @transaction.Amount</td>
                         </tr>
                     }
                     </tbody>
@@ -56,7 +56,7 @@
             }
             else
             {
-                <p class="no-transactions">@Localizer["NoTransactionsFoundMessage"]</p>
+                <p class="no-transactions">@Localizer["NoTransactionsFoundMessage"].Value</p>
             }
         
         </div>

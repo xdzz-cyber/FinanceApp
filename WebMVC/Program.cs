@@ -13,10 +13,18 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 // Configure Identity Server
-
-builder.Services.AddControllersWithViews();
-builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
-builder.Services.AddMvc().AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix).AddDataAnnotationsLocalization();
+builder.Services.AddLocalization(options => options.ResourcesPath = "Resources"); ;
+builder.Services.AddControllersWithViews().AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix)
+    .AddDataAnnotationsLocalization().AddViewLocalization();
+builder.Services.Configure<RequestLocalizationOptions>(options =>
+{
+    options.SetDefaultCulture("en");
+    options.AddSupportedCultures("en", "uk");
+    options.AddSupportedUICultures("en", "uk");
+    options.FallBackToParentCultures = true;
+    options.FallBackToParentUICultures = true;
+    options.RequestCultureProviders.Clear();
+});
 builder.Services.AddAutoMapper(config =>
 {
     config.AddProfile(new AssemblyMappingProfile(Assembly.GetExecutingAssembly()));
@@ -62,15 +70,10 @@ app.UseCors("AllowAll");
 app.UseStaticFiles();
 
 app.UseRouting();
-
+app.UseRequestLocalization();
 app.UseAuthentication();
 app.UseAuthorization();
 
-var supportedCultures = new[] {"en", "uk"};
-var localizationOptions = new RequestLocalizationOptions().SetDefaultCulture(supportedCultures[0])
-    .AddSupportedCultures(supportedCultures).AddSupportedUICultures(supportedCultures);
-
-app.UseRequestLocalization(localizationOptions);
 
 app.MapControllerRoute(
     name: "default",

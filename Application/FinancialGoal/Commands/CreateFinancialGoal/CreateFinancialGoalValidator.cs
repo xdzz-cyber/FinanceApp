@@ -38,5 +38,17 @@ public class CreateFinancialGoalValidator : AbstractValidator<CreateFinancialGoa
         RuleFor(x => x.BudgetId)
             .NotEmpty()
             .WithMessage("BudgetId is required.");
+        
+        // Create rule for CategoryId
+        RuleFor(x => x.CategoryId)
+            .NotEmpty()
+            .WithMessage("CategoryId is required.");
+        
+        // Create rule for CurrentAmount
+        RuleFor(x => x.CurrentAmount)
+            .NotEmpty()
+            .WithMessage("CurrentAmount is required.")
+            .GreaterThanOrEqualTo(0)
+            .WithMessage("CurrentAmount must be greater than or equal to 0.");
     }
 }

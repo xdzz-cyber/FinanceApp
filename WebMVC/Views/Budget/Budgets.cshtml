@@ -7,16 +7,16 @@
 
 @inject IViewLocalizer Localizer
 
-<h1 class="text-center">@Localizer["WelcomeMessage"]</h1>
+<h1 class="text-center">@Localizer["WelcomeMessage"].Value</h1>
 <div class="d-grid justify-content-center">
-    <p>@Localizer["AddBudgetButtonMessage"]</p>
-    <a asp-controller="Budget" asp-action="AddBudget" class="btn btn-primary">@Localizer["AddBudgetMessage"]</a>
+    <p>@Localizer["AddBudgetButtonMessage"].Value</p>
+    <a asp-controller="Budget" asp-action="AddBudget" class="btn btn-primary">@Localizer["AddBudgetMessage"].Value</a>
 </div>
 
 @if (Model.Count == 0)
 {
     <div class="d-grid justify-content-center">
-        <p>@Localizer["NoBudgetsMessage"]</p>
+        <p>@Localizer["NoBudgetsMessage"].Value</p>
     </div>
 }
 else
@@ -27,7 +27,7 @@ else
             <div class="card-body">
                 <h5 class="card-title">@budget.Name</h5>
                 <p class="card-text">@budget.Amount</p>
-                <a asp-action="Budget" asp-controller="Budget" asp-route-id="@budget.Id" class="btn btn-primary">@Localizer["GoSeeTransactionsMessage"]</a>
+                <a asp-action="Budget" asp-controller="Budget" asp-route-id="@budget.Id" class="btn btn-primary">@Localizer["GoSeeTransactionsMessage"].Value</a>
             </div>
         </div>
     }

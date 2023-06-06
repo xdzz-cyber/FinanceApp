@@ -12,7 +12,7 @@
     @Html.AntiForgeryToken()
 
     <div class="form-horizontal">
-        <h4>@Localizer["WelcomeMessage"]</h4>
+        <h4>@Localizer["WelcomeMessage"].Value</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         @Html.HiddenFor(model => model.BudgetId)
@@ -42,6 +42,6 @@
         </div>
         
 
-        <button type="submit" class="btn btn-primary btn-block mb-4">@Localizer["AddTransactionMessage"]</button>
+        <button type="submit" class="btn btn-primary btn-block mb-4">@Localizer["AddTransactionMessage"].Value</button>
     </div>
 }

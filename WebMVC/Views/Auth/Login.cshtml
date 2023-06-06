@@ -13,7 +13,7 @@
         <!-- Email input -->
         <div class="form-outline mb-4">
             <input asp-for="Email" type="email" id="form2Example1" class="form-control" />
-            <label class="form-label" for="form2Example1">@Localizer["EmailInputMessage"]</label>
+            <label class="form-label" for="form2Example1">@Localizer["EmailInputMessage"].Value</label>
             <div>
                 <span class="text-danger" asp-validation-for="Email"></span>
             </div>
@@ -22,16 +22,16 @@
         <!-- Password input -->
         <div class="form-outline mb-4">
             <input asp-for="Password" type="password" id="form2Example2" class="form-control" />
-            <label class="form-label" for="form2Example2">@Localizer["PasswordInputMessage"]</label>
+            <label class="form-label" for="form2Example2">@Localizer["PasswordInputMessage"].Value</label>
             <div>
                 <span class="text-danger" asp-validation-for="Password"></span>
             </div>
         </div>
         <!-- Submit button -->
-        <button type="submit" class="btn btn-primary btn-block mb-4">@Localizer["SignInButtonMessage"]</button>
+        <button type="submit" class="btn btn-primary btn-block mb-4">@Localizer["SignInButtonMessage"].Value</button>
     </form>
     <!-- Register buttons -->
     <div class="text-center">
-        <p>Not a member? <a asp-controller="Auth" asp-action="Register">@Localizer["RegisterButtonMessage"]</a></p>
+        <p>Not a member? <a asp-controller="Auth" asp-action="Register">@Localizer["RegisterButtonMessage"].Value</a></p>
     </div>
 </div>

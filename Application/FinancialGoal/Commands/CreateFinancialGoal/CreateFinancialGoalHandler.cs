@@ -20,7 +20,9 @@ public class CreateFinancialGoalHandler : IRequestHandler<CreateFinancialGoal, G
             Description = request.Description,
             TargetAmount = request.TargetAmount,
             TargetDate = request.TargetDate,
-            BudgetId = request.BudgetId
+            BudgetId = request.BudgetId,
+            CategoryId = request.CategoryId,
+            CurrentAmount = request.CurrentAmount
         };
         
         await _context.FinancialGoals.AddAsync(financialGoal, cancellationToken);

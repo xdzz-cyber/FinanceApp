@@ -1,23 +1,24 @@
-﻿async function generateFinancialGoals() {
+﻿async function generateFinancialGoals(financialGoals) {
+    console.log(financialGoals)
     // Mocked data for testing purposes
-    var financialGoals = [
-        {
-            name: "earn money for my family",
-            description: "Kids and wife need more money",
-            type: "Income",
-            targetAmount: 1000,
-            currentAmount: 500,
-            budgetName: "Family"
-        },
-        {
-            name: "earn money on charitable event to send it to kids",
-            description: "gotta earn money to help kids",
-            type: "Income",
-            targetAmount: 2000,
-            currentAmount: 1500,
-            budgetName: "Leisure"
-        },
-    ];
+    // var financialGoals = [
+    //     {
+    //         name: "earn money for my family",
+    //         description: "Kids and wife need more money",
+    //         type: "Income",
+    //         targetAmount: 1000,
+    //         currentAmount: 500,
+    //         budgetName: "Family",
+    //     },
+    //     {
+    //         name: "earn money on charitable event to send it to kids",
+    //         description: "gotta earn money to help kids",
+    //         type: "Income",
+    //         targetAmount: 2000,
+    //         currentAmount: 1500,
+    //         budgetName: "Leisure",
+    //     },
+    // ];
 
     // Function to create progress bar
     function createProgressBar(container, goal) {
@@ -43,19 +44,15 @@
 
     // Function to get advice for financial goal
     async function getAdvice(goals) {
-        let prompt = ""
+        let prompt = "";
         goals.forEach((goal, idx) => {
-            const {name, description, type, targetAmount, currentAmount, budgetName} = goal;
-            prompt += `I want you to generate me an meaningful advice (64 symbols at max) for each financial goal (there's ${goals.length} of them 
-            and separate answer for each by ; symbol), and here's data of current which is ${idx + 1}th (name:${name},
-            description:${description}, type:${type}, targetAmount:${targetAmount}, currentAmount:${currentAmount}).
-            Type income means that you need to earn more money, type expense means that you need to save more money.
-            Budget name is ${budgetName}`;
+            const { name, description, type, targetAmount, currentAmount, budgetName } = goal;
+            prompt += `I want you to generate me a meaningful advice (64 symbols at max) for each financial goal (there are ${goals.length} of them and separate answers for each by ; symbol), and here's the data for the current goal which is the ${idx + 1}th one (name: ${name}, description: ${description}, type: ${type}, targetAmount: ${targetAmount}, currentAmount: ${currentAmount}). Type "income" means that you need to earn more money, type "expense" means that you need to save more money. Budget name is ${budgetName};`;
         });
 
         const headers = {
             "Content-Type": "application/json",
-            "Authorization": `Bearer `
+            "Authorization": "Bearer "
         };
 
         const data = {
@@ -76,16 +73,12 @@
             headers: headers,
             body: JSON.stringify(data)
         });
-        //console.log(await response.json())
         const responseData = await response.json();
         console.log(responseData.choices)
-        console.log(responseData.choices[0].message.content)
-        console.log(responseData.choices[0].message.content.split("\n"))
-        // console.log(responseData.choices[1].message.content)
-        return response //await response.json();
+        return responseData.choices;
     }
 
-    await getAdvice(financialGoals);
+    const adviceChoices = await getAdvice(financialGoals);
 
     // Generate financial goals
     var container = document.getElementById("financial-goals-container");
@@ -113,31 +106,30 @@
         goalDescription.classList.add("goal-description");
         goalDescription.textContent = goal.description;
 
+        var budgetName = document.createElement("div");
+        budgetName.classList.add("budget-name");
+        budgetName.textContent = "Budget: " + goal.budgetName;
+
         var goalProgressBarContainer = document.createElement("div");
         goalProgressBarContainer.classList.add("goal-progress-bar");
 
         var goalTips = document.createElement("div");
         goalTips.classList.add("goal-tips");
-
-        if (goal.type === "Income") {
-            if (goal.currentAmount < goal.targetAmount) {
-                goalTips.textContent = "Earn more money";
-            } else {
-                goalTips.textContent = "You've earned enough, good job";
-            }
-        } else if (goal.type === "Expense") {
-            if (goal.currentAmount < goal.targetAmount) {
-                //goalTips.textContent = "Please, save money";
-                goalTips.textContent = "You've saved enough, good job";
-            } else {
-                //goalTips.textContent = "You've saved enough, good job";
-                goalTips.textContent = "Please, save money";
-            }
-        }
+        const splitCharacter = adviceChoices[0].message.content.includes(";") ? ";" : "\n";
+        console.log(adviceChoices[0].message.content)
+        console.log(adviceChoices[0].message.content.split(splitCharacter))
+        let tips = adviceChoices[0].message.content.split(splitCharacter);
+        tips = tips.filter(function (el) {
+            return el !== "";
+        });
+        console.log(tips[0])
+        console.log(tips[1])
+        goalTips.textContent = tips[index];
 
         goalContainer.appendChild(goalName);
         goalContainer.appendChild(goalType);
         goalContainer.appendChild(goalDescription);
+        goalContainer.appendChild(budgetName);
         goalContainer.appendChild(goalProgressBarContainer);
         goalContainer.appendChild(goalTips);
 
@@ -146,7 +138,6 @@
         createProgressBar(goalProgressBarContainer, goal);
     });
 }
-
 function generateTransactions(transactionsJson){
     //let transactionsJson = '@Html.Raw(Model.TransactionsJson)';
     let transactions = JSON.parse(transactionsJson);

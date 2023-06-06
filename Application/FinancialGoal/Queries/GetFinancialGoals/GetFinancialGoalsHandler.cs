@@ -25,15 +25,7 @@ public class GetFinancialGoalsHandler : IRequestHandler<GetFinancialGoals, List<
     {
         var userBudgets = await _mediator.Send(new GetBudgets {UserId = request.UserId}, cancellationToken);
         var budgetIds = userBudgets.Select(userBudget => userBudget.Id).ToList();
-        
-        // var financialGoals = await _context.FinancialGoals.AsNoTracking()
-        //     .Where(financialGoal => userBudgets.Any(userBudget => userBudget.Id == financialGoal.BudgetId))
-        //     .ProjectTo<FinancialGoalDto>(_mapper.ConfigurationProvider)
-        //     .ToListAsync(cancellationToken: cancellationToken);
-        //
-        // return await Task.FromResult(financialGoals);
-        //return _mapper.Map<List<FinancialGoalDto>>(financialGoals);
-        
+
         var financialGoals = await _context.FinancialGoals
             .AsNoTracking()
             .Where(financialGoal => budgetIds.Contains(financialGoal.BudgetId))

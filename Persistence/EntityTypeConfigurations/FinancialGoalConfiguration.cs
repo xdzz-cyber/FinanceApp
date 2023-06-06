@@ -13,5 +13,11 @@ public class FinancialGoalConfiguration : IEntityTypeConfiguration<FinancialGoal
             .WithMany(b => b.FinancialGoals)
             .HasForeignKey(fg => fg.BudgetId)
             .OnDelete(DeleteBehavior.Cascade);
+        
+        // Financial goal belongs to a specific category.
+        builder.HasOne(fg => fg.Category)
+            .WithMany(c => c.FinancialGoals)
+            .HasForeignKey(fg => fg.CategoryId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

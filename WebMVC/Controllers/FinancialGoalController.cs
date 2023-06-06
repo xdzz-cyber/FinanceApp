@@ -32,7 +32,8 @@ public class FinancialGoalController : BaseController
                 Name = financialGoal.Name,
                 Description = financialGoal.Description,
                 TargetAmount = financialGoal.TargetAmount,
-                TargetDate = financialGoal.TargetDate,
+                CurrentAmount = financialGoal.CurrentAmount,
+                Type = financialGoal.CategoryName,
                 BudgetName = budget.Name
             }
         ).ToList();
