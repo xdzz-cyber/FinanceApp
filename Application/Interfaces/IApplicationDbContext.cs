@@ -11,6 +11,8 @@ public interface IApplicationDbContext
     DbSet<Domain.Category> Categories { get; set; }
     
     DbSet<Domain.FinancialGoal> FinancialGoals { get; set; }
+    
+    DbSet<Domain.Coin> Coins { get; set; }
 
     Task<int> SaveChangesAsync(CancellationToken cancellationToken);
 }

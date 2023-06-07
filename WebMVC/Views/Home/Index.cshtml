@@ -1,11 +1,51 @@
 ﻿@using Microsoft.AspNetCore.Mvc.Localization
 @{
     ViewData["Title"] = "Home Page";
+    Layout = "_Layout";
 }
 
+@model List<Application.Common.Dtos.CoinDto>
 @inject IViewLocalizer Localizer
 
 
-<div class="text-center">
+<div class="text-center mx-auto">
     <h1 class="display-4">@Localizer["WelcomeMessage"].Value</h1>
 </div>
+
+ @* <div class="card-container"> *@
+ @*        <div class="card"> *@
+ @*            <h3>Card 1</h3> *@
+ @*            <p>This is the content of card 1.</p> *@
+ @*        </div> *@
+ @*        <div class="card"> *@
+ @*            <h3>Card 2</h3> *@
+ @*            <p>This is the content of card 2.</p> *@
+ @*        </div> *@
+ @*        <div class="card"> *@
+ @*            <h3>Card 3</h3> *@
+ @*            <p>This is the content of card 3.</p> *@
+ @*        </div> *@
+ @*        <!-- Repeat the card elements to create more cards --> *@
+@*    </div> *@
+
+<div class="card-container">
+    @foreach (var coin in Model.Take(3))
+    {
+        <div class="card">
+            <h3>@coin.Name</h3>
+            <p>@coin.Symbol</p>
+            <p>Price: @coin.PriceUsd USD</p>
+        </div>
+    }
+</div>
+
+<div class="pagination">
+        <button class="active">1</button>
+        <button>2</button>
+        <button>3</button>
+        <button>4</button>
+        <button>5</button>
+    </div>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>

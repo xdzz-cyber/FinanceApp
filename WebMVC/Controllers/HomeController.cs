@@ -1,4 +1,6 @@
 ﻿using System.Diagnostics;
+using System.Text.Json;
+using Application.Coins.Queries.GetCoins;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebMVC.Models;
@@ -15,9 +17,15 @@ public class HomeController : BaseController
     }
     
     [HttpGet]
-    public IActionResult Index()
+    public async Task<IActionResult> Index()
     {
-        return View();
+        // Make get request to the API to get all coins.
+        // var httpClient = new HttpClient();
+        // var response = httpClient.GetAsync("https://api.coincap.io/v2/assets").Result;
+        // var coins = response.Content.ReadAsStringAsync().Result;
+        // var parsedCoins = JsonSerializer.Deserialize<CoinListVm>(coins);
+        var coins = await Mediator.Send(new GetCoins());
+        return View(coins);
     }
     
 

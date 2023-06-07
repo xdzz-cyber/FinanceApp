@@ -52,7 +52,7 @@
 
         const headers = {
             "Content-Type": "application/json",
-            "Authorization": "Bearer "
+            "Authorization": "Bearer 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"
         };
 
         const data = {

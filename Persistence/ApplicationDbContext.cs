@@ -16,6 +16,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>,IApplicat
     public DbSet<Transaction> Transactions { get; set; }
     public DbSet<Category> Categories { get; set; }
     public DbSet<FinancialGoal> FinancialGoals { get; set; }
+    public DbSet<Coin> Coins { get; set; }
 
 
     public ApplicationDbContext()

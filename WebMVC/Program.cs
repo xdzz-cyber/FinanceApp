@@ -53,7 +53,7 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-    DbInitializer.Initialize(dbContext);
+    DbInitializer.Initialize(dbContext).GetAwaiter().GetResult();
 }
 
 // Configure the HTTP request pipeline.

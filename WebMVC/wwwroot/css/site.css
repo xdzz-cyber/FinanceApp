@@ -176,3 +176,24 @@ body {
 .goal-tips {
   margin-top: 10px;
 }
+
+.card-container{
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  margin-top: 12%;
+}
+
+.pagination{
+  margin-top: 50px;
+  margin-left: auto;
+    margin-right: auto;
+  display: grid;
+  grid-gap: 10px;
+  max-width: 100px;
+  justify-content: space-evenly;
+  grid-template-columns: repeat(5, 1fr);
+}
+
+.pagination button{
+  width: 50px;
+}
