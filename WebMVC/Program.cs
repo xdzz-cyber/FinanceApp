@@ -70,6 +70,7 @@ app.UseCors("AllowAll");
 app.UseStaticFiles();
 
 app.UseRouting();
+// app.UseWebSockets(new WebSocketOptions() {KeepAliveInterval = TimeSpan.FromSeconds(30)});
 app.UseRequestLocalization();
 app.UseAuthentication();
 app.UseAuthorization();

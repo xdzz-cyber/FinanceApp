@@ -1,10 +1,11 @@
 ﻿@using Microsoft.AspNetCore.Mvc.Localization
+@using Application.Common.Constants
 @{
     ViewData["Title"] = "Home Page";
     Layout = "_Layout";
 }
 
-@model List<Application.Common.Dtos.CoinDto>
+@model CoinsVm
 @inject IViewLocalizer Localizer
 
 
@@ -12,40 +13,68 @@
     <h1 class="display-4">@Localizer["WelcomeMessage"].Value</h1>
 </div>
 
- @* <div class="card-container"> *@
- @*        <div class="card"> *@
- @*            <h3>Card 1</h3> *@
- @*            <p>This is the content of card 1.</p> *@
- @*        </div> *@
- @*        <div class="card"> *@
- @*            <h3>Card 2</h3> *@
- @*            <p>This is the content of card 2.</p> *@
- @*        </div> *@
- @*        <div class="card"> *@
- @*            <h3>Card 3</h3> *@
- @*            <p>This is the content of card 3.</p> *@
- @*        </div> *@
- @*        <!-- Repeat the card elements to create more cards --> *@
-@*    </div> *@
 
 <div class="card-container">
-    @foreach (var coin in Model.Take(3))
+    @foreach (var coin in Model.Coins)
     {
         <div class="card">
             <h3>@coin.Name</h3>
             <p>@coin.Symbol</p>
-            <p>Price: @coin.PriceUsd USD</p>
+            @* <p>Price: @coin.PriceUsd USD</p> *@
+            <p id="@($"price-{coin.Name.ToLower()}")">Price: @coin.PriceUsd USD</p>
         </div>
     }
 </div>
 
+
 <div class="pagination">
-        <button class="active">1</button>
-        <button>2</button>
-        <button>3</button>
-        <button>4</button>
-        <button>5</button>
-    </div>
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <nav>
+        <ul class="pagination justify-content-center">
+            @if (Model.StartPage > 1)
+            {
+                <li class="page-item">
+                    <a class="page-link" asp-action="Index" asp-controller="Home" asp-route-page="1">First</a>
+                </li>
+            }
+            
+            @for (var i = Model.StartPage; i <= Model.EndPage; i++)
+            {
+                <li class="page-item @(i == Model.CurrentPage ? "active" : "")">
+                    <a class="page-link" asp-action="Index" asp-controller="Home" asp-route-page="@i">@i</a>
+                </li>
+            }
+            
+            @if (Model.EndPage < Model.TotalPages)
+            {
+                <li class="page-item">
+                    <a class="page-link" asp-action="Index" asp-controller="Home" asp-route-page="@Model.TotalPages">Last</a>
+                </li>
+            }
+        </ul>
+    </nav>
+</div>
+
+<script>
+    // Establish WebSocket connection
+    const coins = @Html.Raw(Json.Serialize(Model.Coins.Select(c => c.Name.ToLower())));
+    var socket = new WebSocket(`wss://ws.coincap.io/prices?assets=${coins.join(",").toString()}`);
+   
+    console.log(`wss://ws.coincap.io/prices?assets=${coins.join(",").toString()}`)
+    // Update coin prices every 2 seconds
+    setInterval(function () {
+        socket.send("ping");
+    }, 2000);
+
+    socket.onmessage = function (event) {
+        var data = JSON.parse(event.data);
+        console.log(`In socket.onmessage: ${data}`)
+        console.log(Object.keys(data))
+        // Update coin prices in the HTML
+        Object.keys(data).forEach(function (coinName) {
+            var priceElement = document.getElementById("price-" + coinName);
+            if (priceElement) {
+                priceElement.textContent = "Price: " + data[coinName] + " USD";
+            }
+        });
+    };
+</script>

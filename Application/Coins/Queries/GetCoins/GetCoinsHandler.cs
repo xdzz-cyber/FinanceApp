@@ -20,6 +20,11 @@ public class GetCoinsHandler : IRequestHandler<GetCoins, List<CoinDto>>
     
     public async Task<List<CoinDto>> Handle(GetCoins request, CancellationToken cancellationToken)
     {
+        // var coins = await _context.Coins.AsNoTracking()
+        //     .ProjectTo<CoinDto>(_mapper.ConfigurationProvider)
+        //     .ToListAsync(cancellationToken: cancellationToken);
+        
+        // Take coins from the database based on page and per page.
         var coins = await _context.Coins.AsNoTracking()
             .ProjectTo<CoinDto>(_mapper.ConfigurationProvider)
             .ToListAsync(cancellationToken: cancellationToken);
