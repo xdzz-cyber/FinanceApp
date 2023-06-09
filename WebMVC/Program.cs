@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Persistence;
+using WebMVC.Hubs;
 using WebMVC.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -44,6 +45,8 @@ builder.Services.AddCors(options =>
 });
 builder.Services.AddAuthentication();
 builder.Services.AddAuthorization();
+builder.Services.AddSignalR();
+builder.Services.AddHttpClient();
 
 
 var app = builder.Build();
@@ -70,15 +73,21 @@ app.UseCors("AllowAll");
 app.UseStaticFiles();
 
 app.UseRouting();
-// app.UseWebSockets(new WebSocketOptions() {KeepAliveInterval = TimeSpan.FromSeconds(30)});
 app.UseRequestLocalization();
 app.UseAuthentication();
 app.UseAuthorization();
 
 
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+// app.MapControllerRoute(
+//     name: "default",
+//     pattern: "{controller=Home}/{action=Index}/{id?}");
 
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllerRoute(
+        name: "default",
+        pattern: "{controller=Home}/{action=Index}/{id?}");
+    endpoints.MapHub<CoinsHub>("/coinsHub");
+});
 
 app.Run();

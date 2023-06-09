@@ -1,5 +1,5 @@
 ﻿@using Microsoft.AspNetCore.Mvc.Localization
-@using Application.Common.Constants
+
 @{
     ViewData["Title"] = "Home Page";
     Layout = "_Layout";
@@ -36,14 +36,14 @@
                     <a class="page-link" asp-action="Index" asp-controller="Home" asp-route-page="1">First</a>
                 </li>
             }
-            
+
             @for (var i = Model.StartPage; i <= Model.EndPage; i++)
             {
                 <li class="page-item @(i == Model.CurrentPage ? "active" : "")">
                     <a class="page-link" asp-action="Index" asp-controller="Home" asp-route-page="@i">@i</a>
                 </li>
             }
-            
+
             @if (Model.EndPage < Model.TotalPages)
             {
                 <li class="page-item">
@@ -56,25 +56,58 @@
 
 <script>
     // Establish WebSocket connection
+    // const coins = @Html.Raw(Json.Serialize(Model.Coins.Select(c => c.Name.ToLower())));
+    // var socket = new WebSocket(`wss://ws.coincap.io/prices?assets=${coins.join(",").toString()}`);
+    //
+    // console.log(`wss://ws.coincap.io/prices?assets=${coins.join(",").toString()}`)
+    // // Update coin prices every 2 seconds
+    // setInterval(function () {
+    //     socket.send("ping");
+    // }, 2000);
+    //
+    // socket.onmessage = function (event) {
+    //     var data = JSON.parse(event.data);
+    //     console.log(`In socket.onmessage: ${data}`)
+    //     console.log(Object.keys(data))
+    //     // Update coin prices in the HTML
+    //     Object.keys(data).forEach(function (coinName) {
+    //         var priceElement = document.getElementById("price-" + coinName);
+    //         if (priceElement) {
+    //             priceElement.textContent = "Price: " + data[coinName] + " USD";
+    //         }
+    //     });
+    // };
+    let connection = new signalR.HubConnectionBuilder().withUrl("/coinsHub").build();
     const coins = @Html.Raw(Json.Serialize(Model.Coins.Select(c => c.Name.ToLower())));
-    var socket = new WebSocket(`wss://ws.coincap.io/prices?assets=${coins.join(",").toString()}`);
-   
-    console.log(`wss://ws.coincap.io/prices?assets=${coins.join(",").toString()}`)
-    // Update coin prices every 2 seconds
-    setInterval(function () {
-        socket.send("ping");
-    }, 2000);
-
-    socket.onmessage = function (event) {
-        var data = JSON.parse(event.data);
-        console.log(`In socket.onmessage: ${data}`)
-        console.log(Object.keys(data))
-        // Update coin prices in the HTML
-        Object.keys(data).forEach(function (coinName) {
-            var priceElement = document.getElementById("price-" + coinName);
-            if (priceElement) {
-                priceElement.textContent = "Price: " + data[coinName] + " USD";
-            }
+    connection.start()
+            .then(function () {
+                console.log("SignalR connection established.");
+                startCoinPriceUpdates();
+            })
+            .catch(function (err) {
+                console.error(err.toString());
+            });
+        
+         setInterval(function () {
+                connection.invoke("UpdateCoinPrices", coins)
+                    .catch(function (error) {
+                        console.error("Error updating coin prices:", error);
+                    });
+            }, 2000); // Update every two seconds
+    
+        connection.on("ReceiveCoinPrices", function (prices) {
+            // Update coin prices in the HTML
+            console.log(`hey`, JSON.parse(prices), JSON.stringify(prices))
+            const data = JSON.parse(prices).data;
+            console.log(data)
+            // Update coin prices in the HTML
+            data.forEach(function (coin) {
+                console.log(`Coin name: ${coin.name} and price: ${coin.priceUsd}`)
+                let priceElement = document.getElementById("price-" + coin.name.toLowerCase());
+                console.log(`priceelement`, priceElement)
+                if (priceElement) {
+                    priceElement.textContent = `Price: ${Number(coin.priceUsd).toPrecision(6)} USD`
+                }
+            });
         });
-    };
 </script>
