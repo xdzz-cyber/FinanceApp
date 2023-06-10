@@ -20,8 +20,11 @@
         <div class="card">
             <h3>@coin.Name</h3>
             <p>@coin.Symbol</p>
-            @* <p>Price: @coin.PriceUsd USD</p> *@
             <p id="@($"price-{coin.Name.ToLower()}")">Price: @coin.PriceUsd USD</p>
+            @* <canvas id="@($"chart-{coin.Name.ToLower()}")" height="100"></canvas> *@
+            <div id="@($"chart-container-{coin.Name.ToLower()}")">
+                <canvas id="@($"chart-{coin.Name.ToLower()}")" height="100"></canvas>
+            </div>
         </div>
     }
 </div>
@@ -55,34 +58,66 @@
 </div>
 
 <script>
-    // Establish WebSocket connection
-    // const coins = @Html.Raw(Json.Serialize(Model.Coins.Select(c => c.Name.ToLower())));
-    // var socket = new WebSocket(`wss://ws.coincap.io/prices?assets=${coins.join(",").toString()}`);
-    //
-    // console.log(`wss://ws.coincap.io/prices?assets=${coins.join(",").toString()}`)
-    // // Update coin prices every 2 seconds
-    // setInterval(function () {
-    //     socket.send("ping");
-    // }, 2000);
-    //
-    // socket.onmessage = function (event) {
-    //     var data = JSON.parse(event.data);
-    //     console.log(`In socket.onmessage: ${data}`)
-    //     console.log(Object.keys(data))
-    //     // Update coin prices in the HTML
-    //     Object.keys(data).forEach(function (coinName) {
-    //         var priceElement = document.getElementById("price-" + coinName);
-    //         if (priceElement) {
-    //             priceElement.textContent = "Price: " + data[coinName] + " USD";
-    //         }
-    //     });
-    // };
     let connection = new signalR.HubConnectionBuilder().withUrl("/coinsHub").build();
     const coins = @Html.Raw(Json.Serialize(Model.Coins.Select(c => c.Name.ToLower())));
+    // Object to store latest price for each coin
+        let latestPrices = coins.reduce((obj, coin) => {
+            obj[coin] = null;
+            return obj;
+        }, {});
+    
+        // Object to store historical data for each coin
+        let coinData = coins.reduce((obj, coin) => {
+            obj[coin] = {
+                prices: [], // Array to store historical prices
+                maxBars: 7, // Maximum number of bars to display
+            };
+            return obj;
+        }, {});
+    
+        // Chart.js configuration
+        let chartOptions = {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        precision: 0,
+                    },
+                },
+            },
+        };
+    
+        // Create a separate chart for each coin
+        let coinCharts = coins.reduce((obj, coin) => {
+            let canvasId = `chart-${coin}`;
+            let canvasElement = document.getElementById(canvasId);
+            let ctx = canvasElement.getContext("2d");
+            let chart = new Chart(ctx, {
+                type: "bar",
+                data: {
+                    labels: [],
+                    datasets: [{
+                        label: coin,
+                        data: [],
+                        backgroundColor: "rgba(75, 192, 192, 0.5)",
+                        borderColor: "rgba(75, 192, 192, 1)",
+                        borderWidth: 1,
+                        barThickness: 20,
+                        maxBarThickness: 40,
+                        minBarLength: 2,
+                    }],
+                },
+                options: chartOptions,
+            });
+            obj[coin] = chart;
+            return obj;
+        }, {});
+    
+    
     connection.start()
             .then(function () {
-                console.log("SignalR connection established.");
-                startCoinPriceUpdates();
+                console.log("SignalR connection established.")
             })
             .catch(function (err) {
                 console.error(err.toString());
@@ -97,17 +132,41 @@
     
         connection.on("ReceiveCoinPrices", function (prices) {
             // Update coin prices in the HTML
-            console.log(`hey`, JSON.parse(prices), JSON.stringify(prices))
             const data = JSON.parse(prices).data;
-            console.log(data)
             // Update coin prices in the HTML
+            console.log("inside ReceiveCoinPrices", data);
             data.forEach(function (coin) {
-                console.log(`Coin name: ${coin.name} and price: ${coin.priceUsd}`)
+                //const priceElement = document.getElementById("price-" + coin.name.toLowerCase());
+                const chartContainer = document.getElementById("chart-container-" + coin.name.toLowerCase());
                 let priceElement = document.getElementById("price-" + coin.name.toLowerCase());
-                console.log(`priceelement`, priceElement)
-                if (priceElement) {
-                    priceElement.textContent = `Price: ${Number(coin.priceUsd).toPrecision(6)} USD`
+                if (priceElement && chartContainer) {
+                    priceElement.textContent = `Price: ${Number(coin.priceUsd).toPrecision(6)} USD`;
                 }
+                let coinHistory = coinData[coin.name.toLowerCase()];
+                
+                            // Check if the new price is different from the latest price
+                            if (coin.priceUsd !== latestPrices[coin.name.toLowerCase()]) {
+                                // Add the new price to the historical data
+                                coinHistory.prices.push(Number(coin.priceUsd).toPrecision(6));
+                
+                                // Limit the historical data to the maximum number of bars
+                                if (coinHistory.prices.length > coinHistory.maxBars) {
+                                    coinHistory.prices.shift(); // Remove the oldest price
+                                }
+                
+                                // Update the latest price
+                                latestPrices[coin.name.toLowerCase()] = coin.priceUsd;
+                
+                                // Update the chart data and labels
+                                let chart = coinCharts[coin.name.toLowerCase()];
+                                chart.data.labels = coinHistory.prices.map((_, index) => `Price ${index + 1}`);
+                                chart.data.datasets[0].data = coinHistory.prices;
+                
+                                // Update the chart
+                                chart.update();
+                            }
             });
         });
+
+
 </script>
