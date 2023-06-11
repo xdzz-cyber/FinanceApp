@@ -83,12 +83,13 @@
                     beginAtZero: true,
                     ticks: {
                         precision: 0,
+                        stepSize: 0.1, // Increment by 1 unit
+                        maxTicksLimit: 10, // Maximum number of ticks (labels) to display
                     },
                 },
             },
         };
-    
-        // Create a separate chart for each coin
+        
         let coinCharts = coins.reduce((obj, coin) => {
             let canvasId = `chart-${coin}`;
             let canvasElement = document.getElementById(canvasId);
@@ -103,8 +104,8 @@
                         backgroundColor: "rgba(75, 192, 192, 0.5)",
                         borderColor: "rgba(75, 192, 192, 1)",
                         borderWidth: 1,
-                        barThickness: 20,
-                        maxBarThickness: 40,
+                        barThickness: 5, // Adjust the thickness of bars
+                        maxBarThickness: 10, // Adjust the maximum thickness of bars
                         minBarLength: 2,
                     }],
                 },
@@ -167,6 +168,4 @@
                             }
             });
         });
-
-
 </script>
