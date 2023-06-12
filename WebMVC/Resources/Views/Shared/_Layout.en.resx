@@ -30,4 +30,7 @@
     <data name="LogoutMessage" xml:space="preserve">
         <value>Logout</value>
     </data>
+    <data name="CartPageMessage" xml:space="preserve">
+        <value>Cart</value>
+    </data>
 </root>

@@ -7,6 +7,9 @@ namespace Application.Common.Dtos;
 
 public class CoinDto : IMapWith<Coin>
 {
+    [JsonPropertyName("id")]
+    public Guid Id { get; set; }
+    
     [JsonPropertyName("name")]
     public string Name { get; set; } = null!;
     [JsonPropertyName("symbol")]

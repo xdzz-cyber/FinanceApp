@@ -13,8 +13,8 @@
     <link rel="stylesheet" href="~/WebMVC.styles.css" asp-append-version="true"/>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-    <script src="~/js/site.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.5/signalr.min.js"></script>
+    <script src="~/js/site.js"></script>
 </head>
 <body>
 <header>
@@ -40,6 +40,9 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Auth" asp-action="Logout">@Localizer["LogoutMessage"].Value</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Cart" asp-action="Cart">@Localizer["CartPageMessage"].Value</a>
                         </li>
                     </ul>
                 </div>

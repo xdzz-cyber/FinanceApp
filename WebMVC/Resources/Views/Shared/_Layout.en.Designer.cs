@@ -69,6 +69,15 @@ namespace WebMVC.Resources.Views.Shared {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cart.
+        /// </summary>
+        internal static string CartPageMessage {
+            get {
+                return ResourceManager.GetString("CartPageMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Financial goals with tips.
         /// </summary>
         internal static string FinancialGoalsWithTipsMessage {

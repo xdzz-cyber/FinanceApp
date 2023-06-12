@@ -1,26 +1,6 @@
-﻿async function generateFinancialGoals(financialGoals) {
-    console.log(financialGoals)
-    // Mocked data for testing purposes
-    // var financialGoals = [
-    //     {
-    //         name: "earn money for my family",
-    //         description: "Kids and wife need more money",
-    //         type: "Income",
-    //         targetAmount: 1000,
-    //         currentAmount: 500,
-    //         budgetName: "Family",
-    //     },
-    //     {
-    //         name: "earn money on charitable event to send it to kids",
-    //         description: "gotta earn money to help kids",
-    //         type: "Income",
-    //         targetAmount: 2000,
-    //         currentAmount: 1500,
-    //         budgetName: "Leisure",
-    //     },
-    // ];
+﻿const storageNameOfCoinsIds = "coinsIds";
 
-    // Function to create progress bar
+async function generateFinancialGoals(financialGoals) {
     function createProgressBar(container, goal) {
         var progressPercentage = Math.round((goal.currentAmount / goal.targetAmount) * 100);
 
@@ -191,4 +171,173 @@ function generateTransactions(transactionsJson){
     var data = [incomeData, expenseData];
 
     Plotly.newPlot('incomeExpenseChart', data, layout);
+}
+
+function generateBarDiagramPerCoin(coins){
+    let connection = new signalR.HubConnectionBuilder().withUrl("/coinsHub").build();
+    //const coins = @Html.Raw(Json.Serialize(Model.Coins.Select(c => c.Name.ToLower())));
+    // Object to store latest price for each coin
+    let latestPrices = coins.reduce((obj, coin) => {
+        obj[coin] = null;
+        return obj;
+    }, {});
+
+    // Object to store historical data for each coin
+    let coinData = coins.reduce((obj, coin) => {
+        obj[coin] = {
+            prices: [], // Array to store historical prices
+            maxBars: 7, // Maximum number of bars to display
+        };
+        return obj;
+    }, {});
+
+    // Chart.js configuration
+    let chartOptions = {
+        responsive: true,
+        scales: {
+            y: {
+                beginAtZero: true,
+                ticks: {
+                    precision: 0,
+                    stepSize: 0.1, // Increment by 1 unit
+                    maxTicksLimit: 10, // Maximum number of ticks (labels) to display
+                },
+            },
+        },
+    };
+
+    let coinCharts = coins.reduce((obj, coin) => {
+        let canvasId = `chart-${coin}`;
+        let canvasElement = document.getElementById(canvasId);
+        let ctx = canvasElement.getContext("2d");
+        let chart = new Chart(ctx, {
+            type: "bar",
+            data: {
+                labels: [],
+                datasets: [{
+                    label: coin,
+                    data: [],
+                    backgroundColor: "rgba(75, 192, 192, 0.5)",
+                    borderColor: "rgba(75, 192, 192, 1)",
+                    borderWidth: 1,
+                    barThickness: 5, // Adjust the thickness of bars
+                    maxBarThickness: 10, // Adjust the maximum thickness of bars
+                    minBarLength: 2,
+                }],
+            },
+            options: chartOptions,
+        });
+        obj[coin] = chart;
+        return obj;
+    }, {});
+
+
+    connection.start()
+        .then(function () {
+            console.log("SignalR connection established.")
+        })
+        .catch(function (err) {
+            console.error(err.toString());
+        });
+
+    setInterval(function () {
+        connection.invoke("UpdateCoinPrices", coins)
+            .catch(function (error) {
+                console.error("Error updating coin prices:", error);
+            });
+    }, 2000); // Update every two seconds
+
+    connection.on("ReceiveCoinPrices", function (prices) {
+        // Update coin prices in the HTML
+        const data = JSON.parse(prices).data;
+        // Update coin prices in the HTML
+        console.log("inside ReceiveCoinPrices", data);
+        data.forEach(function (coin) {
+            //const priceElement = document.getElementById("price-" + coin.name.toLowerCase());
+            const chartContainer = document.getElementById("chart-container-" + coin.name.toLowerCase());
+            let priceElement = document.getElementById("price-" + coin.name.toLowerCase());
+            if (priceElement && chartContainer) {
+                priceElement.textContent = `Price: ${Number(coin.priceUsd).toPrecision(6)} USD`;
+            }
+            let coinHistory = coinData[coin.name.toLowerCase()];
+
+            // Check if the new price is different from the latest price
+            if (coin.priceUsd !== latestPrices[coin.name.toLowerCase()]) {
+                // Add the new price to the historical data
+                coinHistory.prices.push(Number(coin.priceUsd).toPrecision(6));
+
+                // Limit the historical data to the maximum number of bars
+                if (coinHistory.prices.length > coinHistory.maxBars) {
+                    coinHistory.prices.shift(); // Remove the oldest price
+                }
+
+                // Update the latest price
+                latestPrices[coin.name.toLowerCase()] = coin.priceUsd;
+
+                // Update the chart data and labels
+                let chart = coinCharts[coin.name.toLowerCase()];
+                chart.data.labels = coinHistory.prices.map((_, index) => `Price ${index + 1}`);
+                chart.data.datasets[0].data = coinHistory.prices;
+
+                // Update the chart
+                chart.update();
+            }
+        });
+    });
+}
+
+function addCoinsToCart(){
+    const maxNumberOfRecipesAllowedToStore = 10;
+    const gridColsParentOfCards = document.querySelector("#gridColsParentOfCards");
+    
+    gridColsParentOfCards?.addEventListener("change", function(e) {
+        let currentElement = e.target
+        let elementWithRecipeIdValue = currentElement.nextElementSibling
+        let coinsIds = JSON.parse(localStorage.getItem(storageNameOfCoinsIds))
+        console.log(currentElement, elementWithRecipeIdValue,elementWithRecipeIdValue.value, currentElement.checked)
+
+        if(currentElement.checked){
+            coinsIds.push(elementWithRecipeIdValue.value)
+        } else{
+            coinsIds = coinsIds.filter(id => id !== elementWithRecipeIdValue.value)
+        }
+        localStorage.setItem(storageNameOfCoinsIds, JSON.stringify(coinsIds))
+    });
+
+    function init(){
+        if(!localStorage.getItem(storageNameOfCoinsIds)
+            || JSON.parse(localStorage.getItem(storageNameOfCoinsIds)).length > maxNumberOfRecipesAllowedToStore){
+            localStorage.setItem(storageNameOfCoinsIds, JSON.stringify([]))
+        }
+    }
+
+    // function clearStorage(){
+    //     // setInterval(function () {
+    //     //     localStorage.clear()
+    //     // }, 1000 * 60 * 5)
+    //     localStorage.setItem(storageNameOfCoinsIds, JSON.stringify([]))
+    // }
+
+    init()
+}
+
+function addAllRecipesMarkedAsSaved(){
+    console.log(`in addAllRecipesMarkedAsSaved`, localStorage.getItem(storageNameOfCoinsIds), localStorage);
+    fetch("https://localhost:7069/Cart/AddToCart/", {
+        headers: {
+            "Accept":"application/json",
+            "Content-Type": "application/json"
+        },
+        
+        body: JSON.stringify(localStorage.getItem(storageNameOfCoinsIds)),
+        method: "POST"
+    }).then(r => r.text()
+        .then(t => {
+            clearStorage()
+            window.location = `https://localhost:7214/Home/ShowResult?${new URLSearchParams({result:t}).toString()}`
+        }))
+}
+
+function clearStorage(){
+    localStorage.setItem(storageNameOfCoinsIds, JSON.stringify([]))
 }
