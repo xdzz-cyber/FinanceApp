@@ -1,7 +1,21 @@
-﻿@* @model TModel *@
+﻿@model CartPageVm
 
 @{
     Layout = "_Layout";
+}
+
+@functions
+{
+    // Calculate total price of all coins in cart
+    private double CalculateTotalPrice()
+    {
+        double totalPrice = 0;
+        foreach (var coin in Model.Coins)
+        {
+            totalPrice += double.Parse(coin.PriceUsd) * coin.Quantity;
+        }
+        return totalPrice;
+    }
 }
 
 <div class="container px-3 my-5 clearfix">
@@ -24,68 +38,30 @@
                   </tr>
                 </thead>
                 <tbody>
-        
-                  <tr>
-                    <td class="p-4">
-                      <div class="media align-items-center">
-                        <img src="https://bootdey.com/img/Content/avatar/avatar1.png" class="d-block ui-w-40 ui-bordered mr-4" alt="">
-                        <div class="media-body">
-                          <a href="#" class="d-block text-dark">Product 1</a>
-                          <small>
-                            <span class="text-muted">Color:</span>
-                            <span class="ui-product-color ui-product-color-sm align-text-bottom" style="background:#e81e2c;"></span> &nbsp;
-                            <span class="text-muted">Size: </span> EU 37 &nbsp;
-                            <span class="text-muted">Ships from: </span> China
-                          </small>
-                        </div>
-                      </div>
-                    </td>
-                    <td class="text-right font-weight-semibold align-middle p-4">$57.55</td>
-                    <td class="align-middle p-4"><input type="text" class="form-control text-center" value="2"></td>
-                    <td class="text-right font-weight-semibold align-middle p-4">$115.1</td>
-                    <td class="text-center align-middle px-0"><a href="#" class="shop-tooltip close float-none text-danger" title="" data-original-title="Remove">×</a></td>
-                  </tr>
-        
-                  <tr>
-                    <td class="p-4">
-                      <div class="media align-items-center">
-                        <img src="https://bootdey.com/img/Content/avatar/avatar6.png" class="d-block ui-w-40 ui-bordered mr-4" alt="">
-                        <div class="media-body">
-                          <a href="#" class="d-block text-dark">Product 2</a>
-                          <small>
-                            <span class="text-muted">Color:</span>
-                            <span class="ui-product-color ui-product-color-sm align-text-bottom" style="background:#000;"></span> &nbsp;
-                            <span class="text-muted">Storage: </span> 32GB &nbsp;
-                            <span class="text-muted">Warranty: </span> Standard - 1 year &nbsp;
-                            <span class="text-muted">Ships from: </span> China
-                          </small>
-                        </div>
-                      </div>
-                    </td>
-                    <td class="text-right font-weight-semibold align-middle p-4">$1049.00</td>
-                    <td class="align-middle p-4"><input type="text" class="form-control text-center" value="1"></td>
-                    <td class="text-right font-weight-semibold align-middle p-4">$1049.00</td>
-                    <td class="text-center align-middle px-0"><a href="#" class="shop-tooltip close float-none text-danger" title="" data-original-title="Remove">×</a></td>
-                  </tr>
-        
-                  <tr>
-                    <td class="p-4">
-                      <div class="media align-items-center">
-                        <img src="https://bootdey.com/img/Content/avatar/avatar2.png" class="d-block ui-w-40 ui-bordered mr-4" alt="">
-                        <div class="media-body">
-                          <a href="#" class="d-block text-dark">Product 3</a>
-                          <small>
-                            <span class="text-muted">Ships from: </span> Germany
-                          </small>
-                        </div>
-                      </div>
-                    </td>
-                    <td class="text-right font-weight-semibold align-middle p-4">$20.55</td>
-                    <td class="align-middle p-4"><input type="text" class="form-control text-center" value="1"></td>
-                    <td class="text-right font-weight-semibold align-middle p-4">$20.55</td>
-                    <td class="text-center align-middle px-0"><a href="#" class="shop-tooltip close float-none text-danger" title="" data-original-title="Remove">×</a></td>
-                  </tr>
-        
+                @foreach (var coin in @Model.Coins)
+                {
+                    <tr>
+                        <td class="p-4">
+                            <div class="media align-items-center">
+                                <div class="mb-3">
+                                    <i class="fa-solid fa-cart-shopping fa-beat fa-2xl"></i>
+                                </div>
+                                <div class="media-body">
+                                    <a href="#" class="d-block text-dark">@coin.Name</a>
+                                    <i class="fa-solid fa-coins"></i>
+                                    <small>
+                                        <span class="text-muted">Symbol: @coin.Symbol</span>
+                                        <i class="fa-light fa-coin"></i>
+                                    </small>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="text-right font-weight-semibold align-middle p-4">$@coin.PriceUsd</td>
+                        <td class="align-middle p-4"><input type="number" class="form-control text-center" value="@coin.Quantity" min="1" max="10"></td>
+                        <td class="text-right font-weight-semibold align-middle p-4">$@(double.Parse(coin.PriceUsd) * coin.Quantity)</td>
+                        <td class="text-center align-middle px-0"><a href="#" class="shop-tooltip close float-none text-danger" title="" data-original-title="Remove">×</a></td>
+                    </tr>
+                }
                 </tbody>
               </table>
             </div>
@@ -94,7 +70,7 @@
             <div class="pb-4" style="display: grid; justify-content: end; grid-template-areas: 'first second'; align-content: center; grid-gap: 20px">
               <div class="text-right first" style="grid-area: first">
                   <label class="text-muted font-weight-normal m-0">Total price</label>
-                  <div class="text-large"><strong>$1164.65</strong></div>
+                  <div class="text-large"><strong>$@CalculateTotalPrice()</strong></div>
                 </div>
                 <div class="second" style="grid-area: second">
                 <button type="button" class="btn btn-lg btn-primary mt-2">Checkout</button>

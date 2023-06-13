@@ -17,6 +17,9 @@ public class CoinDto : IMapWith<Coin>
     // Price in USD.
     [JsonPropertyName("priceUsd")]
     public string PriceUsd { get; set; } = null!;
+
+    [JsonIgnore] 
+    public int Quantity { get; set; }
     
     public void Mapping(Profile profile)
     {

@@ -25,10 +25,22 @@ public class GetCoinsHandler : IRequestHandler<GetCoins, List<CoinDto>>
         //     .ToListAsync(cancellationToken: cancellationToken);
         
         // Take coins from the database based on page and per page.
+        // var coins = await _context.Coins.AsNoTracking()
+        //     .ProjectTo<CoinDto>(_mapper.ConfigurationProvider)
+        //     .ToListAsync(cancellationToken: cancellationToken);
+        
+        // Take coins from the database and add quantity field to each coin with default value of 1.
         var coins = await _context.Coins.AsNoTracking()
             .ProjectTo<CoinDto>(_mapper.ConfigurationProvider)
+            .Select(c => new CoinDto()
+            {
+                Id = c.Id,
+                Name = c.Name,
+                PriceUsd = c.PriceUsd,
+                Quantity = 1
+            })
             .ToListAsync(cancellationToken: cancellationToken);
-
+        
         return coins;
     }
 }
