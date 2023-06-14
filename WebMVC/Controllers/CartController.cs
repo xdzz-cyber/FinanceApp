@@ -15,13 +15,7 @@ public class CartController : BaseController
     {
         _cache = cache;
     }
-  
-    // [HttpPost]
-    // public async Task<IActionResult> AddToCart([FromBody] string recipeIds)
-    // {
-    //     return Content("Add to cart");
-    // }
-    
+
     [HttpGet]
     public async Task<IActionResult> Cart([FromQuery] string coinsIds)
     {
@@ -37,5 +31,11 @@ public class CartController : BaseController
         {
             Coins = coins!.Where(c => coinsIds.Contains(c.Id.ToString())).ToList()
         });
+    }
+    
+    [HttpPost]
+    public async Task<IActionResult> AddToCart(string coins)
+    {
+        return Content("Add to cart");
     }
 }

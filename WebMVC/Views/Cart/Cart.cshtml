@@ -4,19 +4,76 @@
     Layout = "_Layout";
 }
 
-@functions
-{
-    // Calculate total price of all coins in cart
-    private double CalculateTotalPrice()
-    {
-        double totalPrice = 0;
-        foreach (var coin in Model.Coins)
-        {
-            totalPrice += double.Parse(coin.PriceUsd) * coin.Quantity;
-        }
-        return totalPrice;
+
+<script>
+    // JavaScript function to remove a coin from the cart
+    function removeCoin(coinIndex) {
+        var coinRow = document.getElementById('coinRow_' + coinIndex);
+        coinRow.remove();
+
+        var coinsIds = JSON.parse(localStorage.getItem('coinsIds'));
+        coinsIds.splice(coinIndex, 1);
+        localStorage.setItem('coinsIds', JSON.stringify(coinsIds));
+
+        updateSums();
     }
-}
+
+    // JavaScript function to update the local sum and total sum dynamically
+    function updateSums() {
+            var totalSum = 0;
+            var coinRows = document.querySelectorAll('tbody > tr[id^="coinRow_"]');
+            for (var row of coinRows) {
+                var coinIndex = row.id.split('_')[1];
+                var quantity = parseFloat(document.getElementById('quantity_' + coinIndex).value);
+                var price = parseFloat(document.getElementById('price_' + coinIndex).textContent.substring(1));
+                var localSum = (quantity * price).toFixed(2);
+                document.getElementById('localSum_' + coinIndex).textContent = '$' + localSum;
+                totalSum += quantity * price;
+            }
+            document.getElementById('totalSum').textContent = '$' + totalSum.toFixed(2);
+        }
+        
+        async function checkout() {
+                var coins = [];
+                var coinRows = document.querySelectorAll('tbody > tr[id^="coinRow_"]');
+                for (var row of coinRows) {
+                    var coinIndex = row.id.split('_')[1];
+                    var quantity = parseFloat(document.getElementById('quantity_' + coinIndex).value);
+                    var price = parseFloat(document.getElementById('price_' + coinIndex).textContent.substring(1));
+                    var coin = {
+                        id: coinIndex,  // Use the coin ID or any unique identifier
+                        quantity: quantity,
+                        price: price
+                    };
+                    coins.push(coin);
+                }
+        
+                // Send the coins data to the server via POST request
+                await fetch('https://localhost:7069/Cart/AddToCart/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(coins)
+                })
+                // .then(response => {
+                //     if (response.ok) {
+                //         // Cart successfully updated
+                //         console.log('Cart updated successfully');
+                //         // Optionally, you can clear the localStorage and redirect to a success page
+                //         localStorage.clear();
+                //         window.location.href = '/checkout/success';  // Replace with the desired success page URL
+                //     } else {
+                //         // Handle error response
+                //         console.error('Failed to update cart');
+                //     }
+                // })
+                // .catch(error => {
+                //     // Handle network or other errors
+                //     console.error('An error occurred:', error);
+                // });
+            }
+</script>
 
 <div class="container px-3 my-5 clearfix">
     <!-- Shopping cart table -->
@@ -26,56 +83,61 @@
         </div>
         <div class="card-body">
             <div class="table-responsive">
-              <table class="table table-bordered m-0">
-                <thead>
-                  <tr>
-                    <!-- Set columns width -->
-                    <th class="text-center py-3 px-4" style="min-width: 400px;">Product Name &amp; Details</th>
-                    <th class="text-right py-3 px-4" style="width: 100px;">Price</th>
-                    <th class="text-center py-3 px-4" style="width: 120px;">Quantity</th>
-                    <th class="text-right py-3 px-4" style="width: 100px;">Total</th>
-                    <th class="text-center align-middle py-3 px-0" style="width: 40px;"><a href="#" class="shop-tooltip float-none text-light" title="" data-original-title="Clear cart"><i class="ino ion-md-trash"></i></a></th>
-                  </tr>
-                </thead>
-                <tbody>
-                @foreach (var coin in @Model.Coins)
-                {
-                    <tr>
-                        <td class="p-4">
-                            <div class="media align-items-center">
-                                <div class="mb-3">
-                                    <i class="fa-solid fa-cart-shopping fa-beat fa-2xl"></i>
-                                </div>
-                                <div class="media-body">
-                                    <a href="#" class="d-block text-dark">@coin.Name</a>
-                                    <i class="fa-solid fa-coins"></i>
-                                    <small>
-                                        <span class="text-muted">Symbol: @coin.Symbol</span>
-                                        <i class="fa-light fa-coin"></i>
-                                    </small>
-                                </div>
-                            </div>
-                        </td>
-                        <td class="text-right font-weight-semibold align-middle p-4">$@coin.PriceUsd</td>
-                        <td class="align-middle p-4"><input type="number" class="form-control text-center" value="@coin.Quantity" min="1" max="10"></td>
-                        <td class="text-right font-weight-semibold align-middle p-4">$@(double.Parse(coin.PriceUsd) * coin.Quantity)</td>
-                        <td class="text-center align-middle px-0"><a href="#" class="shop-tooltip close float-none text-danger" title="" data-original-title="Remove">×</a></td>
-                    </tr>
-                }
-                </tbody>
-              </table>
+                <table class="table table-bordered m-0">
+                    <thead>
+                        <tr>
+                            <!-- Set columns width -->
+                            <th class="text-center py-3 px-4" style="min-width: 400px;">Product Name &amp; Details</th>
+                            <th class="text-right py-3 px-4" style="width: 100px;">Price</th>
+                            <th class="text-center py-3 px-4" style="width: 120px;">Quantity</th>
+                            <th class="text-right py-3 px-4" style="width: 100px;">Total</th>
+                            <th class="text-center align-middle py-3 px-0" style="width: 40px;">Remove</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (var i = 0; i < Model.Coins.Count; i++)
+                        {
+                            var coin = Model.Coins[i];
+                            <tr id="coinRow_@i">
+                                <td class="p-4">
+                                    <div class="media align-items-center">
+                                        <div class="mb-3">
+                                            <i class="fa-solid fa-cart-shopping fa-beat fa-2xl"></i>
+                                        </div>
+                                        <div class="media-body">
+                                            <a href="#" class="d-block text-dark">@coin.Name</a>
+                                            <i class="fa-solid fa-coins"></i>
+                                            <small>
+                                                <span class="text-muted">Symbol: @coin.Symbol</span>
+                                                <i class="fa-light fa-coin"></i>
+                                            </small>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="text-right font-weight-semibold align-middle p-4" id="price_@i">$@coin.PriceUsd</td>
+                                <td class="align-middle p-4">
+                                    <input type="number" class="form-control text-center" id="quantity_@i" value="@coin.Quantity" min="1" max="10" oninput="updateSums()">
+                                </td>
+                                <td class="text-right font-weight-semibold align-middle p-4" id="localSum_@i">$@(double.Parse(coin.PriceUsd) * coin.Quantity)</td>
+                                <td class="text-center align-middle px-0">
+                                    <a href="#" class="shop-tooltip close float-none text-danger" title="Remove" onclick="removeCoin(@i)">×</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
             </div>
             <!-- / Shopping cart table -->
-        @* d-flex flex-wrap *@
             <div class="pb-4" style="display: grid; justify-content: end; grid-template-areas: 'first second'; align-content: center; grid-gap: 20px">
-              <div class="text-right first" style="grid-area: first">
-                  <label class="text-muted font-weight-normal m-0">Total price</label>
-                  <div class="text-large"><strong>$@CalculateTotalPrice()</strong></div>
+                <div class="text-right first" style="grid-area: first">
+                    <label class="text-muted font-weight-normal m-0">Total price</label>
+                    <div class="text-large"><strong id="totalSum">$</strong></div>
                 </div>
                 <div class="second" style="grid-area: second">
-                <button type="button" class="btn btn-lg btn-primary mt-2">Checkout</button>
-              </div>
+                    <button type="button" class="btn btn-lg btn-primary mt-2" onclick="checkout()">Checkout</button>
+                </div>
             </div>
         </div>
-      </div>
-  </div>
+    </div>
+</div>
+
