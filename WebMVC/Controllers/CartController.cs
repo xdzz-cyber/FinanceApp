@@ -1,4 +1,6 @@
-﻿using Application.Coins.Queries.GetCoins;
+﻿using System.Security.Claims;
+using Application.Budget.Queries.GetBudgets;
+using Application.Coins.Queries.GetCoins;
 using Application.Common.Dtos;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
@@ -27,15 +29,23 @@ public class CartController : BaseController
             coins = await Mediator.Send(new GetCoins());
             _cache.Set(CoinsCacheKey, coins, TimeSpan.FromDays(7)); // Adjust the cache duration as per your requirement
         }
+        
+        var budgetDtos = await Mediator.Send(new GetBudgets()
+        {
+            UserId = User.FindFirstValue(ClaimTypes.NameIdentifier)
+        });
+        
         return View(new CartPageVm()
         {
-            Coins = coins!.Where(c => coinsIds.Contains(c.Id.ToString())).ToList()
+            Coins = coins!.Where(c => coinsIds.Contains(c.Id.ToString())).ToList(),
+            Budgets = budgetDtos
         });
     }
     
     [HttpPost]
-    public async Task<IActionResult> AddToCart(string coins)
+    public async Task<IActionResult> AddToCart([FromBody] AddCoinsVm addCoinsVm)
     {
-        return Content("Add to cart");
+        var _ = "Add to cart";
+        return Content(_);
     }
 }

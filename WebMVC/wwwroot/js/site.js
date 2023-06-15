@@ -341,3 +341,14 @@ function addAllRecipesMarkedAsSaved(){
 function clearStorage(){
     localStorage.setItem(storageNameOfCoinsIds, JSON.stringify([]))
 }
+
+function setListenerForBudgetIdInCartPage(){
+    var dropdown = document.getElementById('SelectedBudgetId');
+    var hiddenInput = document.getElementById('selectedBudgetId');
+    console.log('dropdown', dropdown, 'hiddenInput', hiddenInput)
+    // Handle the change event of the dropdown
+    dropdown.addEventListener('change', function() {
+        var selectedValue = dropdown.value; // Get the selected value from the dropdown
+        hiddenInput.value = selectedValue; // Update the hidden input field's value
+    });
+}
