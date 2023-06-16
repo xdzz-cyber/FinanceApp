@@ -343,12 +343,14 @@ function clearStorage(){
 }
 
 function setListenerForBudgetIdInCartPage(){
-    var dropdown = document.getElementById('SelectedBudgetId');
-    var hiddenInput = document.getElementById('selectedBudgetId');
+    var dropdown = document.querySelector('#SelectedBudgetId');
+    var hiddenInput = document.querySelector('#selectedBudgetId');
     console.log('dropdown', dropdown, 'hiddenInput', hiddenInput)
     // Handle the change event of the dropdown
     dropdown.addEventListener('change', function() {
-        var selectedValue = dropdown.value; // Get the selected value from the dropdown
-        hiddenInput.value = selectedValue; // Update the hidden input field's value
+        console.log('dropdown.value', dropdown.value)
+         // Get the selected value from the dropdown
+        hiddenInput.value = dropdown.value; // Update the hidden input field's value
+        console.log('hiddenInput.value', hiddenInput.value)
     });
 }

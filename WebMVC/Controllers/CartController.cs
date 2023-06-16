@@ -1,7 +1,11 @@
 ﻿using System.Security.Claims;
+using Application.Budget.Queries.GetBudget;
 using Application.Budget.Queries.GetBudgets;
+using Application.Category.Queries.GetCategories;
 using Application.Coins.Queries.GetCoins;
 using Application.Common.Dtos;
+using Application.Transaction.Commands.CreateTransaction;
+using Domain;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using WebMVC.Models;
@@ -45,7 +49,29 @@ public class CartController : BaseController
     [HttpPost]
     public async Task<IActionResult> AddToCart([FromBody] AddCoinsVm addCoinsVm)
     {
-        var _ = "Add to cart";
-        return Content(_);
+        var total = addCoinsVm.Coins.Sum(c => c.Quantity * c.Price);
+        
+        var categories = await Mediator.Send(new GetCategories());
+        
+        var expenseCategoryId = categories.First(c => c.Name == "Expense").Id;
+
+        var createTransactionCommand = new CreateTransaction()
+        {
+            Amount = total,
+            Date = DateTime.Now,
+            CategoryId = expenseCategoryId,
+            AppUserId = User.FindFirstValue(ClaimTypes.NameIdentifier),
+            BudgetId = addCoinsVm.budgetId
+        };
+        
+        var createdTransactionId = await Mediator.Send(createTransactionCommand);
+
+        if (createdTransactionId == Guid.Empty)
+        {
+            return BadRequest();
+        }
+        var _ = Url.Action("Budget", "Budget", new { id = addCoinsVm.budgetId });
+        //return RedirectToAction("Budget", "Budget", new {id = addCoinsVm.budgetId});
+        return Json(new { redirectUrl = Url.Action("Budget", "Budget", new { id = addCoinsVm.budgetId }) });
     }
 }

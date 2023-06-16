@@ -50,19 +50,36 @@
                     };
                     coins.push(coin);
                 }
-                const result = {coins, budgetId: '@Model.SelectedBudgetId'};
-                console.log('coins', coins, 'stringified', JSON.stringify(coins))
+                const budgetId = document.getElementById('selectedBudgetId').value;
+                
+                const result = {coins, budgetId};
+                console.log('budgetId', '@Model.SelectedBudgetId', 'result', result)
                 // Send the coins data to the server via POST request
-                await fetch('https://localhost:7069/Cart/AddToCart/', {
+                const response = await fetch('https://localhost:7069/Cart/AddToCart/', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify(result)
-                })
+                });
+                
+                console.log('response', response, 'response.ok', response.ok, 'response.url', response.url, 
+                'redirectUrl', response.redirectUrl)
+                
+                if (response.ok) {
+                  const responseData = await response.json();
+                  console.log('responseData', responseData)
+                  // Redirect to the specified URL
+                  window.location.href = responseData.redirectUrl;
+                } else {
+                  // Handle unsuccessful response
+                  console.log('Request failed:', response);
+                }
             }
             
-            setListenerForBudgetIdInCartPage();
+            window.addEventListener("load", function (){
+                setListenerForBudgetIdInCartPage();
+            })
 </script>
 
 <div class="container px-3 my-5 clearfix">
