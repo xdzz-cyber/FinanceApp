@@ -286,6 +286,84 @@ function generateBarDiagramPerCoin(coins){
     });
 }
 
+function renderCards(items) {
+    console.log("inside renderCards", items)
+    // Clear previous cards
+    const cardContainer1 = document.getElementById('cardContainer1');
+    const cardContainer2 = document.getElementById('cardContainer2');
+    cardContainer1.innerHTML = '';
+    cardContainer2.innerHTML = '';
+
+    // Render new cards
+    items.accounts.forEach(account => {
+        const card = createCard(account);
+        cardContainer1.appendChild(card);
+    });
+
+    items.jars.forEach(jar => {
+        const card = createCard(jar);
+        cardContainer2.appendChild(card);
+    });
+}
+
+function createCard(item) {
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.style.width = '18rem';
+
+    const img = document.createElement('img');
+    img.className = 'card-img-top';
+    img.src = '...'; // Set the image source here
+    img.alt = '...'; // Set the image alt text here
+    card.appendChild(img);
+
+    const cardBody = document.createElement('div');
+    cardBody.className = 'card-body';
+    card.appendChild(cardBody);
+
+    const title = document.createElement('h5');
+    title.className = 'card-title';
+    title.textContent = item.title || item.id; // Set the title here
+    cardBody.appendChild(title);
+
+    const description = document.createElement('p');
+    description.className = 'card-text';
+    description.textContent = item.description || ''; // Set the description here
+    cardBody.appendChild(description);
+
+    const link = document.createElement('a');
+    link.href = '#';
+    link.className = 'btn btn-primary';
+    link.textContent = 'Go somewhere';
+    cardBody.appendChild(link);
+
+    return card;
+}
+
+function getBankingInfo(){
+    let connection = new signalR.HubConnectionBuilder().withUrl("/bankingHub").build();
+
+    connection.start()
+        .then(function () {
+            console.log("SignalR connection to banking hub established.")
+        })
+        .catch(function (err) {
+            console.error(err.toString());
+        });
+
+    setInterval(function () {
+        connection.invoke("UpdateBankingInfo")
+            .catch(function (error) {
+                console.error("Error updating coin prices:", error);
+            });
+    }, 60000); // Update every two seconds
+
+    connection.on("ReceiveBankingInfo", function (items) {
+        console.log(`Received banking info: ${items}`, JSON.parse(items));
+        renderCards(JSON.parse(items));
+    });
+}
+
 function addCoinsToCart(){
     const maxNumberOfRecipesAllowedToStore = 10;
     const gridColsParentOfCards = document.querySelector("#gridColsParentOfCards");

@@ -88,6 +88,7 @@ app.UseEndpoints(endpoints =>
         name: "default",
         pattern: "{controller=Home}/{action=Index}/{id?}");
     endpoints.MapHub<CoinsHub>("/coinsHub");
+    endpoints.MapHub<BankingHub>("/bankingHub");
 });
 
 app.Run();

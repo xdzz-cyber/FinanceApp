@@ -218,3 +218,17 @@ body {
   box-shadow: 0 0 0 1px rgba(0,0,0,0.15) inset;
   vertical-align: middle;
 }
+
+.banking-main-container{
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  justify-items: center;
+  align-items: center;
+  grid-gap: 10px;
+}
+
+.banking-main-container-child{
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-gap: 10px;
+}

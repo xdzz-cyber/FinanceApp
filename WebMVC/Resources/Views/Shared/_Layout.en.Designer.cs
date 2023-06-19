@@ -60,6 +60,15 @@ namespace WebMVC.Resources.Views.Shared {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Banking.
+        /// </summary>
+        internal static string BankingPageMessage {
+            get {
+                return ResourceManager.GetString("BankingPageMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Budgets.
         /// </summary>
         internal static string BudgetsMessage {

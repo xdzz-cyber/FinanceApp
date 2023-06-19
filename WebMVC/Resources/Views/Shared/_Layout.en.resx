@@ -33,4 +33,7 @@
     <data name="CartPageMessage" xml:space="preserve">
         <value>Cart</value>
     </data>
+    <data name="BankingPageMessage" xml:space="preserve">
+        <value>Banking</value>
+    </data>
 </root>

@@ -1,0 +1,50 @@
+﻿@* @model TModel *@
+
+@{
+    Layout = "_Layout";
+}
+
+<div class="mx-auto text-center mt-3 mb-3">
+    <h1>Welcome to banking page</h1>
+    <p>Here you can see your cards and banks info as well as ability of top up them</p>
+</div>
+
+@* <div class="banking-main-container"> *@
+@*     <div class="banking-main-container-child"> *@
+@*         @for (var i = 0; i < 3; i++) *@
+@*         { *@
+@*             <div class="card" style="width: 18rem;"> *@
+@*                 <img src="..." class="card-img-top" alt="..."> *@
+@*                 <div class="card-body"> *@
+@*                     <h5 class="card-title">Card title</h5> *@
+@*                     <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p> *@
+@*                     <a href="#" class="btn btn-primary">Go somewhere</a> *@
+@*                 </div> *@
+@*             </div> *@
+@*         } *@
+@*     </div> *@
+@*     <div class="banking-main-container-child"> *@
+@*         @for (var i = 0; i < 3; i++) *@
+@*         { *@
+@*             <div class="card" style="width: 18rem;"> *@
+@*                 <img src="..." class="card-img-top" alt="..."> *@
+@*                 <div class="card-body"> *@
+@*                     <h5 class="card-title">Card title</h5> *@
+@*                     <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p> *@
+@*                     <a href="#" class="btn btn-primary">Go somewhere</a> *@
+@*                 </div> *@
+@*             </div> *@
+@*         } *@
+@*     </div> *@
+@* </div> *@
+
+<div class="banking-main-container">
+    <div class="banking-main-container-child" id="cardContainer1">
+    </div>
+    <div class="banking-main-container-child" id="cardContainer2">
+    </div>
+</div>
+
+<script>
+getBankingInfo();
+</script>
