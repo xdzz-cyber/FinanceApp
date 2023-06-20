@@ -3,10 +3,8 @@ using Application.Common.Dtos;
 
 namespace WebMVC.Models;
 
-public class AddFinancialGoalVm
+public class AddFinancialGoalFormHandlerVm
 {
     [Required]
     public FinancialGoalDto FinancialGoal { get; set; } = null!;
-    public List<BudgetDto>? Budgets { get; set; }
-    public List<CategoryDto>? Categories { get; set; }
 }

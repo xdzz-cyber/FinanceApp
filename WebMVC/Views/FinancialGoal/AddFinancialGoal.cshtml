@@ -20,6 +20,13 @@
         @Html.TextBoxFor(model => model.FinancialGoal.Description, new { @class = "form-control" })
         @Html.ValidationMessageFor(model => model.FinancialGoal.Description, "", new { @class = "text-danger" })
     </div>
+    
+    <div class="form-group">
+        @Html.LabelFor(model => model.FinancialGoal.CurrentAmount, "CurrentAmount")
+        @Html.TextBoxFor(model => model.FinancialGoal.CurrentAmount, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.FinancialGoal.CurrentAmount, "", new { @class = "text-danger" })
+    </div>
+
 
     <div class="form-group">
         @Html.LabelFor(model => model.FinancialGoal.TargetAmount, "TargetAmount")
@@ -38,6 +45,12 @@
         @Html.LabelFor(model => model.FinancialGoal.BudgetId, "BudgetId")
         @Html.DropDownListFor(model => model.FinancialGoal.BudgetId, new SelectList(Model.Budgets, "Id", "Name"), "Select Budget", new { @class = "form-control" })
         @Html.ValidationMessageFor(model => model.FinancialGoal.BudgetId, "", new { @class = "text-danger" })
+    </div>
+    
+    <div class="form-group">
+        @Html.LabelFor(model => model.FinancialGoal.CategoryName, "CategoryName")
+        @Html.DropDownListFor(model => model.FinancialGoal.CategoryName, new SelectList(Model.Categories, "Id", "Name"), "Select Category", new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.FinancialGoal.CategoryName, "", new { @class = "text-danger" })
     </div>
 
     <div class="form-group mt-3">

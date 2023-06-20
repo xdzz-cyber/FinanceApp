@@ -205,6 +205,7 @@ body {
 
 .card{
   box-shadow: 0 1px 15px 1px rgba(52,40,104,.08);
+  max-height: 25vh;
 }
 
 .ui-product-color {
@@ -223,7 +224,7 @@ body {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   justify-items: center;
-  align-items: center;
+  /*align-items: center;*/
   grid-gap: 10px;
 }
 

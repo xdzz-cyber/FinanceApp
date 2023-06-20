@@ -23,7 +23,7 @@ public class BankingHub : Hub
         await Clients.All.SendAsync("ReceiveBankingInfo", items);
     }
     
-    private async Task<ClientDto?> GetItems() // Cards and banks
+    private async Task<string> GetItems() // Cards and banks
     {
         // Make request to banking api and before it add header with token
         _httpClient.DefaultRequestHeaders.Add("X-Token", _configuration["MonobankToken"]);
@@ -33,9 +33,10 @@ public class BankingHub : Hub
         {
             var content = await response.Content.ReadAsStringAsync();
             
-            return JsonSerializer.Deserialize<ClientDto>(content);
+            //return JsonSerializer.Deserialize<ClientDto>(content);
+            return content;
         }
         
-        return null;
+        return string.Empty;
     }
 }

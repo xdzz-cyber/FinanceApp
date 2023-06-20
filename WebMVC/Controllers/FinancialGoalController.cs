@@ -1,5 +1,6 @@
 ﻿using System.Security.Claims;
 using Application.Budget.Queries.GetBudgets;
+using Application.Category.Queries.GetCategories;
 using Application.Common.Dtos;
 using Application.FinancialGoal.Commands.CreateFinancialGoal;
 using Application.FinancialGoal.Queries.GetFinancialGoals;
@@ -48,13 +49,14 @@ public class FinancialGoalController : BaseController
         return View(new AddFinancialGoalVm()
         {
             FinancialGoal = new FinancialGoalDto(),
-            Budgets = await Mediator.Send(new GetBudgets {UserId = userId})
+            Budgets = await Mediator.Send(new GetBudgets {UserId = userId}),
+            Categories = await Mediator.Send(new GetCategories())
         });
     }
     
     // Create a new financial goal handler.
     [HttpPost]
-    public async Task<IActionResult> AddFinancialGoal(AddFinancialGoalVm addFinancialGoalVm)
+    public async Task<IActionResult> AddFinancialGoal(AddFinancialGoalFormHandlerVm addFinancialGoalFormHandlerVm)
     {
         if (!ModelState.IsValid)
         {
@@ -63,11 +65,13 @@ public class FinancialGoalController : BaseController
 
         var createdInstanceId = await Mediator.Send(new CreateFinancialGoal()
         {
-            Name = addFinancialGoalVm.FinancialGoal.Name,
-            Description = addFinancialGoalVm.FinancialGoal.Description,
-            TargetAmount = addFinancialGoalVm.FinancialGoal.TargetAmount,
-            TargetDate = addFinancialGoalVm.FinancialGoal.TargetDate,
-            BudgetId = addFinancialGoalVm.FinancialGoal.BudgetId
+            Name = addFinancialGoalFormHandlerVm.FinancialGoal.Name,
+            Description = addFinancialGoalFormHandlerVm.FinancialGoal.Description,
+            TargetAmount = addFinancialGoalFormHandlerVm.FinancialGoal.TargetAmount,
+            TargetDate = addFinancialGoalFormHandlerVm.FinancialGoal.TargetDate,
+            BudgetId = addFinancialGoalFormHandlerVm.FinancialGoal.BudgetId,
+            CategoryId = Guid.Parse(addFinancialGoalFormHandlerVm.FinancialGoal.CategoryName),
+            CurrentAmount = addFinancialGoalFormHandlerVm.FinancialGoal.CurrentAmount
         });
         
         // Check if the instance was created successfully.

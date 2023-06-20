@@ -296,7 +296,7 @@ function renderCards(items) {
 
     // Render new cards
     items.accounts.forEach(account => {
-        const card = createCard(account);
+        const card = createCard(account, type='account', name=items.name);
         cardContainer1.appendChild(card);
     });
 
@@ -306,29 +306,29 @@ function renderCards(items) {
     });
 }
 
-function createCard(item) {
+function createCard(item, type='jar', name='') {
     const card = document.createElement('div');
     card.className = 'card';
     card.style.width = '18rem';
 
-    const img = document.createElement('img');
-    img.className = 'card-img-top';
-    img.src = '...'; // Set the image source here
-    img.alt = '...'; // Set the image alt text here
-    card.appendChild(img);
+    const i = document.createElement('i');
+    i.className = type !== 'jar' ? 'card-img-overlay fa-solid fa-credit-card fa-2xl' : 'card-img-overlay fa-solid fa-piggy-bank fa-2xl'; 
+    card.appendChild(i);
 
     const cardBody = document.createElement('div');
     cardBody.className = 'card-body';
     card.appendChild(cardBody);
 
     const title = document.createElement('h5');
-    title.className = 'card-title';
-    title.textContent = item.title || item.id; // Set the title here
+    title.className = 'card-title text-center';
+    title.textContent = item.title || name; // Set the title here
     cardBody.appendChild(title);
 
     const description = document.createElement('p');
     description.className = 'card-text';
-    description.textContent = item.description || ''; // Set the description here
+    //description.textContent = item.description || ''; // Set the description here
+    description.textContent = type !== 'jar' ? `Credit limit: ${item.creditLimit} .Balance: ${item.balance}, type: ${item.type} and cashback type ${item.cashbackType}` 
+        : `Description: ${item.description}. Goal: ${item.goal}. Balance: ${item.balance}`;
     cardBody.appendChild(description);
 
     const link = document.createElement('a');
