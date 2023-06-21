@@ -351,12 +351,12 @@ function getBankingInfo(){
             console.error(err.toString());
         });
 
-    setInterval(function () {
-        connection.invoke("UpdateBankingInfo")
-            .catch(function (error) {
-                console.error("Error updating coin prices:", error);
-            });
-    }, 60000); // Update every two seconds
+    // setInterval(function () {
+    //     connection.invoke("UpdateBankingInfo")
+    //         .catch(function (error) {
+    //             console.error("Error updating coin prices:", error);
+    //         });
+    // }, 60000);
 
     connection.on("ReceiveBankingInfo", function (items) {
         console.log(`Received banking info: ${items}`, JSON.parse(items));

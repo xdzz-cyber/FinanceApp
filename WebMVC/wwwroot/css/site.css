@@ -208,6 +208,10 @@ body {
   max-height: 25vh;
 }
 
+.main-page-card{
+  box-shadow: 0 1px 15px 1px rgba(52,40,104,.08);
+}
+
 .ui-product-color {
   display: inline-block;
   overflow: hidden;

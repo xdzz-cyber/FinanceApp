@@ -17,7 +17,7 @@
 <div class="card-container" id="gridColsParentOfCards">
     @foreach (var coin in Model.Coins)
     {
-        <div class="card">
+        <div class="main-page-card">
             <h3>@coin.Name</h3>
             <p>@coin.Symbol</p>
             <p id="@($"price-{coin.Name.ToLower()}")">Price: @coin.PriceUsd USD</p>

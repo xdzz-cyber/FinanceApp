@@ -3,10 +3,12 @@ using System.Reflection;
 using Application;
 using Application.Common.Mappings;
 using Application.Interfaces;
+using Hangfire;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Persistence;
+using WebMVC.BackgroundJobs;
 using WebMVC.Hubs;
 using WebMVC.Middlewares;
 
@@ -47,6 +49,11 @@ builder.Services.AddAuthentication();
 builder.Services.AddAuthorization();
 builder.Services.AddSignalR();
 builder.Services.AddHttpClient();
+builder.Services.AddHangfire(config =>
+{
+    config.UseSqlServerStorage(builder.Configuration.GetConnectionString("HangfireConnection"));
+});
+builder.Services.AddHangfireServer();
 
 
 var app = builder.Build();
@@ -71,6 +78,11 @@ app.UseCustomExceptionHandlerMiddleware();
 app.UseHttpsRedirection();
 app.UseCors("AllowAll");
 app.UseStaticFiles();
+app.UseHangfireDashboard();
+
+// Schedule a recurring job to execute every 10 minutes
+RecurringJob.AddOrUpdate<HangfireRemoteApiCallJob>(x => x.MakeRemoteApiCall(), Cron.MinuteInterval(5));
+
 
 app.UseRouting();
 app.UseRequestLocalization();
