@@ -1,0 +1,64 @@
+﻿@* @model TModel *@
+
+@{
+    Layout = "_Layout";
+}
+
+@{
+    ViewData["Title"] = "Payment";
+}
+
+<h2>Payment</h2>
+
+<form id="payment-form" asp-controller="Payment" asp-action="Charge" method="post">
+    <div>
+        <label for="amount">Amount (in dollars):</label>
+        <input type="number" id="amount" name="amount" />
+    </div>
+    <div id="card-element"></div>
+    <button type="submit">Pay</button>
+</form>
+
+<script>
+        var stripe = Stripe('@ViewBag.StripePublicKey');
+        var elements = stripe.elements();
+
+        var card = elements.create('card');
+        card.mount('#card-element');
+
+        var form = document.getElementById('payment-form');
+
+        form.addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            stripe.createToken(card).then(function (result) {
+                if (result.error) {
+                    // Display error message to the user
+                    console.error(result.error.message);
+                } else {
+                    // Token created successfully, submit the form with the token
+                    stripeTokenHandler(result.token);
+                    //console.log(`result.token: ${result.token}`, 'result', result)
+                }
+            });
+        });
+
+        function stripeTokenHandler(token) {
+            // Insert the token ID into the form so it gets submitted to the server
+            console.log(`token: ${token}`)
+            var hiddenInput = document.createElement('input');
+            hiddenInput.setAttribute('type', 'hidden');
+            hiddenInput.setAttribute('name', 'stripeToken');
+            hiddenInput.setAttribute('value', token.id);
+            form.appendChild(hiddenInput);
+            
+            var hiddenCardNumberInput = document.createElement('input');
+            hiddenCardNumberInput.setAttribute('type', 'hidden');
+            hiddenCardNumberInput.setAttribute('name', 'cardNumber');
+            hiddenCardNumberInput.setAttribute('value', card._frameElements.number.element.value);
+            form.appendChild(hiddenCardNumberInput);
+                    
+            // Submit the form
+            form.submit();
+        }
+    </script>

@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Persistence;
+using StackExchange.Redis;
 using WebMVC.BackgroundJobs;
 using WebMVC.Hubs;
 using WebMVC.Middlewares;
@@ -54,6 +55,13 @@ builder.Services.AddHangfire(config =>
     config.UseSqlServerStorage(builder.Configuration.GetConnectionString("HangfireConnection"));
 });
 builder.Services.AddHangfireServer();
+// Register Redis ConnectionMultiplexer as a singleton
+builder.Services.AddSingleton<IConnectionMultiplexer>(sp =>
+{
+    var config = ConfigurationOptions.Parse(builder.Configuration.GetConnectionString("Redis:ConnectionString"));
+    config.ClientName = builder.Configuration["Redis:InstanceName"];
+    return ConnectionMultiplexer.Connect(config);
+});
 
 
 var app = builder.Build();
@@ -81,7 +89,7 @@ app.UseStaticFiles();
 app.UseHangfireDashboard();
 
 // Schedule a recurring job to execute every 10 minutes
-RecurringJob.AddOrUpdate<HangfireRemoteApiCallJob>(x => x.MakeRemoteApiCall(), Cron.MinuteInterval(5));
+RecurringJob.AddOrUpdate<HangfireRemoteApiCallJob>(x => x.MakeRemoteApiCall(), Cron.MinuteInterval(1));
 
 
 app.UseRouting();
