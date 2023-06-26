@@ -24,4 +24,6 @@ public class JarDto
 
     [JsonPropertyName("goal")]
     public decimal Goal { get; set; }
+    
+    [JsonPropertyName("stripeId")] public string? StripeId { get; set; }
 }

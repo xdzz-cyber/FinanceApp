@@ -1,5 +1,6 @@
 ﻿using System.Text.Json;
 using Application.Card.Commands.UpdateCard;
+using Application.Common.Constants;
 using Application.Common.Dtos;
 using Hangfire;
 using MediatR;
@@ -40,27 +41,39 @@ public class HangfireRemoteApiCallJob
             // First of all update redis cards info
             var client = JsonSerializer.Deserialize<ClientDto>(content);
             
+            var cardIndex = 0;
+
             foreach (var card in client!.Accounts)
             {
-                await _mediator.Send(new UpdateCard
+                var updatedCard = await _mediator.Send(new UpdateCard
                 {
                     Id = card.Id,
+                    StripeId = CardsIdsConstants.CardsId[cardIndex++],
                     InitialAmount = card.Balance
-                });
+                });// 186
+                card.Balance = (card.Balance / 4000) + updatedCard!.UpdateAmount / 100; // To convert to dollars
+                card.StripeId = updatedCard.StripeId;
             }
-
+            
             foreach (var jar in client.Jars)
             {
-                await _mediator.Send(new UpdateCard()
+                var updatedJar = await _mediator.Send(new UpdateCard()
                 {
                     Id = jar.Id,
-                    UpdateAmount = jar.Balance 
+                    StripeId = CardsIdsConstants.CardsId[cardIndex++],
+                    InitialAmount = jar.Balance 
                 });
+                jar.Balance = (jar.Balance / 4000) + updatedJar!.UpdateAmount / 100; // To convert to dollars
+                jar.StripeId = updatedJar.StripeId;
             }
             
             // Create new content with replaced cards and jars
-            content = JsonSerializer.Serialize(client);
+            //content = JsonSerializer.Serialize(client);
             
+            // Serialize in different way
+            
+            content = JsonSerializer.Serialize(client);
+
             await _hubContext.Clients.All.SendAsync("ReceiveBankingInfo", content);
 
             return content;

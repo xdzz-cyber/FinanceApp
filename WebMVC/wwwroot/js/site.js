@@ -1,5 +1,6 @@
 ﻿const storageNameOfCoinsIds = "coinsIds";
 
+
 async function generateFinancialGoals(financialGoals) {
     function createProgressBar(container, goal) {
         var progressPercentage = Math.round((goal.currentAmount / goal.targetAmount) * 100);
@@ -319,16 +320,21 @@ function createCard(item, type='jar', name='') {
     cardBody.className = 'card-body';
     card.appendChild(cardBody);
 
-    const title = document.createElement('h5');
+    const title = document.createElement('h4');
     title.className = 'card-title text-center';
-    title.textContent = item.title || name; // Set the title here
+    title.textContent = item.title || name;
     cardBody.appendChild(title);
+    
+    const stripeId = document.createElement('h5');
+    stripeId.className = 'card-title text-center';
+    stripeId.textContent = `StripeId: ${item.stripeId}` ; // Set the stripeId here
+    cardBody.appendChild(stripeId);
 
     const description = document.createElement('p');
     description.className = 'card-text';
     //description.textContent = item.description || ''; // Set the description here
-    description.textContent = type !== 'jar' ? `Credit limit: ${item.creditLimit} .Balance: ${item.balance}, type: ${item.type} and cashback type ${item.cashbackType}` 
-        : `Description: ${item.description}. Goal: ${item.goal}. Balance: ${item.balance}`;
+    description.textContent = type !== 'jar' ? `Credit limit: ${item.creditLimit} .Balance: ${item.balance}$, type: ${item.type} and cashback type ${item.cashbackType}` 
+        : `Description: ${item.description}. Goal: ${item.goal}. Balance: ${item.balance}$`;
     cardBody.appendChild(description);
 
     const link = document.createElement('a');
@@ -340,7 +346,7 @@ function createCard(item, type='jar', name='') {
     return card;
 }
 
-function getBankingInfo(){
+function subscribeForBankingInfo(){
     let connection = new signalR.HubConnectionBuilder().withUrl("/bankingHub").build();
 
     connection.start()
@@ -363,6 +369,32 @@ function getBankingInfo(){
         renderCards(JSON.parse(items));
     });
 }
+
+// async function getBankingInfo() {
+//     // $(document).ready(function () {
+//     //     $.ajax({
+//     //         url: '@Url.Action("ExecuteBackgroundJob", "Banking")',
+//     //         type: 'POST',
+//     //         success: function () {
+//     //             console.log('Background job executed successfully');
+//     //         },
+//     //         error: function () {
+//     //             console.error('An error occurred while executing the background job');
+//     //         }
+//     //     });
+//     // });
+//
+//     document.addEventListener("DOMContentLoaded", function() {
+//         // Make request to the server via fetch API
+//         fetch('/Banking/ExecuteBackgroundJob/', {
+//             method: 'POST'
+//         }).then(function (response) {
+//             console.log('Background job executed successfully');
+//         }).catch(function (error) {
+//             console.error('An error occurred while executing the background job');
+//         });
+//     });
+// }
 
 function addCoinsToCart(){
     const maxNumberOfRecipesAllowedToStore = 10;
@@ -431,4 +463,57 @@ function setListenerForBudgetIdInCartPage(){
         hiddenInput.value = dropdown.value; // Update the hidden input field's value
         console.log('hiddenInput.value', hiddenInput.value)
     });
+}
+
+function proceedTransaction(stripePublicKey){
+    console.log('key', stripePublicKey)
+    //var stripe = Stripe('@ViewBag.StripePublicKey');
+    var stripe = Stripe(stripePublicKey);
+    var elements = stripe.elements();
+    
+    var card = elements.create('card');
+    card.mount('#card-element');
+
+    var form = document.getElementById('payment-form');
+
+    form.addEventListener('submit', function (event) {
+        event.preventDefault();
+
+        stripe.createToken(card).then(function (result) {
+            if (result.error) {
+                // Display error message to the user
+                console.error(`error: ${result.error.message}`);
+            } else {
+                // Token created successfully, submit the form with the token
+                console.log(`success: ${result.token}`)
+                var cardNumber = result.token.card.number;
+                console.log('cardNumber:', cardNumber);
+                stripeTokenHandler(result.token);
+                //console.log(`result.token: ${result.token}`, 'result', result)
+            }
+        });
+    });
+
+    function stripeTokenHandler(token) {
+        // Insert the token ID into the form so it gets submitted to the server
+        console.log(`token: ${token}`)
+        var hiddenInput = document.createElement('input');
+        hiddenInput.setAttribute('type', 'hidden');
+        hiddenInput.setAttribute('name', 'stripeToken');
+        hiddenInput.setAttribute('value', token.id);
+        form.appendChild(hiddenInput);
+        
+        
+        // var cardNumberElement = document.querySelector('input[name="cardnumber"]');
+        // var cardNumberValue = cardNumberElement.value.replace(/\s/g, ''); // Remove whitespace from the value
+        // console.log('cardNumber', cardNumberElement)
+        // var hiddenCardNumberInput = document.createElement('input');
+        // hiddenCardNumberInput.setAttribute('type', 'hidden');
+        // hiddenCardNumberInput.setAttribute('name', 'cardNumber');
+        // hiddenCardNumberInput.setAttribute('value', cardNumberValue);
+        // form.appendChild(hiddenCardNumberInput);
+        //
+        // // Submit the form
+         form.submit();
+    }
 }

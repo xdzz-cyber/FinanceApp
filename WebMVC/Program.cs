@@ -15,7 +15,9 @@ using WebMVC.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
+
 // Add services to the container.
+// builder.Services.AddSingleton<IConfiguration>(builder.Configuration);
 // Configure Identity Server
 builder.Services.AddLocalization(options => options.ResourcesPath = "Resources"); ;
 builder.Services.AddControllersWithViews().AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix)
@@ -58,11 +60,10 @@ builder.Services.AddHangfireServer();
 // Register Redis ConnectionMultiplexer as a singleton
 builder.Services.AddSingleton<IConnectionMultiplexer>(sp =>
 {
-    var config = ConfigurationOptions.Parse(builder.Configuration.GetConnectionString("Redis:ConnectionString"));
+    var config = ConfigurationOptions.Parse(builder.Configuration["Redis:ConnectionString"]);
     config.ClientName = builder.Configuration["Redis:InstanceName"];
     return ConnectionMultiplexer.Connect(config);
 });
-
 
 var app = builder.Build();
 
@@ -88,7 +89,7 @@ app.UseCors("AllowAll");
 app.UseStaticFiles();
 app.UseHangfireDashboard();
 
-// Schedule a recurring job to execute every 10 minutes
+// Schedule a recurring job to execute every 5 minutes
 RecurringJob.AddOrUpdate<HangfireRemoteApiCallJob>(x => x.MakeRemoteApiCall(), Cron.MinuteInterval(1));
 
 

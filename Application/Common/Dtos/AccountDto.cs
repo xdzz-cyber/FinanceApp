@@ -21,4 +21,6 @@ public class AccountDto
     [JsonPropertyName("maskedPan")] public string[] MaskedPan { get; set; }
 
     [JsonPropertyName("iban")] public string Iban { get; set; }
+    
+    [JsonPropertyName("stripeId")] public string? StripeId { get; set; }
 }

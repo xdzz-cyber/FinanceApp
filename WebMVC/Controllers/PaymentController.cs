@@ -28,14 +28,20 @@ public class PaymentController : BaseController
     }
 
     [HttpPost]
-    public async Task<IActionResult> Charge(string stripeToken, string cardNumber ,int amount)
+    public async Task<IActionResult> Charge(string stripeToken ,int amount)
     {
+        var tokenService = new TokenService();
+        var stripeTokenObject = await tokenService.GetAsync(stripeToken);
+    
+        var cardNumberCardLast4 = stripeTokenObject.Card?.Last4; // Retrieve the last 4 digits of the card number
+        
         var options = new ChargeCreateOptions
         {
             Amount = amount * 100, // Convert to dollars
             Currency = "usd",
             Source = stripeToken,
-            Description = "Test payment"
+            Description = "Test payment",
+            
         };
 
         var service = new ChargeService();
@@ -45,7 +51,7 @@ public class PaymentController : BaseController
         {
             var updateResult = await Mediator.Send(new UpdateCard()
             {
-                Id = cardNumber,
+                StripeId = cardNumberCardLast4!,
                 UpdateAmount = amount * 100 
             });
             
@@ -55,8 +61,6 @@ public class PaymentController : BaseController
                 return BadRequest("Update card failed");
             }
             
-            //return Ok();
-            // return redirect to success page
             return RedirectToAction("Banking", "Banking");
         }
         
