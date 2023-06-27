@@ -1,5 +1,6 @@
 ﻿using System.Text.Json;
 using Application.Card.Commands.UpdateCard;
+using Application.Card.Queries.GetCards;
 using Application.Common.Constants;
 using Application.Common.Dtos;
 using Hangfire;
@@ -42,36 +43,72 @@ public class HangfireRemoteApiCallJob
             var client = JsonSerializer.Deserialize<ClientDto>(content);
             
             var cardIndex = 0;
+            
+            var cachedCards = await _mediator.Send(new GetCards());
 
             foreach (var card in client!.Accounts)
             {
-                var updatedCard = await _mediator.Send(new UpdateCard
+                var matchedCard = cachedCards.FirstOrDefault(cachedCard => cachedCard.Id == card.Id);
+
+                var updateAmount = matchedCard!.UpdateAmount;
+
+                var stripeId = matchedCard.StripeId;
+                
+                if (matchedCard.InitialAmount != card.Balance)
                 {
-                    Id = card.Id,
-                    StripeId = CardsIdsConstants.CardsId[cardIndex++],
-                    InitialAmount = card.Balance
-                });// 186
-                card.Balance = (card.Balance / 4000) + updatedCard!.UpdateAmount / 100; // To convert to dollars
-                card.StripeId = updatedCard.StripeId;
+                    var updateCard = new UpdateCard
+                    {
+                        Id = card.Id,
+                        InitialAmount = card.Balance
+                    };
+                    
+                    if (matchedCard.StripeId != card.StripeId)
+                    {
+                        updateCard.StripeId = CardsIdsConstants.CardsId[cardIndex];
+                    }
+                    
+                    var updatedCard = await _mediator.Send(updateCard);
+                    
+                    updateAmount = updatedCard!.UpdateAmount;
+                    stripeId = updatedCard.StripeId;
+                }
+                    
+                card.Balance = (card.Balance / 4000) + updateAmount / 100; // To convert to dollars
+                card.StripeId = stripeId;
             }
             
             foreach (var jar in client.Jars)
             {
-                var updatedJar = await _mediator.Send(new UpdateCard()
+                var matchedJar = cachedCards.FirstOrDefault(cachedCard => cachedCard.Id == jar.Id);
+
+                var updateAmount = matchedJar!.UpdateAmount;
+                
+                var stripeId = matchedJar.StripeId;
+                
+                if (matchedJar.InitialAmount != jar.Balance)
                 {
-                    Id = jar.Id,
-                    StripeId = CardsIdsConstants.CardsId[cardIndex++],
-                    InitialAmount = jar.Balance 
-                });
-                jar.Balance = (jar.Balance / 4000) + updatedJar!.UpdateAmount / 100; // To convert to dollars
-                jar.StripeId = updatedJar.StripeId;
+                    var updateJar = new UpdateCard
+                    {
+                        Id = jar.Id,
+                        InitialAmount = jar.Balance
+                    };
+                    
+                    if (matchedJar.StripeId != jar.StripeId)
+                    {
+                        matchedJar.StripeId = CardsIdsConstants.CardsId[cardIndex];
+                    }
+                    
+                    var updatedJar = await _mediator.Send(updateJar);
+                    
+                    updateAmount = updatedJar!.UpdateAmount;
+                    
+                    stripeId = updatedJar.StripeId;
+                }
+                    
+                jar.Balance = (jar.Balance / 4000) + updateAmount / 100; // To convert to dollars
+                jar.StripeId = stripeId;
             }
-            
-            // Create new content with replaced cards and jars
-            //content = JsonSerializer.Serialize(client);
-            
-            // Serialize in different way
-            
+
             content = JsonSerializer.Serialize(client);
 
             await _hubContext.Clients.All.SendAsync("ReceiveBankingInfo", content);

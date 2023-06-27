@@ -206,6 +206,7 @@ body {
 .card{
   box-shadow: 0 1px 15px 1px rgba(52,40,104,.08);
   max-height: 22vh;
+  margin-bottom: 7vh;
 }
 
 .main-page-card{

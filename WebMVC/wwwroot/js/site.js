@@ -370,31 +370,31 @@ function subscribeForBankingInfo(){
     });
 }
 
-// async function getBankingInfo() {
-//     // $(document).ready(function () {
-//     //     $.ajax({
-//     //         url: '@Url.Action("ExecuteBackgroundJob", "Banking")',
-//     //         type: 'POST',
-//     //         success: function () {
-//     //             console.log('Background job executed successfully');
-//     //         },
-//     //         error: function () {
-//     //             console.error('An error occurred while executing the background job');
-//     //         }
-//     //     });
-//     // });
-//
-//     document.addEventListener("DOMContentLoaded", function() {
-//         // Make request to the server via fetch API
-//         fetch('/Banking/ExecuteBackgroundJob/', {
-//             method: 'POST'
-//         }).then(function (response) {
-//             console.log('Background job executed successfully');
-//         }).catch(function (error) {
-//             console.error('An error occurred while executing the background job');
-//         });
-//     });
-// }
+function getBankingInfo() {
+    // $(document).ready(function () {
+    //     $.ajax({
+    //         url: '@Url.Action("ExecuteBackgroundJob", "Banking")',
+    //         type: 'POST',
+    //         success: function () {
+    //             console.log('Background job executed successfully');
+    //         },
+    //         error: function () {
+    //             console.error('An error occurred while executing the background job');
+    //         }
+    //     });
+    // });
+
+    document.addEventListener("DOMContentLoaded", function() {
+        // Make request to the server via fetch API
+        fetch('/Banking/ExecuteBackgroundJob/', {
+            method: 'POST'
+        }).then(function (response) {
+            console.log('Background job executed successfully');
+        }).catch(function (error) {
+            console.error('An error occurred while executing the background job');
+        });
+    });
+}
 
 function addCoinsToCart(){
     const maxNumberOfRecipesAllowedToStore = 10;

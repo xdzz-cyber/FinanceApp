@@ -89,8 +89,8 @@ app.UseCors("AllowAll");
 app.UseStaticFiles();
 app.UseHangfireDashboard();
 
-// Schedule a recurring job to execute every 5 minutes
-RecurringJob.AddOrUpdate<HangfireRemoteApiCallJob>(x => x.MakeRemoteApiCall(), Cron.MinuteInterval(1));
+// Schedule a recurring job to execute every 1 minutes
+RecurringJob.AddOrUpdate<HangfireRemoteApiCallJob>(x => x.MakeRemoteApiCall(), Cron.MinuteInterval(5));
 
 
 app.UseRouting();
