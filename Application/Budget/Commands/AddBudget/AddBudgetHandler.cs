@@ -1,5 +1,7 @@
-﻿using Application.Interfaces;
+﻿using Application.Common.Exceptions;
+using Application.Interfaces;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace Application.Budget.Commands.AddBudget;
 
@@ -14,7 +16,16 @@ public class AddBudgetHandler : IRequestHandler<AddBudget, Guid>
     
     public async Task<Guid> Handle(AddBudget request, CancellationToken cancellationToken)
     {
-        var budget = new Domain.Budget
+        var budget = await _context.Budgets.AsNoTracking()
+            .Where(b => b.AppUserId == request.UserId && b.Name == request.Name)
+            .FirstOrDefaultAsync(cancellationToken);
+        
+        if(budget is not null)
+        {
+            throw new AlreadyExistsException("Budget", request.Name);
+        }
+        
+        var createdBudget = new Domain.Budget
         {
             Name = request.Name,
             Amount = request.Amount,
@@ -23,10 +34,10 @@ public class AddBudgetHandler : IRequestHandler<AddBudget, Guid>
             EndDate = request.EndDate
         };
         
-        await _context.Budgets.AddAsync(budget, cancellationToken);
+        await _context.Budgets.AddAsync(createdBudget, cancellationToken);
         
         await _context.SaveChangesAsync(cancellationToken);
         
-        return budget.Id;
+        return createdBudget.Id;
     }
 }

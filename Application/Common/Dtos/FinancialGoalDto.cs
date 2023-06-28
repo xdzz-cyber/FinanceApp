@@ -13,7 +13,7 @@ public class FinancialGoalDto : IMapWith<Domain.FinancialGoal>
 
     // Add validation for Description
     [Required]
-    [StringLength(50, MinimumLength = 1)]
+    [StringLength(500, MinimumLength = 1)]
     public string Description { get; set; } = null!;
 
     // Add validation for TargetAmount

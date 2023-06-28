@@ -17,13 +17,20 @@ public class RegistrationHandler : IRequestHandler<Auth.Commands.Registration.Co
     
     public async Task<bool> Handle(Auth.Commands.Registration.Commands.Registration request, CancellationToken cancellationToken)
     {
-        var user = await _userManager.CreateAsync(new ApplicationUser
+        var user = await _userManager.FindByEmailAsync(request.Email);
+        
+        if (user is not null)
+        {
+            return false;
+        }
+        
+        var createdUser = await _userManager.CreateAsync(new ApplicationUser
         {
             UserName = request.UserName,
             Email = request.Email
         }, request.Password);
 
-        if (user.Succeeded == false)
+        if (createdUser.Succeeded == false)
         {
             return false;
         }

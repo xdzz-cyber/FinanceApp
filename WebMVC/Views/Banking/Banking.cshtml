@@ -9,6 +9,11 @@
     <p>Here you can see your cards and banks info as well as ability of top up them</p>
 </div>
 
+<div class="mt-3 mb-5 mx-auto text-center">
+    <p>Make a payment</p>
+    <a asp-controller="Payment" asp-action="Payment">Payment</a>
+</div>
+
 @* <div class="banking-main-container"> *@
 @*     <div class="banking-main-container-child"> *@
 @*         @for (var i = 0; i < 3; i++) *@
@@ -45,10 +50,6 @@
     </div>
 </div>
 
-<div class="mt-3 mx-auto text-center">
-    <p>Make a payment</p>
-    <a asp-controller="Payment" asp-action="Payment">Payment</a>
-</div>
 
 <script>
 subscribeForBankingInfo();

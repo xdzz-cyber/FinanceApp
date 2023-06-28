@@ -2,6 +2,7 @@
 using Application.Budget.Queries.GetBudgets;
 using Application.Category.Queries.GetCategories;
 using Application.Common.Dtos;
+using Application.Common.Exceptions;
 using Application.FinancialGoal.Commands.CreateFinancialGoal;
 using Application.FinancialGoal.Queries.GetFinancialGoals;
 using Microsoft.AspNetCore.Authorization;
@@ -58,28 +59,34 @@ public class FinancialGoalController : BaseController
     [HttpPost]
     public async Task<IActionResult> AddFinancialGoal(AddFinancialGoalFormHandlerVm addFinancialGoalFormHandlerVm)
     {
-        if (!ModelState.IsValid)
+        try
         {
-            return View();
-        }
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
 
-        var createdInstanceId = await Mediator.Send(new CreateFinancialGoal()
-        {
-            Name = addFinancialGoalFormHandlerVm.FinancialGoal.Name,
-            Description = addFinancialGoalFormHandlerVm.FinancialGoal.Description,
-            TargetAmount = addFinancialGoalFormHandlerVm.FinancialGoal.TargetAmount,
-            TargetDate = addFinancialGoalFormHandlerVm.FinancialGoal.TargetDate,
-            BudgetId = addFinancialGoalFormHandlerVm.FinancialGoal.BudgetId,
-            CategoryId = Guid.Parse(addFinancialGoalFormHandlerVm.FinancialGoal.CategoryName),
-            CurrentAmount = addFinancialGoalFormHandlerVm.FinancialGoal.CurrentAmount
-        });
-        
-        // Check if the instance was created successfully.
-        if (createdInstanceId == Guid.Empty)
-        {
-            return BadRequest();
+            var createdInstanceId = await Mediator.Send(new CreateFinancialGoal()
+            {
+                Name = addFinancialGoalFormHandlerVm.FinancialGoal.Name,
+                Description = addFinancialGoalFormHandlerVm.FinancialGoal.Description,
+                TargetAmount = addFinancialGoalFormHandlerVm.FinancialGoal.TargetAmount,
+                TargetDate = addFinancialGoalFormHandlerVm.FinancialGoal.TargetDate,
+                BudgetId = addFinancialGoalFormHandlerVm.FinancialGoal.BudgetId,
+                CategoryId = Guid.Parse(addFinancialGoalFormHandlerVm.FinancialGoal.CategoryName),
+                CurrentAmount = addFinancialGoalFormHandlerVm.FinancialGoal.CurrentAmount
+            });
+
+            if (createdInstanceId == Guid.Empty)
+            {
+                return BadRequest("Failed to create financial goal.");
+            }
+
+            return RedirectToAction("FinancialGoals");
         }
-        
-        return RedirectToAction("FinancialGoals");
+        catch (AlreadyExistsException alreadyExistsException)
+        {
+            return RedirectToAction("Error", "Error", new {message = alreadyExistsException.Message});
+        }
     }
 }

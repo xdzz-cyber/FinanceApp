@@ -337,11 +337,11 @@ function createCard(item, type='jar', name='') {
         : `Description: ${item.description}. Goal: ${item.goal}. Balance: ${item.balance}$`;
     cardBody.appendChild(description);
 
-    const link = document.createElement('a');
-    link.href = '#';
-    link.className = 'btn btn-primary';
-    link.textContent = 'Go somewhere';
-    cardBody.appendChild(link);
+    // const link = document.createElement('a');
+    // link.href = '#';
+    // link.className = 'btn btn-primary';
+    // link.textContent = 'Go somewhere';
+    // cardBody.appendChild(link);
 
     return card;
 }

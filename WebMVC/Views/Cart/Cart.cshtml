@@ -70,6 +70,7 @@
                   const responseData = await response.json();
                   console.log('responseData', responseData)
                   // Redirect to the specified URL
+                  clearStorage();
                   window.location.href = responseData.redirectUrl;
                 } else {
                   // Handle unsuccessful response
@@ -136,7 +137,7 @@
                 </table>
             </div>
             <!-- / Shopping cart table -->
-            <div class="pb-4" style="display: grid; justify-content: end; grid-template-areas: 'theFirst first second'; align-content: center; grid-gap: 20px">
+            <div class="pb-4" style="margin-bottom: 50px;display: grid; justify-content: end; grid-template-areas: 'theFirst first second'; align-content: center; grid-gap: 20px">
                 <div class="theFirst mt-2" style="grid-area: theFirst">
                     @Html.DropDownListFor(
                         m => m.SelectedBudgetId, // Bind the selected budget ID to a property on your view model
@@ -146,15 +147,15 @@
                         )
                     <input type="hidden" id="selectedBudgetId" value="@Model.SelectedBudgetId" />
                 </div>
-            </div>
-            <div class="text-right first" style="grid-area: first">
-                <label class="text-muted font-weight-normal m-0">Total price</label>
-                <div class="text-large">
-                    <strong id="totalSum">$</strong>
+                <div class="text-right first" style="grid-area: first">
+                                <label class="text-muted font-weight-normal m-0">Total price</label>
+                                <div class="text-large">
+                                    <strong id="totalSum">$</strong>
+                                </div>
+                            </div>
+                <div class="second" style="grid-area: second">
+                    <button type="button" class="btn btn-lg btn-primary mt-2" onclick="checkout()">Checkout</button>
                 </div>
-            </div>
-            <div class="second" style="grid-area: second">
-                <button type="button" class="btn btn-lg btn-primary mt-2" onclick="checkout()">Checkout</button>
             </div>
         </div>
     </div>

@@ -1,5 +1,7 @@
-﻿using Application.Interfaces;
+﻿using Application.Common.Exceptions;
+using Application.Interfaces;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace Application.FinancialGoal.Commands.CreateFinancialGoal;
 
@@ -14,7 +16,15 @@ public class CreateFinancialGoalHandler : IRequestHandler<CreateFinancialGoal, G
     
     public async Task<Guid> Handle(CreateFinancialGoal request, CancellationToken cancellationToken)
     {
-        var financialGoal = new Domain.FinancialGoal()
+        var financialGoalExists = await _context.FinancialGoals.AsNoTracking()
+            .AnyAsync(x => x.Name == request.Name && x.Description == request.Description, cancellationToken);
+
+        if (financialGoalExists)
+        {
+            throw new AlreadyExistsException("Financial Goal with this name and description already exists.", nameof(request.Name));    
+        }
+
+        var createdFinancialGoal = new Domain.FinancialGoal()
         {
             Name = request.Name,
             Description = request.Description,
@@ -25,10 +35,10 @@ public class CreateFinancialGoalHandler : IRequestHandler<CreateFinancialGoal, G
             CurrentAmount = request.CurrentAmount
         };
         
-        await _context.FinancialGoals.AddAsync(financialGoal, cancellationToken);
+        await _context.FinancialGoals.AddAsync(createdFinancialGoal, cancellationToken);
         
         await _context.SaveChangesAsync(cancellationToken);
         
-        return financialGoal.Id;
+        return createdFinancialGoal.Id;
     }
 }

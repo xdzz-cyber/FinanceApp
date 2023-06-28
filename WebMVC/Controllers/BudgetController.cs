@@ -4,6 +4,7 @@ using Application.Budget.Queries.GetBudget;
 using Application.Budget.Queries.GetBudgets;
 using Application.Category.Queries.GetCategories;
 using Application.Common.Dtos;
+using Application.Common.Exceptions;
 using Domain;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -49,36 +50,48 @@ public class BudgetController : BaseController
     [HttpPost]
     public async Task<IActionResult> AddBudget(AddBudgetVm vm)
     {
-        if (!ModelState.IsValid)
+        try
         {
-            return View(vm);
+            if (!ModelState.IsValid)
+            {
+                return View(vm);
+            }
+
+            var budget = new Budget
+            {
+                Name = vm.Name,
+                Amount = vm.Amount,
+                StartDate = vm.StartDate,
+                EndDate = vm.EndDate,
+                AppUserId = User.FindFirstValue(ClaimTypes.NameIdentifier)
+            };
+
+            var result = await Mediator.Send(new AddBudget
+            {
+                Name = budget.Name,
+                Amount = budget.Amount,
+                UserId = budget.AppUserId,
+                StartDate = budget.StartDate,
+                EndDate = budget.EndDate
+            });
+
+            if (result == Guid.Empty)
+            {
+                return View(vm);
+            }
+
+            return RedirectToAction("Budget", new {id = result});
         }
-        
-        var budget = new Budget
+        catch (AlreadyExistsException alreadyExistsException)
         {
-            Name = vm.Name,
-            Amount = vm.Amount,
-            StartDate = vm.StartDate,
-            EndDate = vm.EndDate,
-            AppUserId = User.FindFirstValue(ClaimTypes.NameIdentifier)
-        };
-        
-        var result = await Mediator.Send(new AddBudget
-        {
-            Name = budget.Name,
-            Amount = budget.Amount,
-            UserId = budget.AppUserId,
-            StartDate = budget.StartDate,
-            EndDate = budget.EndDate
-        });
-        
-        // Check if result is not Guid.Empty
-        if (result == Guid.Empty)
-        {
-            return View(vm);
+            return RedirectToAction("Error", "Error", new {message = alreadyExistsException.Message});
         }
-        
-        return RedirectToAction("Budget", new {id = result});
+        // catch (Exception e)
+        // {
+        //     return View(vm);
+        // }
+
+        // return View(vm);
     }
     
     private async Task<string> GetCategoryName(Guid categoryId)
