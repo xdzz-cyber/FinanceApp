@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace WebMVC.Resources.Views.Home {
+namespace WebMVC.Resources.Views.Cart {
     using System;
     
     
@@ -21,14 +21,14 @@ namespace WebMVC.Resources.Views.Home {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Index_en {
+    internal class Cart_en {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal Index_en() {
+        internal Cart_en() {
         }
         
         /// <summary>
@@ -38,7 +38,7 @@ namespace WebMVC.Resources.Views.Home {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("WebMVC.Resources.Views.Home.Index.en", typeof(Index_en).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("WebMVC.Resources.Views.Cart.Cart.en", typeof(Cart_en).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -60,56 +60,83 @@ namespace WebMVC.Resources.Views.Home {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Check to add to your cart.
+        ///   Looks up a localized string similar to Checkout.
         /// </summary>
-        internal static string HomeCheckToAddToCartMessage {
+        internal static string CartCheckoutMessage {
             get {
-                return ResourceManager.GetString("HomeCheckToAddToCartMessage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to First.
-        /// </summary>
-        internal static string HomePaginationFirstMessage {
-            get {
-                return ResourceManager.GetString("HomePaginationFirstMessage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Last.
-        /// </summary>
-        internal static string HomePaginationLastMessage {
-            get {
-                return ResourceManager.GetString("HomePaginationLastMessage", resourceCulture);
+                return ResourceManager.GetString("CartCheckoutMessage", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Price.
         /// </summary>
-        internal static string HomePriceMessage {
+        internal static string CartPriceMessage {
             get {
-                return ResourceManager.GetString("HomePriceMessage", resourceCulture);
+                return ResourceManager.GetString("CartPriceMessage", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Submit items to cart.
+        ///   Looks up a localized string similar to Product Name and Details.
         /// </summary>
-        internal static string HomeSubmitItemsToCartMessage {
+        internal static string CartProductNameNDetailsMessage {
             get {
-                return ResourceManager.GetString("HomeSubmitItemsToCartMessage", resourceCulture);
+                return ResourceManager.GetString("CartProductNameNDetailsMessage", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Welcome.
+        ///   Looks up a localized string similar to Quantity.
         /// </summary>
-        internal static string WelcomeMessage {
+        internal static string CartQuantityMessage {
             get {
-                return ResourceManager.GetString("WelcomeMessage", resourceCulture);
+                return ResourceManager.GetString("CartQuantityMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove.
+        /// </summary>
+        internal static string CartRemoveMessage {
+            get {
+                return ResourceManager.GetString("CartRemoveMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Symbol.
+        /// </summary>
+        internal static string CartSymbolMessage {
+            get {
+                return ResourceManager.GetString("CartSymbolMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Total.
+        /// </summary>
+        internal static string CartTotalMessage {
+            get {
+                return ResourceManager.GetString("CartTotalMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Total price.
+        /// </summary>
+        internal static string CartTotalPriceMessage {
+            get {
+                return ResourceManager.GetString("CartTotalPriceMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Shopping Cart.
+        /// </summary>
+        internal static string CartWelcomeMessage {
+            get {
+                return ResourceManager.GetString("CartWelcomeMessage", resourceCulture);
             }
         }
     }

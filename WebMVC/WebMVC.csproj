@@ -35,8 +35,8 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Resources\Views\Banking\" />
       <Folder Include="wwwroot\dist\" />
+      <Folder Include="wwwroot\images\" />
     </ItemGroup>
 
     <ItemGroup>
@@ -87,6 +87,26 @@
       <EmbeddedResource Update="Resources\Views\Transactions\AddTransaction.en.resx">
         <Generator>ResXFileCodeGenerator</Generator>
         <LastGenOutput>AddTransaction.en.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Views\Banking\Banking.en.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>Banking.en.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Views\Cart\Cart.en.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>Cart.en.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Views\Payment\Payment.en.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>Payment.en.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Views\Shared\Error.en.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>Error.en.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Views\Home\Index.uk.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>Index.uk.Designer.cs</LastGenOutput>
       </EmbeddedResource>
     </ItemGroup>
 
@@ -150,6 +170,31 @@
         <DesignTime>True</DesignTime>
         <AutoGen>True</AutoGen>
         <DependentUpon>AddTransaction.en.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Views\Banking\Banking.en.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>Banking.en.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Views\Cart\Cart.en.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>Cart.en.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Views\Payment\Payment.en.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>Payment.en.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Views\Shared\Error.en.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>Error.en.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Views\Home\Index.uk.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>Index.uk.resx</DependentUpon>
       </Compile>
     </ItemGroup>
 

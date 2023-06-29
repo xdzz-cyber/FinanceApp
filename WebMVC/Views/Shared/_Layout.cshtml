@@ -2,6 +2,7 @@
 @using Microsoft.AspNetCore.Mvc.TagHelpers
 @inject IViewLocalizer Localizer
 
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -45,6 +46,12 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Banking" asp-action="Banking">@Localizer["BankingPageMessage"].Value</a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Localization" asp-action="SetLanguage" asp-route-culture="en"><img height="20px" style="vertical-align: text-bottom" src="~/images/united-kingdom.png" alt="uk's logo"></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Localization" asp-action="SetLanguage" asp-route-culture="uk"><img height="20px" style="vertical-align: text-bottom" src="~/images/ukraine.png" alt="ukraine's logo"></a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Auth" asp-action="Logout">@Localizer["LogoutMessage"].Value</a>
                         </li>
                     </ul>
@@ -63,7 +70,7 @@
     <div class="container">
         <div class="row">
             <div class="col">
-                <p>Footer Content</p>
+                <p>@Localizer["FooterContentMessage"].Value</p>
             </div>
         </div>
     </div>

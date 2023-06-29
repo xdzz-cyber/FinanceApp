@@ -18,7 +18,22 @@
     <resheader name="writer">
         <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
     </resheader>
-    <data name="AddFinancialGoalWelcomeMessage" xml:space="preserve">
-        <value>Create Financial Goal</value>
+    <data name="WelcomeMessage" xml:space="preserve">
+        <value>Ласкаво просимо</value>
+    </data>
+    <data name="HomeCheckToAddToCartMessage" xml:space="preserve">
+        <value>Поставте прапорець, щоб додати в кошик</value>
+    </data>
+    <data name="HomePaginationFirstMessage" xml:space="preserve">
+        <value>Перший</value>
+    </data>
+    <data name="HomePaginationLastMessage" xml:space="preserve">
+        <value>Останній</value>
+    </data>
+    <data name="HomePriceMessage" xml:space="preserve">
+        <value>Ціна</value>
+    </data>
+    <data name="HomeSubmitItemsToCartMessage" xml:space="preserve">
+        <value>Додайте товари в кошик</value>
     </data>
 </root>

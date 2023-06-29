@@ -1,4 +1,6 @@
-﻿@* @model TModel *@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@* @model TModel *@
 
 @{
     Layout = "_Layout";
@@ -8,15 +10,17 @@
     ViewData["Title"] = "Payment";
 }
 
+@inject IViewLocalizer Localizer
+
 <h2>Payment</h2>
 
 <form id="payment-form" asp-controller="Payment" asp-action="Charge" method="post">
     <div>
-        <label for="amount">Amount (in dollars):</label>
+        <label for="amount">@Localizer["PaymentAmountMessage"].Value:</label>
         <input type="number" id="amount" name="amount" />
     </div>
     <div id="card-element"></div>
-    <button type="submit">Pay</button>
+    <button type="submit">@Localizer["PaymentPayMessage"].Value</button>
 </form>
 
 <script>

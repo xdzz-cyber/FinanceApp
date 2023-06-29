@@ -69,6 +69,15 @@ namespace WebMVC.Resources.Views.Auth {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Not a member?.
+        /// </summary>
+        internal static string NotAMemberMessage {
+            get {
+                return ResourceManager.GetString("NotAMemberMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Password.
         /// </summary>
         internal static string PasswordInputMessage {

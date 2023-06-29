@@ -7,6 +7,7 @@ using Hangfire;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc.Razor;
+using Microsoft.Extensions.Options;
 using Persistence;
 using StackExchange.Redis;
 using WebMVC.BackgroundJobs;
@@ -21,7 +22,8 @@ var builder = WebApplication.CreateBuilder(args);
 // Configure Identity Server
 builder.Services.AddLocalization(options => options.ResourcesPath = "Resources"); ;
 builder.Services.AddControllersWithViews().AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix)
-    .AddDataAnnotationsLocalization().AddViewLocalization();
+    .AddDataAnnotationsLocalization();
+//.AddViewLocalization();
 builder.Services.Configure<RequestLocalizationOptions>(options =>
 {
     options.SetDefaultCulture("en");
@@ -29,7 +31,8 @@ builder.Services.Configure<RequestLocalizationOptions>(options =>
     options.AddSupportedUICultures("en", "uk");
     options.FallBackToParentCultures = true;
     options.FallBackToParentUICultures = true;
-    options.RequestCultureProviders.Clear();
+    // options.RequestCultureProviders.Clear();
+    options.RequestCultureProviders.Insert(0, new CookieRequestCultureProvider());
 });
 builder.Services.AddAutoMapper(config =>
 {
@@ -92,9 +95,8 @@ app.UseHangfireDashboard();
 // Schedule a recurring job to execute every 1 minutes
 RecurringJob.AddOrUpdate<HangfireRemoteApiCallJob>(x => x.MakeRemoteApiCall(), Cron.MinuteInterval(5));
 
-
+app.UseRequestLocalization(app.Services.GetService<IOptions<RequestLocalizationOptions>>().Value);
 app.UseRouting();
-app.UseRequestLocalization();
 app.UseAuthentication();
 app.UseAuthorization();
 

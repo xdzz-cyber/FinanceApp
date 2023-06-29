@@ -20,7 +20,7 @@
         <div class="main-page-card">
             <h3>@coin.Name</h3>
             <p>@coin.Symbol</p>
-            <p id="@($"price-{coin.Name.ToLower()}")">Price: @coin.PriceUsd USD</p>
+            <p id="@($"price-{coin.Name.ToLower()}")">@Localizer["HomePriceMessage"].Value: @coin.PriceUsd.ToString("F5") USD</p>
             <div id="@($"chart-container-{coin.Name.ToLower()}")">
                 <canvas id="@($"chart-{coin.Name.ToLower()}")" height="100"></canvas>
             </div>
@@ -28,7 +28,7 @@
                 <input class="form-check-input pt-2" type="checkbox" value="">
                 <input type="hidden" class="coinIdToBeAdded" value="@coin.Id">
                 <label class="form-check-label">
-                    Check to add to your cart
+                    @Localizer["HomeCheckToAddToCartMessage"].Value
                 </label>
             </div>
         </div>
@@ -37,7 +37,9 @@
 
 
 <div class="d-grid justify-content-center mt-5">
-    <button id="submitCartBtn" class="btn btn-success" onclick="submitCartBtnClickHandler(e)">Submit items to cart</button>
+    <button id="submitCartBtn" class="btn btn-success" onclick="submitCartBtnClickHandler(e)">
+        @Localizer["HomeSubmitItemsToCartMessage"].Value
+    </button>
 </div>
 
 <div class="pagination">
@@ -46,7 +48,9 @@
             @if (Model.StartPage > 1)
             {
                 <li class="page-item">
-                    <a class="page-link" asp-action="Index" asp-controller="Home" asp-route-page="1">First</a>
+                    <a class="page-link" asp-action="Index" asp-controller="Home" asp-route-page="1">
+                        @Localizer["HomePaginationFirstMessage"].Value
+                    </a>
                 </li>
             }
 
@@ -60,7 +64,9 @@
             @if (Model.EndPage < Model.TotalPages)
             {
                 <li class="page-item">
-                    <a class="page-link" asp-action="Index" asp-controller="Home" asp-route-page="@Model.TotalPages">Last</a>
+                    <a class="page-link" asp-action="Index" asp-controller="Home" asp-route-page="@Model.TotalPages">
+                        @Localizer["HomePaginationLastMessage"].Value
+                    </a>
                 </li>
             }
         </ul>
@@ -82,16 +88,17 @@
                 const params = new URLSearchParams();
                 params.append('coinsIds', coinsIdsString);
                 // make get request to CartController
-                console.log('im here')
-                const response = await fetch(`https://localhost:7069/Cart/Cart?${params.toString()}`)
-                console.log(response, response.ok)
-                if (response.ok) {
-                      // Redirect to the cart page
-                      window.location.href = response.url;
-                    } else {
-                      // Handle error case
-                      console.log('Error:', response.status);
-                    }
+                console.log('im here and params are: ', params.toString())
+                window.location.href = `/Cart/Cart?${params.toString()}`;
+                // const response = await fetch(`https://localhost:7069/Cart/Cart?${params.toString()}`)
+                // console.log(`response is: ${response}`)
+                // if (response.ok) {
+                //       // Redirect to the cart page
+                //       window.location.href = response.url;
+                //     } else {
+                //       // Handle error case
+                //       console.log('Error:', response.status);
+                //     }
             }
         
     }

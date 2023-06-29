@@ -1,9 +1,12 @@
-﻿@model CartPageVm
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@model CartPageVm
 
 @{
     Layout = "_Layout";
 }
 
+
+@inject IViewLocalizer Localizer
 
 <script>
     // JavaScript function to remove a coin from the cart
@@ -87,7 +90,7 @@
     <!-- Shopping cart table -->
     <div class="card">
         <div class="card-header">
-            <h2>Shopping Cart</h2>
+            <h2>@Localizer["CartWelcomeMessage"].Value</h2>
         </div>
         <div class="card-body">
             <div class="table-responsive">
@@ -95,11 +98,11 @@
                     <thead>
                     <tr>
                         <!-- Set columns width -->
-                        <th class="text-center py-3 px-4" style="min-width: 400px;">Product Name &amp; Details</th>
-                        <th class="text-right py-3 px-4" style="width: 100px;">Price</th>
-                        <th class="text-center py-3 px-4" style="width: 120px;">Quantity</th>
-                        <th class="text-right py-3 px-4" style="width: 100px;">Total</th>
-                        <th class="text-center align-middle py-3 px-0" style="width: 40px;">Remove</th>
+                        <th class="text-center py-3 px-4" style="min-width: 400px;">@Localizer["CartProductNameNDetailsMessage"].Value</th>
+                        <th class="text-right py-3 px-4" style="width: 100px;">@Localizer["CartPriceMessage"].Value</th>
+                        <th class="text-center py-3 px-4" style="width: 120px;">@Localizer["CartQuantityMessage"].Value</th>
+                        <th class="text-right py-3 px-4" style="width: 100px;">@Localizer["CartTotalMessage"].Value</th>
+                        <th class="text-center align-middle py-3 px-0" style="width: 40px;">@Localizer["CartRemoveMessage"].Value</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -116,18 +119,18 @@
                                         <a href="#" class="d-block text-dark">@coin.Name</a>
                                         <i class="fa-solid fa-coins"></i>
                                         <small>
-                                            <span class="text-muted">Symbol: @coin.Symbol</span>
+                                            <span class="text-muted">@Localizer["CartSymbolMessage"].Value: @coin.Symbol</span>
                                             <i class="fa-light fa-coin"></i>
                                         </small>
                                     </div>
                                 </div>
                             </td>
-                            <td class="text-right font-weight-semibold align-middle p-4" id="price_@i">$@coin.PriceUsd</td>
+                            <td class="text-right font-weight-semibold align-middle p-4" id="price_@i">$@coin.PriceUsd.ToString("F5")</td>
                             <td class="align-middle p-4">
                                 <input type="number" class="form-control text-center" id="quantity_@i" value="@coin.Quantity" min="1" max="10" oninput="updateSums()">
                                 <input type="hidden" class="form-control" id="id_@i" value="@coin.Id">
                             </td>
-                            <td class="text-right font-weight-semibold align-middle p-4" id="localSum_@i">$@(double.Parse(coin.PriceUsd) * coin.Quantity)</td>
+                            <td class="text-right font-weight-semibold align-middle p-4" id="localSum_@i">$@((coin.PriceUsd * coin.Quantity).ToString("F5"))</td>
                             <td class="text-center align-middle px-0">
                                 <a href="#" class="shop-tooltip close float-none text-danger" title="Remove" onclick="removeCoin(@i)">×</a>
                             </td>
@@ -148,13 +151,13 @@
                     <input type="hidden" id="selectedBudgetId" value="@Model.SelectedBudgetId" />
                 </div>
                 <div class="text-right first" style="grid-area: first">
-                                <label class="text-muted font-weight-normal m-0">Total price</label>
+                                <label class="text-muted font-weight-normal m-0">@Localizer["CartTotalPriceMessage"].Value</label>
                                 <div class="text-large">
                                     <strong id="totalSum">$</strong>
                                 </div>
                             </div>
                 <div class="second" style="grid-area: second">
-                    <button type="button" class="btn btn-lg btn-primary mt-2" onclick="checkout()">Checkout</button>
+                    <button type="button" class="btn btn-lg btn-primary mt-2" onclick="checkout()">@Localizer["CartCheckoutMessage"].Value</button>
                 </div>
             </div>
         </div>

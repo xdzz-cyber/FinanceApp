@@ -21,14 +21,14 @@ namespace WebMVC.Resources.Views.Home {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Index_en {
+    internal class Index_uk {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal Index_en() {
+        internal Index_uk() {
         }
         
         /// <summary>
@@ -38,7 +38,7 @@ namespace WebMVC.Resources.Views.Home {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("WebMVC.Resources.Views.Home.Index.en", typeof(Index_en).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("WebMVC.Resources.Views.Home.Index.uk", typeof(Index_uk).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -60,7 +60,7 @@ namespace WebMVC.Resources.Views.Home {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Check to add to your cart.
+        ///   Looks up a localized string similar to Поставте прапорець, щоб додати в кошик.
         /// </summary>
         internal static string HomeCheckToAddToCartMessage {
             get {
@@ -69,7 +69,7 @@ namespace WebMVC.Resources.Views.Home {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to First.
+        ///   Looks up a localized string similar to Перший.
         /// </summary>
         internal static string HomePaginationFirstMessage {
             get {
@@ -78,7 +78,7 @@ namespace WebMVC.Resources.Views.Home {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Last.
+        ///   Looks up a localized string similar to Останній.
         /// </summary>
         internal static string HomePaginationLastMessage {
             get {
@@ -87,7 +87,7 @@ namespace WebMVC.Resources.Views.Home {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Price.
+        ///   Looks up a localized string similar to Ціна.
         /// </summary>
         internal static string HomePriceMessage {
             get {
@@ -96,7 +96,7 @@ namespace WebMVC.Resources.Views.Home {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Submit items to cart.
+        ///   Looks up a localized string similar to Додайте товари в кошик.
         /// </summary>
         internal static string HomeSubmitItemsToCartMessage {
             get {
@@ -105,7 +105,7 @@ namespace WebMVC.Resources.Views.Home {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Welcome.
+        ///   Looks up a localized string similar to Ласкаво просимо.
         /// </summary>
         internal static string WelcomeMessage {
             get {

@@ -16,7 +16,7 @@ public class CoinDto : IMapWith<Coin>
     public string Symbol { get; set; } = null!;
     // Price in USD.
     [JsonPropertyName("priceUsd")]
-    public string PriceUsd { get; set; } = null!;
+    public double PriceUsd { get; set; }
 
     [JsonIgnore] 
     public int Quantity { get; set; }

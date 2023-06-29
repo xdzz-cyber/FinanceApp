@@ -96,6 +96,15 @@ namespace WebMVC.Resources.Views.Shared {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Footer Content.
+        /// </summary>
+        internal static string FooterContentMessage {
+            get {
+                return ResourceManager.GetString("FooterContentMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Home.
         /// </summary>
         internal static string HomeMessage {

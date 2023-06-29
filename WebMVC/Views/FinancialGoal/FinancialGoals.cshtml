@@ -6,7 +6,7 @@
     Layout = "_Layout";
 }
 
-@* @inject IViewLocalizer Localizer *@
+@inject IViewLocalizer Localizer
 @* *@
 @* <h2>@Localizer["FinancialGoalsMessage"]</h2> *@
 @* *@
@@ -37,7 +37,7 @@
 <div id="financial-goals-container"></div>
 
 <div>
-    @Html.ActionLink("Create New", "AddFinancialGoal", "FinancialGoal")
+    @Html.ActionLink(@Localizer["CreateNewFinancialGoalMessage"].Value, "AddFinancialGoal", "FinancialGoal")
 </div>
 
 <script>

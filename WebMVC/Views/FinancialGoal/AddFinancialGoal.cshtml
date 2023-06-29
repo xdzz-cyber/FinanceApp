@@ -1,11 +1,13 @@
-﻿@model AddFinancialGoalVm
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@model AddFinancialGoalVm
 
 @{
     Layout = "_Layout";
 }
 
+@inject IViewLocalizer Localizer
 
-<h2>Create Financial Goal</h2>
+<h2>@Localizer["AddFinancialGoalWelcomeMessage"].Value</h2>
 
 @using (Html.BeginForm("AddFinancialGoal", "FinancialGoal", FormMethod.Post))
 {

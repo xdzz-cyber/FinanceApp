@@ -32,6 +32,6 @@
     </form>
     <!-- Register buttons -->
     <div class="text-center">
-        <p>Not a member? <a asp-controller="Auth" asp-action="Register">@Localizer["RegisterButtonMessage"].Value</a></p>
+        <p>@Localizer["NotAMemberMessage"].Value <a asp-controller="Auth" asp-action="Register">@Localizer["RegisterButtonMessage"].Value</a></p>
     </div>
 </div>

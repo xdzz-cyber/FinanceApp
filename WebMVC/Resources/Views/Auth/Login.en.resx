@@ -30,4 +30,7 @@
     <data name="RegisterButtonMessage" xml:space="preserve">
         <value>Register</value>
     </data>
+    <data name="NotAMemberMessage" xml:space="preserve">
+        <value>Not a member?</value>
+    </data>
 </root>

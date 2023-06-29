@@ -18,22 +18,31 @@
     <resheader name="writer">
         <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
     </resheader>
-    <data name="WelcomeMessage" xml:space="preserve">
-        <value>Welcome</value>
+    <data name="CartProductNameNDetailsMessage" xml:space="preserve">
+        <value>Product Name and Details</value>
     </data>
-    <data name="HomePriceMessage" xml:space="preserve">
+    <data name="CartPriceMessage" xml:space="preserve">
         <value>Price</value>
     </data>
-    <data name="HomeCheckToAddToCartMessage" xml:space="preserve">
-        <value>Check to add to your cart</value>
+    <data name="CartQuantityMessage" xml:space="preserve">
+        <value>Quantity</value>
     </data>
-    <data name="HomeSubmitItemsToCartMessage" xml:space="preserve">
-        <value>Submit items to cart</value>
+    <data name="CartTotalMessage" xml:space="preserve">
+        <value>Total</value>
     </data>
-    <data name="HomePaginationFirstMessage" xml:space="preserve">
-        <value>First</value>
+    <data name="CartRemoveMessage" xml:space="preserve">
+        <value>Remove</value>
     </data>
-    <data name="HomePaginationLastMessage" xml:space="preserve">
-        <value>Last</value>
+    <data name="CartWelcomeMessage" xml:space="preserve">
+        <value>Shopping Cart</value>
+    </data>
+    <data name="CartSymbolMessage" xml:space="preserve">
+        <value>Symbol</value>
+    </data>
+    <data name="CartTotalPriceMessage" xml:space="preserve">
+        <value>Total price</value>
+    </data>
+    <data name="CartCheckoutMessage" xml:space="preserve">
+        <value>Checkout</value>
     </data>
 </root>

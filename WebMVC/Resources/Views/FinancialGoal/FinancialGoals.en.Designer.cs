@@ -69,6 +69,15 @@ namespace WebMVC.Resources.Views.FinancialGoal {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Create new.
+        /// </summary>
+        internal static string CreateNewFinancialGoalMessage {
+            get {
+                return ResourceManager.GetString("CreateNewFinancialGoalMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Description.
         /// </summary>
         internal static string DescriptionMessage {

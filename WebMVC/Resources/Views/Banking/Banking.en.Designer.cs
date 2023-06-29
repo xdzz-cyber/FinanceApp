@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace WebMVC.Resources.Views.Home {
+namespace WebMVC.Resources.Views.Banking {
     using System;
     
     
@@ -21,14 +21,14 @@ namespace WebMVC.Resources.Views.Home {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Index_en {
+    internal class Banking_en {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal Index_en() {
+        internal Banking_en() {
         }
         
         /// <summary>
@@ -38,7 +38,7 @@ namespace WebMVC.Resources.Views.Home {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("WebMVC.Resources.Views.Home.Index.en", typeof(Index_en).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("WebMVC.Resources.Views.Banking.Banking.en", typeof(Banking_en).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -60,56 +60,38 @@ namespace WebMVC.Resources.Views.Home {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Check to add to your cart.
+        ///   Looks up a localized string similar to Here you can see your cards and banks info as well as ability of top up them.
         /// </summary>
-        internal static string HomeCheckToAddToCartMessage {
+        internal static string BankingDescriptionMessage {
             get {
-                return ResourceManager.GetString("HomeCheckToAddToCartMessage", resourceCulture);
+                return ResourceManager.GetString("BankingDescriptionMessage", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to First.
+        ///   Looks up a localized string similar to Make a payment.
         /// </summary>
-        internal static string HomePaginationFirstMessage {
+        internal static string BankingMakePaymentMessage {
             get {
-                return ResourceManager.GetString("HomePaginationFirstMessage", resourceCulture);
+                return ResourceManager.GetString("BankingMakePaymentMessage", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Last.
+        ///   Looks up a localized string similar to Payment.
         /// </summary>
-        internal static string HomePaginationLastMessage {
+        internal static string BankingPaymentMessage {
             get {
-                return ResourceManager.GetString("HomePaginationLastMessage", resourceCulture);
+                return ResourceManager.GetString("BankingPaymentMessage", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Price.
+        ///   Looks up a localized string similar to Welcome to banking page.
         /// </summary>
-        internal static string HomePriceMessage {
+        internal static string BankingWelcomeMessage {
             get {
-                return ResourceManager.GetString("HomePriceMessage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Submit items to cart.
-        /// </summary>
-        internal static string HomeSubmitItemsToCartMessage {
-            get {
-                return ResourceManager.GetString("HomeSubmitItemsToCartMessage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Welcome.
-        /// </summary>
-        internal static string WelcomeMessage {
-            get {
-                return ResourceManager.GetString("WelcomeMessage", resourceCulture);
+                return ResourceManager.GetString("BankingWelcomeMessage", resourceCulture);
             }
         }
     }

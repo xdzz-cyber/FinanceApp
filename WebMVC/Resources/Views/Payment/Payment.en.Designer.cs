@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace WebMVC.Resources.Views.Home {
+namespace WebMVC.Resources.Views.Payment {
     using System;
     
     
@@ -21,14 +21,14 @@ namespace WebMVC.Resources.Views.Home {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Index_en {
+    internal class Payment_en {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal Index_en() {
+        internal Payment_en() {
         }
         
         /// <summary>
@@ -38,7 +38,7 @@ namespace WebMVC.Resources.Views.Home {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("WebMVC.Resources.Views.Home.Index.en", typeof(Index_en).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("WebMVC.Resources.Views.Payment.Payment.en", typeof(Payment_en).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -60,56 +60,20 @@ namespace WebMVC.Resources.Views.Home {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Check to add to your cart.
+        ///   Looks up a localized string similar to Amount (in dollars).
         /// </summary>
-        internal static string HomeCheckToAddToCartMessage {
+        internal static string PaymentAmountMessage {
             get {
-                return ResourceManager.GetString("HomeCheckToAddToCartMessage", resourceCulture);
+                return ResourceManager.GetString("PaymentAmountMessage", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to First.
+        ///   Looks up a localized string similar to Pay.
         /// </summary>
-        internal static string HomePaginationFirstMessage {
+        internal static string PaymentPayMessage {
             get {
-                return ResourceManager.GetString("HomePaginationFirstMessage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Last.
-        /// </summary>
-        internal static string HomePaginationLastMessage {
-            get {
-                return ResourceManager.GetString("HomePaginationLastMessage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Price.
-        /// </summary>
-        internal static string HomePriceMessage {
-            get {
-                return ResourceManager.GetString("HomePriceMessage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Submit items to cart.
-        /// </summary>
-        internal static string HomeSubmitItemsToCartMessage {
-            get {
-                return ResourceManager.GetString("HomeSubmitItemsToCartMessage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Welcome.
-        /// </summary>
-        internal static string WelcomeMessage {
-            get {
-                return ResourceManager.GetString("WelcomeMessage", resourceCulture);
+                return ResourceManager.GetString("PaymentPayMessage", resourceCulture);
             }
         }
     }

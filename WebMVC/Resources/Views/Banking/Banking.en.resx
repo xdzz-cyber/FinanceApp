@@ -18,7 +18,16 @@
     <resheader name="writer">
         <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
     </resheader>
-    <data name="AddFinancialGoalWelcomeMessage" xml:space="preserve">
-        <value>Create Financial Goal</value>
+    <data name="BankingWelcomeMessage" xml:space="preserve">
+        <value>Welcome to banking page</value>
+    </data>
+    <data name="BankingDescriptionMessage" xml:space="preserve">
+        <value>Here you can see your cards and banks info as well as ability of top up them</value>
+    </data>
+    <data name="BankingMakePaymentMessage" xml:space="preserve">
+        <value>Make a payment</value>
+    </data>
+    <data name="BankingPaymentMessage" xml:space="preserve">
+        <value>Payment</value>
     </data>
 </root>
