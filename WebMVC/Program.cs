@@ -4,6 +4,8 @@ using Application;
 using Application.Common.Mappings;
 using Application.Interfaces;
 using Hangfire;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc.Razor;
@@ -51,7 +53,17 @@ builder.Services.AddCors(options =>
         policy.AllowAnyOrigin();
     });
 });
-builder.Services.AddAuthentication();
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+    options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+    // options.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
+}).AddCookie().AddGoogle(options =>
+{
+    options.ClientId = builder.Configuration["Google:ClientId"];
+    options.ClientSecret = builder.Configuration["Google:ClientSecret"];
+    // options.CallbackPath = "/Auth/GoogleResponse";
+});
 builder.Services.AddAuthorization();
 builder.Services.AddSignalR();
 builder.Services.AddHttpClient();

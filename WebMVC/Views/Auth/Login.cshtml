@@ -33,5 +33,12 @@
     <!-- Register buttons -->
     <div class="text-center">
         <p>@Localizer["NotAMemberMessage"].Value <a asp-controller="Auth" asp-action="Register">@Localizer["RegisterButtonMessage"].Value</a></p>
+        <p>
+            <a class="btn btn-primary" asp-controller="Auth" asp-action="ExternalLoginCallback">Sign in with Google</a>
+        </p>
     </div>
 </div>
+
+<script >
+clearStorage();
+</script>

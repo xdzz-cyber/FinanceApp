@@ -6,7 +6,7 @@ public class GetBudgetsValidator : AbstractValidator<GetBudgets>
 {
     public GetBudgetsValidator()
     {
-        RuleFor(x => x.UserId).NotEmpty()
-            .WithMessage("UserId is required to get budgets");
+        RuleFor(x => x.Email).NotEmpty()
+            .WithMessage("Email is required to get budgets");
     }
 }

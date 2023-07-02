@@ -7,5 +7,8 @@ public class GetFinancialGoals : IRequest<List<FinancialGoalDto>>
 {
     // public Guid BudgetId { get; set; }
 
-    public string UserId { get; set; } = null!;
+    // public string UserId { get; set; } = null!;
+    
+    // email
+    public string Email { get; set; } = null!;
 }

@@ -1,4 +1,5 @@
 ﻿using System.Security.Claims;
+using Application.ApplicationUser.Queries.GetUser;
 using Application.Budget.Queries.GetBudget;
 using Application.Budget.Queries.GetBudgets;
 using Application.Category.Queries.GetCategories;
@@ -33,10 +34,10 @@ public class CartController : BaseController
             coins = await Mediator.Send(new GetCoins());
             _cache.Set(CoinsCacheKey, coins, TimeSpan.FromDays(7)); // Adjust the cache duration as per your requirement
         }
-        
+
         var budgetDtos = await Mediator.Send(new GetBudgets()
         {
-            UserId = User.FindFirstValue(ClaimTypes.NameIdentifier)
+            Email = Email
         });
         
         return View(new CartPageVm()
@@ -55,12 +56,14 @@ public class CartController : BaseController
         
         var expenseCategoryId = categories.First(c => c.Name == "Expense").Id;
 
+        var user = await Mediator.Send(new GetUser {Email = Email});
+
         var createTransactionCommand = new CreateTransaction()
         {
             Amount = total,
             Date = DateTime.Now,
             CategoryId = expenseCategoryId,
-            AppUserId = User.FindFirstValue(ClaimTypes.NameIdentifier),
+            AppUserId = user.Id,
             BudgetId = addCoinsVm.budgetId
         };
         
@@ -70,8 +73,7 @@ public class CartController : BaseController
         {
             return BadRequest();
         }
-        var _ = Url.Action("Budget", "Budget", new { id = addCoinsVm.budgetId });
-        //return RedirectToAction("Budget", "Budget", new {id = addCoinsVm.budgetId});
+        
         return Json(new { redirectUrl = Url.Action("Budget", "Budget", new { id = addCoinsVm.budgetId }) });
     }
 }

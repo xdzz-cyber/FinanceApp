@@ -1,4 +1,5 @@
 ﻿using System.Security.Claims;
+using Application.ApplicationUser.Queries.GetUser;
 using Application.Budget.Queries.GetBudgets;
 using Application.Category.Queries.GetCategories;
 using Application.Common.Dtos;
@@ -17,14 +18,12 @@ public class FinancialGoalController : BaseController
     [HttpGet]
     public async Task<IActionResult> FinancialGoals()
     {
-        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
         var financialGoals = await Mediator.Send(new GetFinancialGoals()
         {
-            UserId = userId
+            Email = Email
         });
 
-        var budgets = await Mediator.Send(new GetBudgets { UserId = userId });
+        var budgets = await Mediator.Send(new GetBudgets { Email = Email});
 
         var financialGoalsVm = (
             from financialGoal in financialGoals
@@ -46,11 +45,10 @@ public class FinancialGoalController : BaseController
     [HttpGet]
     public async Task<IActionResult> AddFinancialGoal()
     {
-        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
         return View(new AddFinancialGoalVm()
         {
             FinancialGoal = new FinancialGoalDto(),
-            Budgets = await Mediator.Send(new GetBudgets {UserId = userId}),
+            Budgets = await Mediator.Send(new GetBudgets {Email = Email}),
             Categories = await Mediator.Send(new GetCategories())
         });
     }

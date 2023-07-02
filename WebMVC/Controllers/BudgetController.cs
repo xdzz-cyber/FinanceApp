@@ -1,4 +1,5 @@
 ﻿using System.Security.Claims;
+using Application.ApplicationUser.Queries.GetUser;
 using Application.Budget.Commands.AddBudget;
 using Application.Budget.Queries.GetBudget;
 using Application.Budget.Queries.GetBudgets;
@@ -18,7 +19,13 @@ public class BudgetController : BaseController
     [HttpGet]
     public async Task<IActionResult> Budgets()
     {
-        var budgets = await Mediator.Send(new GetBudgets {UserId = User.FindFirstValue(ClaimTypes.NameIdentifier)});
+        // var claims = HttpContext.User.Claims;
+        // var _ = User.Identity.Name;
+        // var budgets = await Mediator.Send(new GetBudgets {Email = User.FindFirstValue(ClaimTypes.NameIdentifier)});
+        // var claims = User.Claims.ToList();
+        //_.First(c => c.Type == ClaimTypes.Email).Value
+        var budgets = await Mediator.Send(new GetBudgets
+            {Email = Email});
         
         return View(budgets);
     }
@@ -28,17 +35,23 @@ public class BudgetController : BaseController
     [HttpGet]
     public async Task<IActionResult> Budget(Guid id)
     {
-        // Add logic to get budget by id
-        var budget = await Mediator.Send(new GetBudget {Id = id});
-        //var categoryName = await GetCategoryName(budget.CategoryId);
-        var transactions = GetTransactions(budget);
-        
-        return View(new BudgetVm
+        try
         {
-            Budget = budget,
-            Transactions = transactions,
-            TransactionsJson = Newtonsoft.Json.JsonConvert.SerializeObject(transactions)
-        });
+            // Add logic to get budget by id
+            var budget = await Mediator.Send(new GetBudget {Id = id});
+            //var categoryName = await GetCategoryName(budget.CategoryId);
+            var transactions = GetTransactions(budget);
+        
+            return View(new BudgetVm
+            {
+                Budget = budget,
+                Transactions = transactions,
+                TransactionsJson = Newtonsoft.Json.JsonConvert.SerializeObject(transactions)
+            });
+        } catch(NotFoundException notFoundException)
+        {
+            return RedirectToAction("Error", "Error", new {message = notFoundException.Message});
+        }
     }
 
     [HttpGet]
@@ -57,13 +70,15 @@ public class BudgetController : BaseController
                 return View(vm);
             }
 
+            var user = await Mediator.Send(new GetUser {Email = Email});
+            
             var budget = new Budget
             {
                 Name = vm.Name,
                 Amount = vm.Amount,
                 StartDate = vm.StartDate,
                 EndDate = vm.EndDate,
-                AppUserId = User.FindFirstValue(ClaimTypes.NameIdentifier)
+                AppUserId = user.Id
             };
 
             var result = await Mediator.Send(new AddBudget
@@ -86,10 +101,10 @@ public class BudgetController : BaseController
         {
             return RedirectToAction("Error", "Error", new {message = alreadyExistsException.Message});
         }
-        // catch (Exception e)
-        // {
-        //     return View(vm);
-        // }
+        catch (NotFoundException notFoundException)
+        {
+            return RedirectToAction("Error", "Error", new {message = notFoundException.Message});
+        }
 
         // return View(vm);
     }
@@ -111,7 +126,5 @@ public class BudgetController : BaseController
         });
 
         return transactions;
-
-        //return Newtonsoft.Json.JsonConvert.SerializeObject(transactions);
     }
 }

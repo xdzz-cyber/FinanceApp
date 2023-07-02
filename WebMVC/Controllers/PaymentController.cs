@@ -31,6 +31,7 @@ public class PaymentController : BaseController
     public async Task<IActionResult> Charge(string stripeToken ,int amount)
     {
         var tokenService = new TokenService();
+        
         var stripeTokenObject = await tokenService.GetAsync(stripeToken);
     
         var cardNumberCardLast4 = stripeTokenObject.Card?.Last4; // Retrieve the last 4 digits of the card number

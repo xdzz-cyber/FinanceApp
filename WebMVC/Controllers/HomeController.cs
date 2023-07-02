@@ -32,7 +32,7 @@ public class HomeController : BaseController
             _cache.Set(CoinsCacheKey, coins, TimeSpan.FromDays(7)); // Adjust the cache duration as per your requirement
         }
 
-        var paginatedCoins = coins
+        var paginatedCoins = coins!
             .Skip((page - 1) * CoinsConstants.MaxCoinsPerPage)
             .Take(CoinsConstants.MaxCoinsPerPage)
             .ToList();

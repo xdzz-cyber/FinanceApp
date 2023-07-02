@@ -6,9 +6,9 @@ namespace Application.Auth.Commands.Logout.Commands;
 
 public class LogoutHandler : IRequestHandler<Auth.Commands.Logout.Commands.Logout, bool>
 {
-    private readonly SignInManager<ApplicationUser> _signInManager;
+    private readonly SignInManager<Domain.ApplicationUser> _signInManager;
 
-    public LogoutHandler(SignInManager<ApplicationUser> signInManager)
+    public LogoutHandler(SignInManager<Domain.ApplicationUser> signInManager)
     {
         _signInManager = signInManager;
     }
