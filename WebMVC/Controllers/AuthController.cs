@@ -95,6 +95,10 @@ public class AuthController : BaseController
         
         if (result)
         {
+            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(new ClaimsIdentity(new List<Claim>
+            {
+                new (ClaimTypes.Name, registerCommand.Email)
+            }, CookieAuthenticationDefaults.AuthenticationScheme)));
             return RedirectToAction("Index", "Home");
         }
 

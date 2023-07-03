@@ -42,10 +42,10 @@ public class PaymentController : BaseController
             Currency = "usd",
             Source = stripeToken,
             Description = "Test payment",
-            
         };
 
         var service = new ChargeService();
+        
         var charge = await service.CreateAsync(options);
 
         if (charge.Paid)
