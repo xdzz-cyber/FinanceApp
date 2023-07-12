@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace WebMVC.Resources.Views.Shared {
+namespace WebMVC.Resources.Views.Report {
     using System;
     
     
@@ -21,14 +21,14 @@ namespace WebMVC.Resources.Views.Shared {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class _Layout_en {
+    internal class Report_en {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal _Layout_en() {
+        internal Report_en() {
         }
         
         /// <summary>
@@ -38,7 +38,7 @@ namespace WebMVC.Resources.Views.Shared {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("WebMVC.Resources.Views.Shared._Layout.en", typeof(_Layout_en).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("WebMVC.Resources.Views.Report.Report.en", typeof(Report_en).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -60,70 +60,7 @@ namespace WebMVC.Resources.Views.Shared {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Banking.
-        /// </summary>
-        internal static string BankingPageMessage {
-            get {
-                return ResourceManager.GetString("BankingPageMessage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Budgets.
-        /// </summary>
-        internal static string BudgetsMessage {
-            get {
-                return ResourceManager.GetString("BudgetsMessage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Cart.
-        /// </summary>
-        internal static string CartPageMessage {
-            get {
-                return ResourceManager.GetString("CartPageMessage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Financial goals with tips.
-        /// </summary>
-        internal static string FinancialGoalsWithTipsMessage {
-            get {
-                return ResourceManager.GetString("FinancialGoalsWithTipsMessage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Footer Content.
-        /// </summary>
-        internal static string FooterContentMessage {
-            get {
-                return ResourceManager.GetString("FooterContentMessage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Home.
-        /// </summary>
-        internal static string HomeMessage {
-            get {
-                return ResourceManager.GetString("HomeMessage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Logout.
-        /// </summary>
-        internal static string LogoutMessage {
-            get {
-                return ResourceManager.GetString("LogoutMessage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Reports.
+        ///   Looks up a localized string similar to .
         /// </summary>
         internal static string ReportPageMessage {
             get {

@@ -11,6 +11,8 @@ using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.Extensions.Options;
 using Persistence;
+using Serilog;
+using Serilog.Events;
 using StackExchange.Redis;
 using WebMVC.BackgroundJobs;
 using WebMVC.Hubs;
@@ -78,6 +80,21 @@ builder.Services.AddSingleton<IConnectionMultiplexer>(sp =>
     var config = ConfigurationOptions.Parse(builder.Configuration["Redis:ConnectionString"]);
     config.ClientName = builder.Configuration["Redis:InstanceName"];
     return ConnectionMultiplexer.Connect(config);
+});
+
+// Add Serilog as the logging provider
+Log.Logger = new LoggerConfiguration()
+    .MinimumLevel.Debug()
+    .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
+    .Enrich.FromLogContext()
+    .WriteTo.Console()
+    .WriteTo.File("logs/log.txt", rollingInterval: RollingInterval.Day)
+    .CreateLogger();
+
+builder.Services.AddLogging(loggingBuilder =>
+{
+    // Include Serilog as the logging provider
+    loggingBuilder.AddSerilog();
 });
 
 var app = builder.Build();

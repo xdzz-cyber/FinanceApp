@@ -11,6 +11,8 @@ public class CategoryDto : IMapWith<Domain.Category>
     
     public string Description { get; set; } = null!;
     
+    public int TransactionsConnected { get; set; }
+    
     public void Mapping(Profile profile)
     {
         profile.CreateMap<Domain.Category, CategoryDto>()

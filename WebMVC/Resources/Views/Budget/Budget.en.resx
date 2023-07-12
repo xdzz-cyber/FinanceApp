@@ -42,4 +42,10 @@
     <data name="NoTransactionsFoundMessage" xml:space="preserve">
         <value>No transactions found.</value>
     </data>
+    <data name="NetAmountPositiveMessage" xml:space="preserve">
+        <value>$ left from the budget</value>
+    </data>
+    <data name="NetAmountNegativeMessage" xml:space="preserve">
+        <value>No money left</value>
+    </data>
 </root>

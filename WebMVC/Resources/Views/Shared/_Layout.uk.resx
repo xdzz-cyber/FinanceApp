@@ -32,4 +32,7 @@
     <data name="LogoutMessage" xml:space="preserve">
         <value>Вийти</value>
     </data>
+    <data name="ReportPageMessage" xml:space="preserve">
+        <value>Звіти</value>
+    </data>
 </root>

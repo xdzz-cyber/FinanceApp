@@ -1,0 +1,167 @@
+﻿@model ReportVm
+
+@{
+    Layout = "_Layout";
+}
+
+<div id="barChartContainer"></div>
+<div id="lineChartContainer"></div>
+<div id="pieChartContainer"></div>
+
+<script>
+    // Data for the charts
+    var budgetData = @Html.Raw(Json.Serialize(Model.Budgets));
+    var goalData = @Html.Raw(Json.Serialize(Model.FinancialGoals));
+    var categoryData = @Html.Raw(Json.Serialize(Model.Categories));
+    
+    console.log(budgetData, goalData, categoryData)
+
+    // Bar chart - Budget Comparison
+    var barChartOptions = {
+        chart: {
+            renderTo: 'barChartContainer',
+            type: 'bar'
+        },
+        // Bar chart configuration options
+                xAxis: {
+                    type: 'category',
+                    title: {
+                        text: 'Budget Name'
+                    }
+                },
+                yAxis: {
+                    title: {
+                        text: 'Budget Amount'
+                    }
+                },
+                // Bar chart configuration options
+                title: {
+                    text: 'Budget Comparison' // Updated chart title
+                },
+        // Bar chart configuration options
+        series: [{
+            name: 'Budgets',
+            data: budgetData.map(budget => [budget.name, budget.amount])
+        }]
+    };
+    
+            var stackedColumnOptions = {
+                chart: {
+                    renderTo: 'lineChartContainer',
+                    type: 'column'
+                },
+                // Stacked column chart configuration options
+                xAxis: {
+                    type: 'category',
+                    title: {
+                        text: 'Financial Goal Name'
+                    }
+                },
+                yAxis: {
+                    title: {
+                        text: 'Amount'
+                    },
+                    stackLabels: {
+                        enabled: true,
+                        format: '{total}'
+                    }
+                },
+                plotOptions: {
+                    column: {
+                        stacking: 'normal'
+                    }
+                },
+                tooltip: {
+                    formatter: function() {
+                        var amountType = this.series.name === 'Current Amount' ? 'Current Amount' : 'Remaining Amount';
+                        var amount = Highcharts.numberFormat(this.point.y, 2);
+                        return amountType + ': ' + amount;
+                    }
+                },
+                 // Bar chart configuration options
+                title: {
+                    text: 'Financial goals comparison' // Updated chart title
+                 },
+                                        
+                series: [
+                    {
+                        name: 'Current Amount',
+                        data: goalData.map(goal => ({
+                            name: goal.name,
+                            y: goal.currentAmount
+                        }))
+                    },
+                    {
+                        name: 'Target Amount',
+                        data: goalData.map(goal => ({
+                            name: goal.name,
+                            y: goal.targetAmount - goal.currentAmount
+                        }))
+                    }
+                ]
+            };
+
+    // Pie chart - Category Distribution
+    var pieChartOptions = {
+        chart: {
+            renderTo: 'pieChartContainer',
+            type: 'pie'
+        },
+        // Pie chart configuration options
+        // Bar chart configuration options
+       title: {
+            text: 'Categories with related transactions comparison' // Updated chart title
+        },
+        series: [{
+            name: 'Categories',
+            data: categoryData.map(category => [category.name, category.transactionsConnected]) //category.Transactions.length
+        }]
+    };
+
+    // Initialize the charts
+    var barChart = new Highcharts.Chart(barChartOptions);
+    var stackedColumnChart = new Highcharts.Chart(stackedColumnOptions);
+    var pieChart = new Highcharts.Chart(pieChartOptions);
+    
+    // Function to export the charts as PDF
+        function exportAsPDF() {
+            Highcharts.exportCharts([barChart, stackedColumnChart, pieChart]);
+            
+            // Define the exportCharts function
+            Highcharts.exportCharts = function(charts, options) {
+                // Merge the options
+                var form
+                options = Highcharts.merge(Highcharts.getOptions().exporting, options);
+            
+                // Post to export server
+                form = Highcharts.createElement('form', {
+                    method: 'post',
+                    action: options.url
+                }, {
+                    display: 'none'
+                }, document.body);
+            
+                // Add the values
+                Highcharts.each(['filename', 'type', 'width', 'svg'], function(name) {
+                    Highcharts.createElement('input', {
+                        type: 'hidden',
+                        name: name,
+                        value: {
+                            filename: options.filename || 'chart',
+                            type: options.type || 'application/pdf',
+                            width: options.width || 1200,
+                            svg: charts.map(function(chart) {
+                                return chart.getSVG(options);
+                            }).join(options.type === 'image/svg+xml' ? ' ' : '')
+                        }[name]
+                    }, null, form);
+                });
+            
+                // Submit
+                form.submit();
+            
+                // Clean up
+                form.parentNode.removeChild(form);
+            };
+        }
+</script>

@@ -25,7 +25,7 @@ public class GetBudgetsHandler : IRequestHandler<GetBudgets, List<BudgetDto>>
     {
         var user = await _userManager.FindByEmailAsync(request.Email);
         
-        var budgets = await _context.Budgets.AsNoTracking().Where(b => b.AppUserId == user.Id)
+        var budgets = await _context.Budgets.AsNoTracking().Include(b => b.Transactions).Where(b => b.AppUserId == user.Id)
             .ToListAsync(cancellationToken: cancellationToken);
         
         return await Task.FromResult(_mapper.Map<List<BudgetDto>>(budgets));

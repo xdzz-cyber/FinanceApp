@@ -1,7 +1,9 @@
 ﻿using System.Security.Claims;
 using Application.ApplicationUser.Queries.GetUser;
+using Application.Budget.Queries.GetBudget;
 using Application.Category.Queries.GetCategories;
 using Application.Transaction.Commands.CreateTransaction;
+using Application.Transaction.Queries.GetTransactions;
 using Domain;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -17,11 +19,15 @@ public class TransactionController : BaseController
     public async Task<ActionResult> AddTransaction(Guid budgetId)
     {
         var categories = await Mediator.Send(new GetCategories());
-        
+        var transactions = await Mediator.Send(new GetTransactions() {BudgetId = budgetId});
+        var budget = await Mediator.Send(new GetBudget() {Id = budgetId});
         return View(new AddTransactionVm()
         {
             BudgetId = budgetId,
-            Categories = categories
+            Categories = categories,
+            NetAmount = budget.Amount + transactions.Where(t => t.CategoryId == categories.First(c => c.Name == "Income").Id)
+                            .Sum(t => t.Amount) - transactions.Where(t => t.CategoryId == categories.First(c => c.Name == "Expense").Id)
+                .Sum(t => t.Amount)
         });
     }
     

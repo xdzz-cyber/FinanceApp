@@ -23,5 +23,7 @@ public record AddTransactionVm
     [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
     public DateTime Date { get; set; }
     // [Required]
-    public List<CategoryDto>? Categories { get; set; } 
+    public List<CategoryDto>? Categories { get; set; }
+
+    public decimal NetAmount { get; set; }
 }

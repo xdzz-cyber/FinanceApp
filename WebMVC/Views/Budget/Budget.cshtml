@@ -1,12 +1,17 @@
 ﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
 @using Microsoft.AspNetCore.Mvc.Localization
 @model BudgetVm
+@inject IViewLocalizer Localizer
 
 @{
     Layout = "_Layout";
 }
 
-@inject IViewLocalizer Localizer
+@{
+    var netAmountMessage = Model.NetAmount > 0 ? Localizer["NetAmountPositiveMessage"].Value : Localizer["NetAmountNegativeMessage"].Value;
+}
+
+
 
 <div class="container">
     <div class="row">
@@ -16,9 +21,10 @@
             <div class="budget-container">
                 <div class="budget-info">
                     <h3>@Model.Budget.Name</h3>
-                    <p>Amount: @Model.Budget.Amount</p>
+                    <p>Amount: @Model.Budget.Amount$</p>
                     <p>Start Date: @Model.Budget.StartDate.ToString("yyyy-MM-dd")</p>
                     <p>End Date: @Model.Budget.EndDate.ToString("yyyy-MM-dd")</p>
+                    <p class=@(Model.NetAmount > 0 ? "text-black" : "text-danger")>Net amount: @(Model.NetAmount > 0 ? $"{Model.NetAmount} {netAmountMessage}" : netAmountMessage)</p>
                 </div>
                 <div class="budget-container">
                     <div class="budget-info">

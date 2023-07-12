@@ -114,6 +114,24 @@ namespace WebMVC.Resources.Views.Budget {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No money left.
+        /// </summary>
+        internal static string NetAmountNegativeMessage {
+            get {
+                return ResourceManager.GetString("NetAmountNegativeMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to $ left from the budget.
+        /// </summary>
+        internal static string NetAmountPositiveMessage {
+            get {
+                return ResourceManager.GetString("NetAmountPositiveMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No transactions found..
         /// </summary>
         internal static string NoTransactionsFoundMessage {

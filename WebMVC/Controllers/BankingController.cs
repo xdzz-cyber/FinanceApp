@@ -22,7 +22,6 @@ public class BankingController : BaseController
     [HttpPost]
     public IActionResult ExecuteBackgroundJob()
     {
-        // _backgroundJobClient.Enqueue<HangfireRemoteApiCallJob>(x => x.MakeRemoteApiCall());
         _backgroundJobClient.Schedule<HangfireRemoteApiCallJob>(x => x.MakeRemoteApiCall(), TimeSpan.Zero);
         return Ok();
     }

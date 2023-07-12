@@ -11,4 +11,5 @@ public class BudgetVm
     public string CategoryName { get; set; } = null!;
     public IEnumerable<TransactionVm>? Transactions { get; set; }
     public string? TransactionsJson { get; set; }
+    public decimal NetAmount { get; set; }
 }

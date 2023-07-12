@@ -7,32 +7,6 @@
 }
 
 @inject IViewLocalizer Localizer
-@* *@
-@* <h2>@Localizer["FinancialGoalsMessage"]</h2> *@
-@* *@
-@* <table class="table"> *@
-@*     <thead> *@
-@*     <tr> *@
-@*         <th>@Localizer["NameMessage"]</th> *@
-@*         <th>@Localizer["DescriptionMessage"]</th> *@
-@*         <th>@Localizer["TargetAmountMessage"]</th> *@
-@*         <th>@Localizer["TargetDateMessage"]</th> *@
-@*         <th>@Localizer["BudgetMessage"]</th> *@
-@*     </tr> *@
-@*     </thead> *@
-@*     <tbody> *@
-@*     @foreach (var goal in Model) *@
-@*     { *@
-@*         <tr> *@
-@*             <td>@goal.Name</td> *@
-@*             <td>@goal.Description</td> *@
-@*             <td>@goal.TargetAmount</td> *@
-@*             <td>@goal.TargetDate.ToString("dd/MM/yyyy")</td> *@
-@*             <td>@(goal.BudgetName)</td> *@
-@*         </tr> *@
-@*     } *@
-@*     </tbody> *@
-@* </table> *@
 
 <div id="financial-goals-container"></div>
 

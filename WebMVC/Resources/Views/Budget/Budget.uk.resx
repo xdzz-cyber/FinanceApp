@@ -35,4 +35,10 @@
     <data name="TransactionsMessage" xml:space="preserve">
         <value>Транзакції</value>
     </data>
+    <data name="NetAmountPositiveMessage" xml:space="preserve">
+        <value>Кошти, що залишилися з бюджету</value>
+    </data>
+    <data name="NetAmountNegativeMessage" xml:space="preserve">
+        <value>Грошей не залишилось</value>
+    </data>
 </root>

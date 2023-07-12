@@ -7,6 +7,10 @@
 
 @inject IViewLocalizer Localizer
 
+@{
+    var categories = @Model.NetAmount > 0 ? Model.Categories : Model.Categories!.Where(c => c.Name != "Expense").ToList();
+}
+
 @using (Html.BeginForm("AddTransaction", "Transaction", FormMethod.Post))
 {
     @Html.AntiForgeryToken()
@@ -28,7 +32,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.CategoryId, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownListFor(model => model.CategoryId, new SelectList(@Model.Categories, "Id", "Name"), "Select Transaction Type", new { @class = "form-control" })
+                @Html.DropDownListFor(model => model.CategoryId, new SelectList(categories, "Id", "Name"), "Select Transaction Type", new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.CategoryId, "", new { @class = "text-danger" })
             </div>
         </div>

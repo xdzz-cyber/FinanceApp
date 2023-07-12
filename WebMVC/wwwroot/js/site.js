@@ -4,9 +4,10 @@
 async function generateFinancialGoals(financialGoals) {
     function createProgressBar(container, goal) {
         var progressPercentage = Math.round((goal.currentAmount / goal.targetAmount) * 100);
-
+        var oldProgressPercentage = progressPercentage;
         var progressBar = document.createElement("div");
         progressBar.classList.add("goal-progress");
+        progressPercentage = progressPercentage > 100 ? 105 : progressPercentage;
         progressBar.style.width = progressPercentage + "%";
 
         if (goal.type === "Income") {
@@ -17,7 +18,7 @@ async function generateFinancialGoals(financialGoals) {
 
         var percentageLabel = document.createElement("div");
         percentageLabel.classList.add("goal-percentage");
-        percentageLabel.textContent = progressPercentage + "%";
+        percentageLabel.textContent = oldProgressPercentage + "%";
 
         container.appendChild(progressBar);
         container.appendChild(percentageLabel);
@@ -176,8 +177,7 @@ function generateTransactions(transactionsJson){
 
 function generateBarDiagramPerCoin(coins){
     let connection = new signalR.HubConnectionBuilder().withUrl("/coinsHub").build();
-    //const coins = @Html.Raw(Json.Serialize(Model.Coins.Select(c => c.Name.ToLower())));
-    // Object to store latest price for each coin
+
     let latestPrices = coins.reduce((obj, coin) => {
         obj[coin] = null;
         return obj;
@@ -200,7 +200,7 @@ function generateBarDiagramPerCoin(coins){
                 beginAtZero: true,
                 ticks: {
                     precision: 0,
-                    stepSize: 0.1, // Increment by 1 unit
+                    stepSize: 0.001, // Increment by 1 unit
                     maxTicksLimit: 10, // Maximum number of ticks (labels) to display
                 },
             },
@@ -262,10 +262,12 @@ function generateBarDiagramPerCoin(coins){
             }
             let coinHistory = coinData[coin.name.toLowerCase()];
 
-            // Check if the new price is different from the latest price
-            if (coin.priceUsd !== latestPrices[coin.name.toLowerCase()]) {
+            if (coin.priceUsd !== latestPrices[coin.name.toLowerCase()]) { // !==
+                // Calculate the difference between the current price and the previous price
+                const currentPrice = Number(coin.priceUsd).toPrecision(6);
+
                 // Add the new price to the historical data
-                coinHistory.prices.push(Number(coin.priceUsd).toPrecision(6));
+                coinHistory.prices.push(currentPrice);
 
                 // Limit the historical data to the maximum number of bars
                 if (coinHistory.prices.length > coinHistory.maxBars) {
@@ -278,7 +280,16 @@ function generateBarDiagramPerCoin(coins){
                 // Update the chart data and labels
                 let chart = coinCharts[coin.name.toLowerCase()];
                 chart.data.labels = coinHistory.prices.map((_, index) => `Price ${index + 1}`);
-                chart.data.datasets[0].data = coinHistory.prices;
+
+                // Adjust the bar heights based on the price difference
+                chart.data.datasets[0].data = coinHistory.prices.map((price, index) => {
+                    if (index === 0) { //&& coinHistory.prices.length === 0
+                        return price * 0.01;
+                    } else {
+                        const previousPrice = coinHistory.prices[coinHistory.prices.length - index - 1];
+                        return (price - previousPrice) * 100;
+                    }
+                });
 
                 // Update the chart
                 chart.update();

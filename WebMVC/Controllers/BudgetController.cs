@@ -19,11 +19,6 @@ public class BudgetController : BaseController
     [HttpGet]
     public async Task<IActionResult> Budgets()
     {
-        // var claims = HttpContext.User.Claims;
-        // var _ = User.Identity.Name;
-        // var budgets = await Mediator.Send(new GetBudgets {Email = User.FindFirstValue(ClaimTypes.NameIdentifier)});
-        // var claims = User.Claims.ToList();
-        //_.First(c => c.Type == ClaimTypes.Email).Value
         var budgets = await Mediator.Send(new GetBudgets
             {Email = Email});
         
@@ -46,7 +41,9 @@ public class BudgetController : BaseController
             {
                 Budget = budget,
                 Transactions = transactions,
-                TransactionsJson = Newtonsoft.Json.JsonConvert.SerializeObject(transactions)
+                TransactionsJson = Newtonsoft.Json.JsonConvert.SerializeObject(transactions),
+                NetAmount = budget.Amount + transactions.Where(t => t.CategoryName == "Income").Sum(t => t.Amount) 
+                            - transactions.Where(t => t.CategoryName == "Expense").Sum(t => t.Amount)
             });
         } catch(NotFoundException notFoundException)
         {

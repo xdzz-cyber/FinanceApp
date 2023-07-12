@@ -17,6 +17,9 @@
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.5/signalr.min.js"></script>
     @* <script src="https://kit.fontawesome.com/1bbc0cdede.js" crossorigin="anonymous"></script> *@
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/modules/export-data.js"></script>
     <script src="https://js.stripe.com/v3/"></script>
     <script src="~/js/site.js"></script>
 </head>
@@ -44,6 +47,9 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Banking" asp-action="Banking">@Localizer["BankingPageMessage"].Value</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Report" asp-action="Report">@Localizer["ReportPageMessage"].Value</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Localization" asp-action="SetLanguage" asp-route-culture="en"><img height="20px" style="vertical-align: text-bottom" src="~/images/united-kingdom.png" alt="uk's logo"></a>

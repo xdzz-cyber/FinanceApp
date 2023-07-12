@@ -18,28 +18,7 @@
     <resheader name="writer">
         <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
     </resheader>
-    <data name="HomeMessage" xml:space="preserve">
-        <value>Home</value>
-    </data>
-    <data name="BudgetsMessage" xml:space="preserve">
-        <value>Budgets</value>
-    </data>
-    <data name="FinancialGoalsWithTipsMessage" xml:space="preserve">
-        <value>Financial goals with tips</value>
-    </data>
-    <data name="LogoutMessage" xml:space="preserve">
-        <value>Logout</value>
-    </data>
-    <data name="CartPageMessage" xml:space="preserve">
-        <value>Cart</value>
-    </data>
-    <data name="BankingPageMessage" xml:space="preserve">
-        <value>Banking</value>
-    </data>
-    <data name="FooterContentMessage" xml:space="preserve">
-        <value>Footer Content</value>
-    </data>
     <data name="ReportPageMessage" xml:space="preserve">
-        <value>Reports</value>
+        <value>Report</value>
     </data>
 </root>
