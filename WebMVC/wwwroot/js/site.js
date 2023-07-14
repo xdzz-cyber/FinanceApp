@@ -265,15 +265,17 @@ function generateBarDiagramPerCoin(coins){
             if (coin.priceUsd !== latestPrices[coin.name.toLowerCase()]) { // !==
                 // Calculate the difference between the current price and the previous price
                 const currentPrice = Number(coin.priceUsd).toPrecision(6);
-
-                // Add the new price to the historical data
-                coinHistory.prices.push(currentPrice);
-
+                debugger
+                
+                
                 // Limit the historical data to the maximum number of bars
-                if (coinHistory.prices.length > coinHistory.maxBars) {
+                if (coinHistory.prices.length >= coinHistory.maxBars) {
                     coinHistory.prices.shift(); // Remove the oldest price
                 }
 
+                // Add the new price to the historical data
+                coinHistory.prices.push(currentPrice);
+                
                 // Update the latest price
                 latestPrices[coin.name.toLowerCase()] = coin.priceUsd;
 
@@ -282,13 +284,18 @@ function generateBarDiagramPerCoin(coins){
                 chart.data.labels = coinHistory.prices.map((_, index) => `Price ${index + 1}`);
 
                 // Adjust the bar heights based on the price difference
+                //let c = 0;
                 chart.data.datasets[0].data = coinHistory.prices.map((price, index) => {
-                    if (index === 0) { //&& coinHistory.prices.length === 0
+                    if (index === 0) { //&& coinHistory.prices.length === 0 && index === 0
+                        //c++;
                         return price * 0.01;
                     } else {
-                        const previousPrice = coinHistory.prices[coinHistory.prices.length - index - 1];
+                        // const previousPrice = index === coinHistory.prices.length - 2 ? coinHistory.prices[index - 1]
+                        //     : coinHistory.prices[coinHistory.prices.length - index - 1];
+                        const previousPrice = coinHistory.prices[index - 1];
                         return (price - previousPrice) * 100;
                     }
+                    //c++;
                 });
 
                 // Update the chart
