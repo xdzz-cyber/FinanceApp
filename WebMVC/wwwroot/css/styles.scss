@@ -22,6 +22,7 @@ body {
     width: calc(33.33% - 20px);
     padding: 0 10px;
     box-sizing: border-box;
+    margin-top: 20px;
 
     .goal-name {
       font-weight: bold;
@@ -186,3 +187,24 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+.addFinancialGoalDiv{
+  position: relative;
+  top: 5rem;
+}
+
+.goal-target-date{
+  font-weight: bold;
+  position: relative;
+  top: 6.5rem;
+  margin-bottom: 10px;
+}
+
+.goal-target-date-green{
+  color:green;
+}
+
+.goal-target-date-red{
+  color:red;
+}
+

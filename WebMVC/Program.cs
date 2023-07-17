@@ -1,12 +1,9 @@
-using System.Globalization;
 using System.Reflection;
 using Application;
 using Application.Common.Mappings;
 using Application.Interfaces;
 using Hangfire;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication.Google;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.Extensions.Options;
@@ -139,7 +136,6 @@ app.UseEndpoints(endpoints =>
     endpoints.MapControllerRoute(
         name: "default",
         pattern: "{controller=Home}/{action=Index}/{id?}");
-    endpoints.MapHub<CoinsHub>("/coinsHub");
     endpoints.MapHub<BankingHub>("/bankingHub");
 });
 

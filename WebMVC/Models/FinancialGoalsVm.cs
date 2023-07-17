@@ -10,4 +10,6 @@ public class FinancialGoalsVm
     
     public decimal CurrentAmount { get; set; }
     public string BudgetName { get; set; } = null!;
+    
+    public DateTime TargetDate { get; set; }
 }

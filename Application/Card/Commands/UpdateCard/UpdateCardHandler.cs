@@ -21,15 +21,7 @@ public class UpdateCardHandler : IRequestHandler<UpdateCard, CardDto?>
     {
         // Add new amount for each card to redis
         var db = _redisConnection.GetDatabase();
-        //     
-        // if (!db.KeyExists("cards"))
-        // {
-        //     db.StringSet("cards", "[]");
-        // }
-        // var cards = await db.StringGetAsync("cards");
-        //     
-        // var newCards = JsonSerializer.Deserialize<List<CardDto>>(cards!);
-        
+
         var cards = await _mediator.Send(new GetCards(), cancellationToken);
 
         if (cards.FirstOrDefault(c => c.Id == request.Id || c.StripeId.Substring(c.StripeId.Length - 4)
@@ -37,9 +29,6 @@ public class UpdateCardHandler : IRequestHandler<UpdateCard, CardDto?>
         {
             cards.Add(new CardDto{Id = request.Id, StripeId = request.StripeId});
         }
-
-        //var card = newCards?.FirstOrDefault(c => c.Id == request.Id) is not null 
-        //     ? newCards.FirstOrDefault(c => c.Id == request.Id): new CardDto(){Id = request.Id};
 
         var card = cards?.FirstOrDefault(c => c.Id == request.Id || c.StripeId.Substring(c.StripeId.Length - 4) 
             == request.StripeId.Substring(request.StripeId.Length - 4));

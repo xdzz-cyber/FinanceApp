@@ -35,7 +35,8 @@ public class FinancialGoalController : BaseController
                 TargetAmount = financialGoal.TargetAmount,
                 CurrentAmount = financialGoal.CurrentAmount,
                 Type = financialGoal.CategoryName,
-                BudgetName = budget.Name
+                BudgetName = budget.Name,
+                TargetDate = financialGoal.TargetDate
             }
         ).ToList();
 
@@ -64,7 +65,7 @@ public class FinancialGoalController : BaseController
                 return View();
             }
 
-            var createdInstanceId = await Mediator.Send(new CreateFinancialGoal()
+            await Mediator.Send(new CreateFinancialGoal()
             {
                 Name = addFinancialGoalFormHandlerVm.FinancialGoal.Name,
                 Description = addFinancialGoalFormHandlerVm.FinancialGoal.Description,
@@ -75,16 +76,24 @@ public class FinancialGoalController : BaseController
                 CurrentAmount = addFinancialGoalFormHandlerVm.FinancialGoal.CurrentAmount
             });
 
-            if (createdInstanceId == Guid.Empty)
-            {
-                return BadRequest("Failed to create financial goal.");
-            }
+            // if (createdInstanceId == Guid.Empty)
+            // {
+            //     return BadRequest("Failed to create financial goal.");
+            // }
 
             return RedirectToAction("FinancialGoals");
         }
         catch (AlreadyExistsException alreadyExistsException)
         {
             return RedirectToAction("Error", "Error", new {message = alreadyExistsException.Message});
+        }
+        catch (ArgumentNullException argumentNullException)
+        {
+            return RedirectToAction("Error", "Error", new {message = argumentNullException.Message});
+        }
+        catch (ArgumentOutOfRangeException argumentOutOfRangeException)
+        {
+            return RedirectToAction("Error", "Error", new {message = argumentOutOfRangeException.Message});
         }
     }
 }

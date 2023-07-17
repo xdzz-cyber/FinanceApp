@@ -19,9 +19,23 @@ async function generateFinancialGoals(financialGoals) {
         var percentageLabel = document.createElement("div");
         percentageLabel.classList.add("goal-percentage");
         percentageLabel.textContent = oldProgressPercentage + "%";
+        
+        var currentDate = new Date();
+        var parsedTargetDate = new Date(goal.targetDate);
+        var targetDate = document.createElement("div");
+        targetDate.classList.add("goal-target-date");
+        // debugger
+        if(currentDate.getFullYear() === parsedTargetDate.getFullYear() && currentDate.getMonth() === parsedTargetDate.getMonth()
+            && currentDate.getDate() === parsedTargetDate.getDate() && new Date() && currentDate.getHours() >= parsedTargetDate.getHours()){
+            targetDate.classList.add("goal-target-date-red");
+        } else {
+            targetDate.classList.add("goal-target-date-green");
+        }
+        targetDate.textContent = "Target date: " + goal.targetDate;
 
         container.appendChild(progressBar);
         container.appendChild(percentageLabel);
+        container.appendChild(targetDate);
     }
 
     // Function to get advice for financial goal
@@ -176,7 +190,6 @@ function generateTransactions(transactionsJson){
 }
 
 function generateBarDiagramPerCoin(coins){
-    let connection = new signalR.HubConnectionBuilder().withUrl("/coinsHub").build();
 
     let latestPrices = coins.reduce((obj, coin) => {
         obj[coin] = null;
@@ -232,76 +245,81 @@ function generateBarDiagramPerCoin(coins){
         return obj;
     }, {});
 
+    const socket = new WebSocket(`wss://ws.coincap.io/prices?assets=${coins.join(",")}`);
 
-    connection.start()
-        .then(function () {
-            console.log("SignalR connection established.")
-        })
-        .catch(function (err) {
-            console.error(err.toString());
-        });
+    let delayInterval = 5000; // 10 seconds delay between processing messages
+    let canProcessMessage = true;
 
-    setInterval(function () {
-        connection.invoke("UpdateCoinPrices", coins)
-            .catch(function (error) {
-                console.error("Error updating coin prices:", error);
-            });
-    }, 2000); // Update every two seconds
+    socket.addEventListener('open', () => {
+        console.log('WebSocket connection established.');
+    });
 
-    connection.on("ReceiveCoinPrices", function (prices) {
-        // Update coin prices in the HTML
-        const data = JSON.parse(prices).data;
-        // Update coin prices in the HTML
-        console.log("inside ReceiveCoinPrices", data);
-        data.forEach(function (coin) {
-            //const priceElement = document.getElementById("price-" + coin.name.toLowerCase());
-            const chartContainer = document.getElementById("chart-container-" + coin.name.toLowerCase());
-            let priceElement = document.getElementById("price-" + coin.name.toLowerCase());
-            if (priceElement && chartContainer) {
-                priceElement.textContent = `Price: ${Number(coin.priceUsd).toPrecision(6)} USD`;
-            }
-            let coinHistory = coinData[coin.name.toLowerCase()];
+    socket.addEventListener('message', (event) => {
+        if (canProcessMessage) {
+            canProcessMessage = false;
 
-            if (coin.priceUsd !== latestPrices[coin.name.toLowerCase()]) { // !==
-                // Calculate the difference between the current price and the previous price
-                const currentPrice = Number(coin.priceUsd).toPrecision(6);
-                debugger
-                
-                
-                // Limit the historical data to the maximum number of bars
-                if (coinHistory.prices.length >= coinHistory.maxBars) {
-                    coinHistory.prices.shift(); // Remove the oldest price
+            const data = JSON.parse(event.data);
+            Object.keys(data).forEach(function (coin) {
+                //const priceElement = document.getElementById("price-" + coin.name.toLowerCase());
+                const chartContainer = document.getElementById("chart-container-" + coin.toLowerCase());
+                let priceElement = document.getElementById("price-" + coin.toLowerCase());
+                if (priceElement && chartContainer) {
+                    priceElement.textContent = `Price: ${Number(data[coin]).toPrecision(6)} USD`;
                 }
+                let coinHistory = coinData[coin.toLowerCase()];
 
-                // Add the new price to the historical data
-                coinHistory.prices.push(currentPrice);
-                
-                // Update the latest price
-                latestPrices[coin.name.toLowerCase()] = coin.priceUsd;
+                if (data[coin] !== latestPrices[coin.toLowerCase()]) { // !==
+                    // Calculate the difference between the current price and the previous price
+                    const currentPrice = Number(data[coin]).toPrecision(6);
 
-                // Update the chart data and labels
-                let chart = coinCharts[coin.name.toLowerCase()];
-                chart.data.labels = coinHistory.prices.map((_, index) => `Price ${index + 1}`);
-
-                // Adjust the bar heights based on the price difference
-                //let c = 0;
-                chart.data.datasets[0].data = coinHistory.prices.map((price, index) => {
-                    if (index === 0) { //&& coinHistory.prices.length === 0 && index === 0
-                        //c++;
-                        return price * 0.01;
-                    } else {
-                        // const previousPrice = index === coinHistory.prices.length - 2 ? coinHistory.prices[index - 1]
-                        //     : coinHistory.prices[coinHistory.prices.length - index - 1];
-                        const previousPrice = coinHistory.prices[index - 1];
-                        return (price - previousPrice) * 100;
+                    // Limit the historical data to the maximum number of bars
+                    if (coinHistory.prices.length >= coinHistory.maxBars) {
+                        coinHistory.prices.shift(); // Remove the oldest price
                     }
-                    //c++;
-                });
 
-                // Update the chart
-                chart.update();
-            }
-        });
+                    // Add the new price to the historical data
+                    coinHistory.prices.push(currentPrice);
+
+                    // Update the latest price
+                    latestPrices[coin.toLowerCase()] = data[coin];
+
+                    // Update the chart data and labels
+                    let chart = coinCharts[coin.toLowerCase()];
+                    chart.data.labels = coinHistory.prices.map((_, index) => `Price ${index + 1}`);
+
+                    // Adjust the bar heights based on the price difference
+                    //let c = 0;
+                    chart.data.datasets[0].data = coinHistory.prices.map((price, index) => {
+                        if (index === 0) { //&& coinHistory.prices.length === 0 && index === 0
+                            //c++;
+                            return price * 0.01;
+                        } else {
+                            // const previousPrice = index === coinHistory.prices.length - 2 ? coinHistory.prices[index - 1]
+                            //     : coinHistory.prices[coinHistory.prices.length - index - 1];
+                            const previousPrice = coinHistory.prices[index - 1];
+                            return (price - previousPrice) * 100;
+                        }
+                        //c++;
+                    });
+
+                    // Update the chart
+                    chart.update();
+                }
+            });
+            // Reset the canProcessMessage flag after the specified delay
+            setTimeout(() => {
+                canProcessMessage = true;
+            }, delayInterval);
+        }
+        
+    });
+
+    socket.addEventListener('error', (event) => {
+        console.error('WebSocket error:', event);
+    });
+
+    socket.addEventListener('close', (event) => {
+        console.log('WebSocket connection closed:', event.code, event.reason);
     });
 }
 
@@ -355,12 +373,6 @@ function createCard(item, type='jar', name='') {
         : `Description: ${item.description}. Goal: ${item.goal}. Balance: ${item.balance}$`;
     cardBody.appendChild(description);
 
-    // const link = document.createElement('a');
-    // link.href = '#';
-    // link.className = 'btn btn-primary';
-    // link.textContent = 'Go somewhere';
-    // cardBody.appendChild(link);
-
     return card;
 }
 
@@ -375,13 +387,6 @@ function subscribeForBankingInfo(){
             console.error(err.toString());
         });
 
-    // setInterval(function () {
-    //     connection.invoke("UpdateBankingInfo")
-    //         .catch(function (error) {
-    //             console.error("Error updating coin prices:", error);
-    //         });
-    // }, 60000);
-
     connection.on("ReceiveBankingInfo", function (items) {
         console.log(`Received banking info: ${items}`, JSON.parse(items));
         renderCards(JSON.parse(items));
@@ -389,18 +394,6 @@ function subscribeForBankingInfo(){
 }
 
 function getBankingInfo() {
-    // $(document).ready(function () {
-    //     $.ajax({
-    //         url: '@Url.Action("ExecuteBackgroundJob", "Banking")',
-    //         type: 'POST',
-    //         success: function () {
-    //             console.log('Background job executed successfully');
-    //         },
-    //         error: function () {
-    //             console.error('An error occurred while executing the background job');
-    //         }
-    //     });
-    // });
 
     document.addEventListener("DOMContentLoaded", function() {
         // Make request to the server via fetch API
@@ -438,13 +431,6 @@ function addCoinsToCart(){
             localStorage.setItem(storageNameOfCoinsIds, JSON.stringify([]))
         }
     }
-
-    // function clearStorage(){
-    //     // setInterval(function () {
-    //     //     localStorage.clear()
-    //     // }, 1000 * 60 * 5)
-    //     localStorage.setItem(storageNameOfCoinsIds, JSON.stringify([]))
-    // }
 
     init()
 }
@@ -521,17 +507,6 @@ function proceedTransaction(stripePublicKey){
         hiddenInput.setAttribute('value', token.id);
         form.appendChild(hiddenInput);
         
-        
-        // var cardNumberElement = document.querySelector('input[name="cardnumber"]');
-        // var cardNumberValue = cardNumberElement.value.replace(/\s/g, ''); // Remove whitespace from the value
-        // console.log('cardNumber', cardNumberElement)
-        // var hiddenCardNumberInput = document.createElement('input');
-        // hiddenCardNumberInput.setAttribute('type', 'hidden');
-        // hiddenCardNumberInput.setAttribute('name', 'cardNumber');
-        // hiddenCardNumberInput.setAttribute('value', cardNumberValue);
-        // form.appendChild(hiddenCardNumberInput);
-        //
-        // // Submit the form
          form.submit();
     }
 }
